@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Plan Fitness Pro</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --g:#1D9E75;--gd:#0F6E56;--gl:#E1F5EE;--gb:#9FE1CB;
+  --amber:#F59E0B;--amber-bg:#FFFBEB;
+  --blue:#3B82F6;--blue-bg:#EFF6FF;
+  --g50:#F9FAFB;--g100:#F3F4F6;--g200:#E5E7EB;--g300:#D1D5DB;
+  --g400:#9CA3AF;--g500:#6B7280;--g600:#4B5563;--g700:#374151;
+  --g800:#1F2937;--g900:#111827;--white:#fff;
+  --r:10px;--rl:16px;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{font-family:'DM Sans',sans-serif;background:#EDEEE9;color:var(--g900);min-height:100vh}
+
+/* ── HOME SCREEN ── */
+.home{min-height:100vh;display:flex;flex-direction:column}
+.home-hero{
+  background:linear-gradient(150deg,#071f17 0%,#0a3326 35%,#0F6E56 70%,#1D9E75 100%);
+  padding:56px 24px 48px;flex:1;
+  display:flex;flex-direction:column;justify-content:space-between;
+  position:relative;overflow:hidden;
+}
+.home-hero::before{content:'';position:absolute;top:-100px;right:-80px;width:320px;height:320px;border-radius:50%;background:rgba(255,255,255,0.03)}
+.home-hero::after{content:'';position:absolute;bottom:-60px;left:-60px;width:220px;height:220px;border-radius:50%;background:rgba(255,255,255,0.03)}
+.home-badge{display:inline-block;background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.2);color:rgba(255,255,255,0.85);font-size:10px;font-weight:600;letter-spacing:2.5px;text-transform:uppercase;padding:5px 14px;border-radius:20px;margin-bottom:20px}
+.home-title{font-family:'Bebas Neue',sans-serif;font-size:64px;color:white;line-height:0.88;letter-spacing:1px;margin-bottom:10px}
+.home-sub{font-size:13px;color:rgba(255,255,255,0.6);margin-bottom:40px;line-height:1.6}
+.home-stats{display:flex;gap:0;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.15);border-radius:var(--rl);overflow:hidden;max-width:340px}
+.home-stat{flex:1;padding:14px 8px;text-align:center;border-right:1px solid rgba(255,255,255,0.12)}
+.home-stat:last-child{border-right:none}
+.home-stat-v{font-family:'Bebas Neue',sans-serif;font-size:28px;color:white;line-height:1}
+.home-stat-l{font-size:10px;color:rgba(255,255,255,0.6);text-transform:uppercase;letter-spacing:1px;margin-top:2px}
+.home-menu{background:var(--white);border-radius:var(--rl) var(--rl) 0 0;padding:32px 24px 40px;margin-top:-20px;position:relative;z-index:2}
+.home-menu-title{font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--g400);margin-bottom:16px}
+.menu-card{display:flex;align-items:center;gap:16px;padding:20px;border:1px solid var(--g200);border-radius:var(--rl);margin-bottom:12px;cursor:pointer;background:var(--white);transition:all 0.2s;text-decoration:none}
+.menu-card:hover{border-color:var(--gb);background:var(--gl);transform:translateY(-1px)}
+.menu-card:active{transform:scale(0.98)}
+.menu-icon{width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0}
+.menu-icon-green{background:var(--gl)}
+.menu-icon-blue{background:var(--blue-bg)}
+.menu-info{flex:1}
+.menu-name{font-size:16px;font-weight:600;color:var(--g900)}
+.menu-desc{font-size:12px;color:var(--g400);margin-top:3px}
+.menu-arrow{font-size:18px;color:var(--g300)}
+
+/* ── SHARED HEADER ── */
+.page-header{display:flex;align-items:center;gap:12px;padding:14px 16px;background:var(--white);border-bottom:1px solid var(--g200);position:sticky;top:0;z-index:100;box-shadow:0 1px 4px rgba(0,0,0,0.06)}
+.back-btn{width:36px;height:36px;border-radius:50%;background:var(--g50);border:1px solid var(--g200);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:18px;color:var(--g600);flex-shrink:0;transition:all 0.15s}
+.back-btn:hover{background:var(--gl);border-color:var(--gb)}
+.page-header-title{font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--g900);letter-spacing:0.5px}
+
+/* ── PAGES ── */
+.page{display:none}
+.page.active{display:block}
+
+/* ── PLAN SECTION ── */
+.plan-hero{background:linear-gradient(145deg,#0F6E56 0%,#1D9E75 50%,#5DCAA5 100%);padding:32px 20px 36px;text-align:center;position:relative;overflow:hidden}
+.plan-hero::before{content:'';position:absolute;top:-60px;right:-60px;width:220px;height:220px;border-radius:50%;background:rgba(255,255,255,0.06)}
+.plan-hero-badge{display:inline-block;background:rgba(255,255,255,0.18);border:1px solid rgba(255,255,255,0.3);color:white;font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;padding:5px 14px;border-radius:20px;margin-bottom:14px}
+.plan-hero h2{font-family:'Bebas Neue',sans-serif;font-size:44px;color:white;line-height:0.95;letter-spacing:1px;margin-bottom:6px}
+.plan-hero-sub{color:rgba(255,255,255,0.8);font-size:13px;margin-bottom:24px}
+.plan-hero-stats{display:flex;justify-content:center;background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.2);border-radius:var(--rl);overflow:hidden;max-width:300px;margin:0 auto}
+.phs{flex:1;padding:12px 8px;text-align:center;border-right:1px solid rgba(255,255,255,0.15)}
+.phs:last-child{border-right:none}
+.phs-v{font-family:'Bebas Neue',sans-serif;font-size:24px;color:white;line-height:1}
+.phs-l{font-size:10px;color:rgba(255,255,255,0.7);text-transform:uppercase;letter-spacing:1px;margin-top:2px}
+
+/* ── PLAN TABS ── */
+.tab-bar{display:flex;background:var(--white);border-bottom:1px solid var(--g200);overflow-x:auto;scrollbar-width:none;position:sticky;top:64px;z-index:99;box-shadow:0 1px 3px rgba(0,0,0,0.04)}
+.tab-bar::-webkit-scrollbar{display:none}
+.tab-btn{flex-shrink:0;padding:12px 16px;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;color:var(--g400);background:none;border:none;border-bottom:3px solid transparent;cursor:pointer;white-space:nowrap;transition:all 0.2s}
+.tab-btn.active{color:var(--gd);border-bottom-color:var(--g);font-weight:600}
+
+/* ── CONTENT ── */
+.tab-content{display:none;padding:16px 16px 80px;max-width:560px;margin:0 auto}
+.tab-content.active{display:block}
+
+/* ── SECTION HEADER ── */
+.sec-header{background:white;border-radius:var(--rl);padding:18px;margin-bottom:14px;border:1px solid var(--g200)}
+.sec-title{font-family:'Bebas Neue',sans-serif;font-size:30px;color:var(--g900);letter-spacing:0.5px;line-height:1}
+.sec-meta{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.tag{font-size:11px;font-weight:600;padding:4px 10px;border-radius:20px}
+.tag-g{background:var(--gl);color:var(--gd)}
+.tag-a{background:var(--amber-bg);color:#92400E}
+.tag-b{background:var(--blue-bg);color:#1E40AF}
+
+/* ── SUBTABS ── */
+.stab-bar{display:flex;gap:8px;margin-bottom:14px}
+.stab-btn{flex:1;padding:10px;border-radius:var(--r);border:1.5px solid var(--g200);background:white;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;color:var(--g600);cursor:pointer;text-align:center;transition:all 0.2s}
+.stab-btn.active{background:var(--gl);border-color:var(--gb);color:var(--gd);font-weight:600}
+
+/* ── BANNER ── */
+.banner{border-radius:var(--r);padding:10px 12px;margin-bottom:12px;font-size:12px;font-weight:500;display:flex;align-items:flex-start;gap:8px}
+.b-amber{background:var(--amber-bg);color:#92400E;border:1px solid #FDE68A}
+.b-green{background:var(--gl);color:var(--gd);border:1px solid var(--gb)}
+.b-blue{background:var(--blue-bg);color:#1E40AF;border:1px solid #BFDBFE}
+
+/* ── EXERCISE CARD ── */
+.ex-card{background:white;border:1px solid var(--g200);border-radius:var(--rl);margin-bottom:12px;overflow:hidden}
+.ex-hd{display:flex;align-items:flex-start;gap:12px;padding:14px 14px 10px}
+.ex-num{background:var(--gl);color:var(--gd);width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue';font-size:16px;flex-shrink:0;margin-top:2px}
+.ex-name{font-size:14px;font-weight:600;color:var(--g900)}
+.ex-muscle{font-size:11px;color:var(--g);margin-top:2px}
+.ex-specs{display:flex;gap:5px;flex-wrap:wrap;padding:0 14px 10px}
+.sp{font-size:11px;font-weight:600;padding:3px 9px;border-radius:20px}
+.sp-g{background:var(--gl);color:var(--gd)}
+.sp-gray{background:var(--g100);color:var(--g600)}
+.ex-tip{margin:0 14px 10px;padding:8px 10px;background:var(--g50);border-left:3px solid var(--g);border-radius:0 6px 6px 0;font-size:11.5px;color:var(--g600);line-height:1.6}
+.vid-label{display:flex;align-items:center;gap:6px;padding:9px 14px;background:#1a1a1a;color:white;font-size:11px;font-weight:500}
+.yt-dot{width:7px;height:7px;background:#FF0000;border-radius:50%}
+.vid-wrap{position:relative;padding-bottom:56.25%;height:0;overflow:hidden;background:#000}
+.vid-wrap iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:none}
+
+/* ── WEEK + MEAL CARDS ── */
+.week-card{background:white;border:1px solid var(--g200);border-radius:var(--rl);overflow:hidden;margin-bottom:14px}
+.week-row{display:flex;align-items:center;padding:12px 16px;border-bottom:1px solid var(--g100);gap:12px}
+.week-row:last-child{border-bottom:none}
+.wday{font-family:'Bebas Neue';font-size:14px;color:var(--g400);width:36px;flex-shrink:0}
+.wdot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
+.wdesc{font-size:13px;font-weight:500;color:var(--g800)}
+.wsub{font-size:11px;color:var(--g400)}
+
+.macros-card{background:linear-gradient(135deg,var(--gd) 0%,var(--g) 100%);border-radius:var(--rl);padding:18px;margin-bottom:14px;color:white}
+.macros-title{font-family:'Bebas Neue';font-size:18px;letter-spacing:1px;margin-bottom:14px;opacity:.9}
+.macros-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}
+.macro-item{background:rgba(255,255,255,0.15);border-radius:8px;padding:10px 5px;text-align:center}
+.macro-val{font-family:'Bebas Neue';font-size:22px;line-height:1}
+.macro-lbl{font-size:10px;opacity:.8;text-transform:uppercase;letter-spacing:.5px;margin-top:2px}
+
+.meal-card{background:white;border:1px solid var(--g200);border-radius:var(--rl);margin-bottom:12px;overflow:hidden}
+.meal-hd{display:flex;justify-content:space-between;align-items:center;padding:14px 16px;border-bottom:1px solid var(--g100)}
+.meal-time{font-size:10px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--g)}
+.meal-title-txt{font-size:15px;font-weight:600;color:var(--g900);margin-top:2px}
+.meal-kcal{background:var(--blue-bg);color:#1E40AF;font-size:11px;font-weight:600;padding:6px 10px;border-radius:8px;text-align:center;flex-shrink:0}
+.meal-body{padding:12px 16px}
+.opt-lbl{font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--gd);margin:10px 0 4px;display:flex;align-items:center;gap:5px}
+.opt-lbl::before{content:'';width:14px;height:2px;background:var(--g);border-radius:2px}
+.opt-lbl:first-child{margin-top:0}
+.opt-item{font-size:13px;color:var(--g600);line-height:1.6;padding-left:8px;border-left:2px solid var(--gb);margin-bottom:3px}
+
+.tips-card{background:var(--amber-bg);border:1px solid #FDE68A;border-radius:var(--rl);padding:16px;margin-bottom:12px}
+.tips-title{font-size:12px;font-weight:700;color:#92400E;margin-bottom:10px;text-transform:uppercase;letter-spacing:.5px}
+.tip-item{display:flex;gap:8px;margin-bottom:8px;align-items:flex-start}
+.tip-item:last-child{margin-bottom:0}
+.tip-icon{font-size:14px;flex-shrink:0;margin-top:1px}
+.tip-text{font-size:12.5px;color:#78350F;line-height:1.6}
+
+.ex-divider{height:1px;background:var(--g100);margin:10px 0}
+.subsection{display:none}
+.subsection.active{display:block}
+
+/* ── BITÁCORA ── */
+.bit-hero{background:linear-gradient(160deg,#071f17 0%,#0a3326 40%,#0F6E56 80%,#1D9E75 100%);padding:28px 20px 32px;position:relative;overflow:hidden}
+.bit-hero::before{content:'';position:absolute;top:-80px;right:-60px;width:240px;height:240px;border-radius:50%;background:rgba(255,255,255,0.03)}
+.bit-hero-lbl{font-size:10px;font-weight:600;letter-spacing:2.5px;text-transform:uppercase;color:rgba(255,255,255,0.6);margin-bottom:6px}
+.bit-hero h2{font-family:'Bebas Neue',sans-serif;font-size:40px;color:white;line-height:.9;letter-spacing:1px;margin-bottom:4px}
+.bit-hero-sub{font-size:12px;color:rgba(255,255,255,0.65);margin-bottom:20px}
+.bit-chips{display:flex;gap:7px;flex-wrap:wrap}
+.bit-chip{background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.2);color:rgba(255,255,255,.9);font-size:10px;font-weight:500;padding:4px 11px;border-radius:20px}
+
+.btab-bar{display:flex;background:var(--white);border-bottom:1px solid var(--g200);overflow-x:auto;scrollbar-width:none;position:sticky;top:64px;z-index:99;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+.btab-bar::-webkit-scrollbar{display:none}
+.btab-btn{flex-shrink:0;padding:12px 18px;font-family:'DM Sans';font-size:12px;font-weight:500;color:var(--g400);background:none;border:none;border-bottom:3px solid transparent;cursor:pointer;white-space:nowrap;transition:all .2s}
+.btab-btn.active{color:var(--gd);border-bottom-color:var(--g);font-weight:600}
+
+.bcontent{display:none;padding:14px 14px 80px;max-width:560px;margin:0 auto}
+.bcontent.active{display:block}
+
+.week-bar{display:flex;align-items:center;justify-content:space-between;background:var(--white);border-radius:var(--r);border:1px solid var(--g200);padding:11px 14px;margin-bottom:12px}
+.week-nav{width:30px;height:30px;border-radius:50%;background:var(--g50);border:1px solid var(--g200);display:flex;align-items:center;justify-content:center;font-size:14px;cursor:pointer;color:var(--g600);transition:all .15s}
+.week-nav:hover{background:var(--gl);border-color:var(--gb);color:var(--gd)}
+.week-num{font-family:'Bebas Neue';font-size:20px;color:var(--g900);line-height:1;text-align:center}
+.week-dates{font-size:11px;color:var(--g400);text-align:center;margin-top:2px}
+
+.sess-card{background:var(--white);border:1px solid var(--g200);border-radius:var(--rl);margin-bottom:12px;overflow:hidden}
+.sess-hd{display:flex;align-items:center;justify-content:space-between;padding:13px 14px 11px;border-bottom:1px solid var(--g100);cursor:pointer}
+.sess-left{display:flex;align-items:center;gap:11px}
+.sess-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
+.sess-day-lbl{font-size:10px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--g400)}
+.sess-name{font-size:14px;font-weight:600;color:var(--g900);margin-top:1px}
+.sess-toggle{font-size:16px;color:var(--g400);transition:transform .2s;background:none;border:none;cursor:pointer;padding:4px}
+.sess-toggle.open{transform:rotate(180deg)}
+.sess-body{display:none;padding:12px 14px}
+.sess-body.open{display:block}
+
+.s-meta{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
+.f-group{display:flex;flex-direction:column;gap:3px}
+.f-lbl{font-size:10px;font-weight:600;color:var(--g400);text-transform:uppercase;letter-spacing:.8px}
+.f-input{background:var(--g50);border:1px solid var(--g200);border-radius:8px;padding:7px 9px;font-family:'DM Sans';font-size:13px;color:var(--g900);width:100%;outline:none;transition:border-color .15s}
+.f-input:focus{border-color:var(--g);background:var(--gl)}
+select.f-input{cursor:pointer}
+
+.feel-row{display:flex;gap:7px;margin-bottom:12px;flex-wrap:wrap}
+.feel-btn{flex:1;min-width:56px;padding:7px 4px;border-radius:8px;border:1.5px solid var(--g200);background:var(--white);cursor:pointer;text-align:center;font-size:16px;transition:all .15s}
+.feel-btn.selected{border-color:var(--g);background:var(--gl);transform:scale(1.06)}
+.feel-lbl{font-size:9px;color:var(--g400);display:block;margin-top:2px}
+
+.ex-log-row{margin-bottom:8px}
+.el-hd{display:flex;align-items:center;gap:7px;margin-bottom:6px}
+.el-num{background:var(--gl);color:var(--gd);width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue';font-size:13px;flex-shrink:0}
+.el-name{font-size:12px;font-weight:600;color:var(--g800)}
+.el-target{font-size:10px;color:var(--g400);margin-top:1px}
+
+.s-grid{display:grid;grid-template-columns:24px 1fr 1fr 1fr 28px;gap:3px;align-items:center;margin-bottom:3px}
+.s-head{font-size:9px;font-weight:600;color:var(--g400);text-transform:uppercase;letter-spacing:.5px;text-align:center;padding:3px 0}
+.s-num{font-family:'DM Mono';font-size:11px;color:var(--g400);text-align:center}
+.s-inp{background:var(--g50);border:1px solid var(--g200);border-radius:5px;padding:6px 4px;font-family:'DM Mono';font-size:12px;color:var(--g900);text-align:center;width:100%;outline:none;transition:all .15s}
+.s-inp:focus{border-color:var(--g);background:var(--gl)}
+.s-inp::placeholder{color:var(--g300);font-size:10px}
+.chk-btn{width:24px;height:24px;border-radius:50%;border:1.5px solid var(--g200);background:var(--white);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:11px;transition:all .15s;color:transparent}
+.chk-btn.done{background:var(--g);border-color:var(--g);color:white}
+
+.el-notes{margin-top:4px}
+.el-notes textarea{width:100%;background:var(--g50);border:1px solid var(--g200);border-radius:7px;padding:7px 9px;font-family:'DM Sans';font-size:11px;color:var(--g800);resize:none;outline:none;transition:border-color .15s;min-height:36px}
+.el-notes textarea:focus{border-color:var(--g);background:var(--gl)}
+.el-div{height:1px;background:var(--g100);margin:10px 0}
+
+.gen-notes{background:var(--amber-bg);border:1px solid #FDE68A;border-radius:var(--r);padding:11px 12px;margin-top:12px}
+.gen-notes-lbl{font-size:10px;font-weight:600;color:#92400E;text-transform:uppercase;letter-spacing:.8px;margin-bottom:5px;display:flex;align-items:center;gap:5px}
+.gen-notes textarea{width:100%;background:rgba(255,255,255,.6);border:1px solid #FDE68A;border-radius:7px;padding:7px 9px;font-family:'DM Sans';font-size:12px;color:#78350F;resize:none;outline:none;min-height:52px}
+.gen-notes textarea:focus{border-color:var(--amber)}
+
+.save-btn{width:100%;padding:13px;background:linear-gradient(135deg,var(--gd),var(--g));color:white;border:none;border-radius:var(--r);cursor:pointer;font-family:'Bebas Neue';font-size:19px;letter-spacing:1px;margin-top:12px;transition:opacity .15s}
+.save-btn:active{opacity:.85}
+
+/* HISTORIAL */
+.hist-card{background:var(--white);border:1px solid var(--g200);border-radius:var(--rl);margin-bottom:10px;overflow:hidden}
+.hist-hd{display:flex;justify-content:space-between;align-items:center;padding:13px 14px;border-bottom:1px solid var(--g100)}
+.hist-ttl{font-size:13px;font-weight:600;color:var(--g900)}
+.hist-dt{font-size:11px;color:var(--g400)}
+.hist-body{padding:10px 14px}
+.hist-ex{margin-bottom:8px}
+.hist-ex-name{font-size:12px;font-weight:600;color:var(--g700);margin-bottom:3px}
+.hist-pills{display:flex;gap:5px;flex-wrap:wrap}
+.hpill{background:var(--gl);color:var(--gd);font-family:'DM Mono';font-size:10px;font-weight:500;padding:2px 8px;border-radius:20px}
+.hist-note{font-size:11px;color:var(--g500);font-style:italic;margin-top:5px;padding:6px 8px;background:var(--g50);border-radius:6px}
+.empty-hist{text-align:center;padding:36px 20px;color:var(--g400);font-size:13px}
+.empty-icon{font-size:36px;margin-bottom:10px;display:block}
+
+/* STATS */
+.streak-card{background:linear-gradient(135deg,var(--gd),var(--g));border-radius:var(--rl);padding:18px;margin-bottom:12px;color:white;text-align:center}
+.streak-num{font-family:'Bebas Neue';font-size:60px;line-height:1;color:white}
+.streak-lbl{font-size:12px;opacity:.8;margin-top:3px}
+.stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:12px}
+.stat-card{background:var(--white);border:1px solid var(--g200);border-radius:var(--r);padding:13px;text-align:center}
+.stat-val{font-family:'Bebas Neue';font-size:30px;color:var(--g);line-height:1}
+.stat-lbl{font-size:10px;color:var(--g400);text-transform:uppercase;letter-spacing:.8px;margin-top:3px}
+.prog-sec{margin-bottom:12px}
+.prog-title{font-size:12px;font-weight:600;color:var(--g700);margin-bottom:8px}
+.prog-row{margin-bottom:8px}
+.prog-lbl-row{display:flex;justify-content:space-between;font-size:11px;color:var(--g600);margin-bottom:4px}
+.prog-bar{height:7px;background:var(--g100);border-radius:4px;overflow:hidden}
+.prog-fill{height:100%;background:linear-gradient(90deg,var(--gd),var(--g));border-radius:4px;transition:width .6s ease}
+
+/* FOOTER */
+footer{background:var(--g900);color:var(--g400);text-align:center;padding:20px;font-size:11px;line-height:1.8}
+footer strong{color:var(--g)}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════
+     HOME
+════════════════════════════════════════ -->
+<div class="page active" id="page-home">
+  <div class="home">
+    <div class="home-hero">
+      <div>
+        <div class="home-badge">Plan Personalizado · Principiante</div>
+        <h1 class="home-title">FITNESS<br>PRO<br>PLAN</h1>
+        <p class="home-sub">Pérdida de grasa · Preservar músculo<br>Sin pescado · 3 días / semana</p>
+      </div>
+      <div class="home-stats">
+        <div class="home-stat"><div class="home-stat-v">3</div><div class="home-stat-l">Días/sem</div></div>
+        <div class="home-stat"><div class="home-stat-v">2K</div><div class="home-stat-l">Calorías</div></div>
+        <div class="home-stat"><div class="home-stat-v">160g</div><div class="home-stat-l">Proteína</div></div>
+      </div>
+    </div>
+    <div class="home-menu">
+      <div class="home-menu-title">¿Qué quieres hacer?</div>
+      <div class="menu-card" onclick="goTo('page-plan')">
+        <div class="menu-icon menu-icon-green">💪</div>
+        <div class="menu-info">
+          <div class="menu-name">Plan de Entrenamiento</div>
+          <div class="menu-desc">3 días · Videos · Versión gym y casa · Alimentación</div>
+        </div>
+        <div class="menu-arrow">›</div>
+      </div>
+      <div class="menu-card" onclick="goTo('page-bit')">
+        <div class="menu-icon menu-icon-blue">📓</div>
+        <div class="menu-info">
+          <div class="menu-name">Bitácora de Entrenamiento</div>
+          <div class="menu-desc">Registra series · pesos · reps · historial · estadísticas</div>
+        </div>
+        <div class="menu-arrow">›</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════
+     PLAN
+════════════════════════════════════════ -->
+<div class="page" id="page-plan">
+  <div class="page-header">
+    <button class="back-btn" onclick="goTo('page-home')">‹</button>
+    <div class="page-header-title">PLAN DE ENTRENAMIENTO</div>
+  </div>
+  <div class="plan-hero">
+    <div class="plan-hero-badge">Plan Personalizado</div>
+    <h2>TU PLAN<br>COMPLETO</h2>
+    <p class="plan-hero-sub">Pérdida de grasa · Preservar músculo · Sin pescado</p>
+    <div class="plan-hero-stats">
+      <div class="phs"><div class="phs-v">3</div><div class="phs-l">Días</div></div>
+      <div class="phs"><div class="phs-v">2K</div><div class="phs-l">Kcal</div></div>
+      <div class="phs"><div class="phs-v">160g</div><div class="phs-l">Prot</div></div>
+    </div>
+  </div>
+  <div class="tab-bar">
+    <button class="tab-btn active" onclick="switchPlanTab('pt-resumen')">Resumen</button>
+    <button class="tab-btn" onclick="switchPlanTab('pt-d1')">Día 1 · Empuje</button>
+    <button class="tab-btn" onclick="switchPlanTab('pt-d2')">Día 2 · Jalón</button>
+    <button class="tab-btn" onclick="switchPlanTab('pt-d3')">Día 3 · Piernas</button>
+    <button class="tab-btn" onclick="switchPlanTab('pt-diet')">Alimentación</button>
+  </div>
+
+  <!-- RESUMEN -->
+  <div class="tab-content active" id="pt-resumen">
+    <div style="height:4px"></div>
+    <div class="sec-header"><div class="sec-title">PLAN SEMANAL</div><div class="sec-meta"><span class="tag tag-g">Principiante</span><span class="tag tag-a">Déficit calórico</span><span class="tag tag-b">Sin pescado</span></div></div>
+    <div class="week-card">
+      <div class="week-row"><div class="wday">LUN</div><div class="wdot" style="background:var(--g)"></div><div><div class="wdesc">Día 1 — Empuje</div><div class="wsub">Pecho · Hombros · Tríceps · ~45 min</div></div></div>
+      <div class="week-row"><div class="wday">MAR</div><div class="wdot" style="background:var(--g200)"></div><div><div class="wdesc" style="color:var(--g400)">Descanso activo</div><div class="wsub">Caminar 30 min</div></div></div>
+      <div class="week-row"><div class="wday">MIÉ</div><div class="wdot" style="background:var(--blue)"></div><div><div class="wdesc">Día 2 — Jalón</div><div class="wsub">Espalda · Bíceps · Core · ~45 min</div></div></div>
+      <div class="week-row"><div class="wday">JUE</div><div class="wdot" style="background:var(--g200)"></div><div><div class="wdesc" style="color:var(--g400)">Descanso activo</div><div class="wsub">Caminar 30 min</div></div></div>
+      <div class="week-row"><div class="wday">VIE</div><div class="wdot" style="background:var(--amber)"></div><div><div class="wdesc">Día 3 — Piernas</div><div class="wsub">Cuádriceps · Glúteo · Femoral · ~50 min</div></div></div>
+      <div class="week-row"><div class="wday">SÁB</div><div class="wdot" style="background:var(--g200)"></div><div><div class="wdesc" style="color:var(--g400)">Descanso total</div><div class="wsub">O cardio ligero opcional</div></div></div>
+      <div class="week-row"><div class="wday">DOM</div><div class="wdot" style="background:var(--g200)"></div><div><div class="wdesc" style="color:var(--g400)">Descanso total</div><div class="wsub">Recuperación completa</div></div></div>
+    </div>
+    <div class="tips-card">
+      <div class="tips-title">📋 Reglas de oro</div>
+      <div class="tip-item"><div class="tip-icon">🎯</div><div class="tip-text"><strong>Técnica antes que peso.</strong> Las primeras 4 semanas aprende el movimiento.</div></div>
+      <div class="tip-item"><div class="tip-icon">⬆️</div><div class="tip-text"><strong>Sube el peso</strong> cuando puedas hacer más de 12 reps con buena forma.</div></div>
+      <div class="tip-item"><div class="tip-icon">⏱️</div><div class="tip-text"><strong>Descanso:</strong> 60–90 seg aislamiento · 2–3 min compuestos.</div></div>
+      <div class="tip-item"><div class="tip-icon">💤</div><div class="tip-text"><strong>Duerme 7–8 horas.</strong> El músculo se construye mientras duermes.</div></div>
+      <div class="tip-item"><div class="tip-icon">💧</div><div class="tip-text"><strong>2.5–3 litros de agua al día.</strong> Ayuda con saciedad en déficit.</div></div>
+      <div class="tip-item"><div class="tip-icon">💊</div><div class="tip-text"><strong>Creatina 5g/día</strong> (sin ciclar) + proteína whey si no llegas a 160g.</div></div>
+    </div>
+  </div>
+
+  <!-- DÍA 1 -->
+  <div class="tab-content" id="pt-d1">
+    <div style="height:4px"></div>
+    <div class="sec-header"><div class="sec-title">DÍA 1 — EMPUJE</div><div class="sec-meta"><span class="tag tag-g">Pecho</span><span class="tag tag-g">Hombros</span><span class="tag tag-g">Tríceps</span><span class="tag tag-a">~45 min</span></div></div>
+    <div class="stab-bar"><button class="stab-btn active" onclick="switchSub('d1g','d1h',this)">🏢 Gimnasio</button><button class="stab-btn" onclick="switchSub('d1h','d1g',this)">🏠 Casa</button></div>
+    <div class="subsection active" id="d1g">
+      <div class="banner b-amber"><span>⏱</span>Descanso: 2–3 min compuestos · 60–90 seg aislamiento</div>
+      <div class="ex-card"><div class="ex-hd"><div class="ex-num">1</div><div><div class="ex-name">Press de banca con barra</div><div class="ex-muscle">Pecho mayor · porción media</div></div></div><div class="ex-specs"><span class="sp sp-g">3 series</span><span class="sp sp-g">8–10 reps</span><span class="sp sp-gray">Compuesto principal</span></div><div class="ex-tip">Escápulas retraídas, arco neutro. Barra al esternón inferior en 2 seg.</div><div class="vid-label"><div class="yt-dot"></div>Tutorial en video</div><div class="vid-wrap"><iframe src="https://www.youtube.com/embed/rT7DgCr-3pg" allowfullscreen loading="lazy"></iframe></div></div>
+      <div class="ex-card"><div class="ex-hd"><div class="ex-num">2</div><div><div class="ex-name">Press inclinado con mancuernas</div><div class="ex-muscle">Pecho mayor · porción superior</div></div></div><div class="ex-specs"><span class="sp sp-g">3 series</span><span class="sp sp-g">10–12 reps</span><span class="sp sp-gray">Inclinación 30–45°</span></div><div class="ex-tip">Codos a 75° del torso. Mejor activación y menos estrés en hombros.</div><div class="vid-label"><div class="yt-dot"></div>Tutorial en video</div><div class="vid-wrap"><iframe src="https://www.youtube.com/embed/8iPEnn-ltC8" allowfullscreen loading="lazy"></iframe></div></div>
+      <div class="ex-card"><div class="ex-hd"><div class="ex-num">3</div><div><div class="ex-name">Press de hombros con mancuernas</div><div class="ex-muscle">Deltoides anterior · medial</div></div></div><div class="ex-specs"><span class="sp sp-g">3 series</span><span class="sp sp-g">10–12 reps</span></div><div class="ex-tip">Espalda apoyada, no arquees la lumbar. Core activo siempre.</div><div class="vid-label"><div class="yt-dot"></div>Tutorial en video</div><div class="vid-wrap"><iframe src="https://www.youtube.com/embed/HzIiNhHhhtA" allowfullscreen loading="lazy"></iframe></div></div>
+      <div class="ex-card"><div class="ex-hd"><div class="ex-num">4</div><div><div class="ex-name">Elevaciones laterales</div><div class="ex-muscle">Deltoides medial</div></div></div><div class="ex-specs"><span class="sp sp-g">3 series</span><span class="sp sp-g">12–15 reps</span></div><div class="ex-tip">Codo ligeramente doblado, pulgares 15° abajo. Sube a nivel de hombro.</div><div class="vid-label"><div class="yt-dot"></div>Tutorial en video</div><div class="vid-wrap"><iframe src="https://www.youtube.com/embed/3VcKaXpzqRo" allowfullscreen loading="lazy"></iframe></div></div>
+      <div class="ex-card"><div class="ex-hd"><div class="ex-num">5</div><div><div class="ex-name">Extensión tríceps en polea (cuerda)</div><div class="ex-muscle">Tríceps · 3 cabezas</div></div></div><div class="ex-specs"><span class="sp sp-g">3 series</span><span class="sp sp-g">12–15 reps</span></div><div class="ex-tip">Separa la cuerda al final. Codos pegados al torso todo el tiempo.</div><div class="vid-label"><div class="yt-dot"></div>Tutorial en video</div><div class="vid-wrap"><iframe src="https://www.youtube.com/embed/vB5OHsJ3EME" allowfullscreen loading="lazy"></iframe></div></div>
+      <div class="ex-card"><div class="ex-hd"><div class="ex-num">6</div><div><div class="ex-name">Fondos entre bancos (Bench Dips)</div><div class="ex-muscle">Tríceps · Pecho inferior</div></div></div><div class="ex-specs"><span class="sp sp-g">3 series</span><span class="sp sp-g">10–12 reps</span><span class="sp sp-gray">Pies en el suelo</span></div><div class="ex-tip">Baja hasta 90° en el codo. Torso recto para más tríceps.</div><div class="vid-label"><div class="yt-dot"></div>Tutorial en video</div><div class="vid-wrap"><iframe src="https://www.youtube.com/embed/c3ZGl4pAwZ4" allowfullscreen loading="lazy"></iframe></div></div>
+    </div>
+    <div class="subsection" id="d1h">
+      <div class="banner b-green"><span>🏠</span>Solo peso corporal. Si es fácil: mochila con peso o movimiento más lento.</div>
+      <div class="ex-card"><div class="ex-hd"><div class="ex-num">1</div><div><div class="ex-name">Flexiones con pausa (push-up)</div><div class="ex-muscle">Pecho · Tríceps · Hombro anterior</div></div></div><div class="ex-specs"><span class="sp sp-g">3 series</span><span class="sp sp-g">8–12 reps</span><span class="sp sp-gray">Pausa 2 seg abajo</span></div><div class="ex-tip">Progresión: pies elevados en silla o mochila en la espalda.</div><div class="vid-label"><div class="yt-dot"></div>Tutorial en video</div><div class="vid-wrap"><iframe src="https://www.youtube.com/embed/IODxDxX7oi4" allowfullscreen loading="lazy"></iframe></div></div>
+      <div class="ex-card"><div class="ex-hd"><div class="ex-num">2</div><div><div class="ex-name">Flexiones con pies en silla</div><div class="ex-muscle">Pecho superior · Hombro anterior</div></div></div><div class="ex-specs"><span class="sp sp-g">3 series</span><span class="sp sp-g">8–10 reps</span></div><div class="ex-tip">Cuanto más elevados los pies, más pecho superior. Core activo.</div><div class="vid-label"><div class="yt-dot"></div>Tutorial en video</div><div class="vid-wrap"><iframe src="https://www.youtube.com/embed/dFzUjzfih7k" allowfullscreen loading="lazy"></iframe></div></div>
+      <div class="ex-card"><div class="ex-hd"><div class="ex-num">3</div><div><div class="ex-name">Diamante push-up</div><div class="ex-muscle">Tríceps · Pecho interior</div></div></div><div class="ex-specs"><span class="sp sp-g">3 series</span><span class="sp sp-g">8–10 reps</span></div><div class="ex-tip">Manos en triángulo bajo el pecho. Codos pegados al bajar.</div><div class="vid-label"><div class="yt-dot"></div>Tutorial en video</div><div class="vid-wrap"><iframe src="https://www.youtube.com/embed/J0DnG1_S92I" allowfullscreen loading="lazy"></iframe></div></div>
+      <div class="ex-card"><div class="ex-hd"><div class="ex-num">4</div><div><div class="ex-name">Press de hombros con botellas/mochila</div><div class="ex-muscle">Deltoides anterior y medial</div></div></div><div class="ex-specs"><span class="sp sp-g">3 series</span><span class="sp sp-g">10–12 reps</span></div><div class="ex-tip">Botellas llenas, latas o mochila. El control vale más que el peso.</div><div class="vid-label"><div class="yt-dot"></div>Tutorial en video</div><div class="vid-wrap"><iframe src="https://www.youtube.com/embed/HzIiNhHhhtA" allowfullscreen loading="lazy"></iframe></div></div>
+      <div class="ex-card"><div class="ex-hd"><div class="ex-num">5</div><div><div class="ex-name">Fondos entre dos sillas</div><div class="ex-muscle">Tríceps</div></div></div><div class="ex-specs"><span class="sp sp-g">3 series</span><span class="sp sp-g">10–12 reps</span></div><div class="ex-tip">Dos sillas estables. Baja hasta 90° en el codo.</div><div class="vid-label"><div class="yt-dot"></div>Tutorial en video</div><div class="vid-wrap"><iframe src="https://www.youtube.com/embed/c3ZGl4pAwZ4" allowfullscreen loading="lazy"></iframe></div></div>
+      <div class="ex-card"><div class="ex-hd"><div class="ex-num">6</div><div><div class="ex-name">Plancha con toque de hombro</div><div class="ex-muscle">Core · Estabilizadores</div></div></div><div class="ex-specs"><span class="sp sp-g">3 series</span><span class="sp sp-g">10 reps/lado</span></div><div class="ex-tip">Core muy apretado, no balancees la cadera. Toca el hombro contrario.</div><div class="vid-label"><div class="yt-dot"></div>Tutorial en video</div><div class="vid-wrap"><iframe src="https://www.youtube.com/embed/wqzrb67Dwf8" allowfullscreen loading="lazy"></iframe></div></div>
+    </div>
+  </div>
+
+  <!-- DÍA 2 -->
+  <div class="tab-content" id="pt-d2">
+    <div style="height:4px"></div>
+    <div class="sec-header"><div class="sec-title">DÍA 2 — JALÓN</div><div class="sec-meta"><span class="tag tag-b">Espalda</span><span class="tag tag-b">Bíceps</span><span class="tag tag-b">Core</span><span class="tag tag-a">~45 min</span></div></div>
+    <div class="stab-bar"><button class="stab-btn active" onclick="switchSub('d2g','d2h',this)">🏢 Gimnasio</button><button class="stab-btn" onclick="switchSub('d2h','d2g',this)">🏠 Casa</button></div>
+    <div class="subsection active" id="d2g">
+      <div class="banner b-amber"><span>⏱</span>Descanso: 2–3 min compuestos · 60–90 seg aislamiento y core</div>
+      <div class="ex-card"><div class="ex-hd"><div class="ex-num">1</div><div><div class="ex-name">Jalón al pecho en polea</div><div class="ex-muscle">Dorsal ancho · Redondo mayor</div></div></div><div class="ex-specs"><span class="sp sp-g">3 series</span><span class="sp sp-g">10–12 reps</span></div><div class="ex-tip">Inclínate 15° atrás, barra al esternón. No uses impulso del torso.</div><div class="vid-label"><div class="yt-dot"></div>Tutorial en video</div><div class="vid-wrap"><iframe src="https://www.youtube.com/embed/CAwf7n6Luuc" allowfullscreen loading="lazy"></iframe></div></div>
+      <div class="ex-card"><div class="ex-hd"><div class="ex-num">2</div><div><div class="ex-name">Remo en polea baja (agarre neutro)</div><div class="ex-muscle">Dorsal · Bíceps · Trapecio</div></div></div><div class="ex-specs"><span class="sp sp-g">3 series</span><span class="sp sp-g">10–12 reps</span></div><div class="ex-tip">Siéntate erguido. Lleva los codos detrás del torso. No caigas hacia adelante.</div><div class="vid-label"><div class="yt-dot"></div>Tutorial en video</div><div class="vid-wrap"><iframe src="https://www.youtube.com/embed/GZbfZ033f74" allowfullscreen loading="lazy"></iframe></div></div>
+      <div class="ex-card"><div class="ex-hd"><div class="ex-num">3</div><div><div class="ex-name">Remo con mancuerna (un brazo)</div><div class="ex-muscle">Dorsal unilateral</div></div></div><div class="ex-specs"><span class="sp sp-g">3 series</span><span class="sp sp-g">10–12 reps/lado</span></div><div class="ex-tip">Rodilla y mano contraria en banco. Tira hacia la cadera, no al hombro.</div><div class="vid-label"><div class="yt-dot"></div>Tutorial en video</div><div class="vid-wrap"><iframe src="https://www.youtube.com/embed/pYcpY20QaE8" allowfullscreen loading="lazy"></iframe></div></div>
+      <div class="ex-card"><div class="ex-hd"><div class="ex-num">4</div><div><div class="ex-name">Curl de bíceps con mancuernas</div><div class="ex-muscle">Bíceps · Braquial</div></div></div><div class="ex-specs"><span class="sp sp-g">3 series</span><span class="sp sp-g">10–12 reps</span><span class="sp sp-gray">Excéntrico lento</span></div><div class="ex-tip">Codos fijos. Baja en 3 seg. No osciles el torso.</div><div class="vid-label"><div class="yt-dot"></div>Tutorial en video</div><div class="vid-wrap"><iframe src="https://www.youtube.com/embed/ykJmrZ5v0Oo" allowfullscreen loading="lazy"></iframe></div></div>
+      <div class="ex-card"><div class="ex-hd"><div class="ex-num">5</div><div><div class="ex-name">Curl martillo con mancuernas</div><div class="ex-muscle">Braquioradial · Bíceps · Antebrazo</div></div></div><div class="ex-specs"><span class="sp sp-g">3 series</span><span class="sp sp-g">12 reps</span></div><div class="ex-tip">Agarre neutro (pulgares arriba). Alterna brazos. Excelente para grosor.</div><div class="vid-label"><div class="yt-dot"></div>Tutorial en video</div><div class="vid-wrap"><iframe src="https://www.youtube.com/embed/zC3nLlEvin4" allowfullscreen loading="lazy"></iframe></div></div>
+      <div class="ex-card"><div class="ex-hd"><div class="ex-num">6</div><div><div class="ex-name">Plancha frontal</div><div class="ex-muscle">Core · Estabilizadores</div></div></div><div class="ex-specs"><span class="sp sp-g">3 series</span><span class="sp sp-g">30–40 seg</span></div><div class="ex-tip">Cuerpo recto, no subas el trasero ni dejes caer las caderas.</div><div class="vid-label"><div class="yt-dot"></div>Tutorial en video</div><div class="vid-wrap"><iframe src="https://www.youtube.com/embed/pSHjTRCQxIw" allowfullscreen loading="lazy"></iframe></div></div>
+    </div>
+    <div class="subsection" id="d2h">
+      <div class="banner b-green"><span>🏠</span>Una barra de dominadas transforma este día. Sin ella, usa la mesa.</div>
+      <div class="ex-card"><div class="ex-hd"><div class="ex-num">1</div><div><div class="ex-name">Remo invertido bajo mesa</div><div class="ex-muscle">Dorsal · Romboides · Bíceps</div></div></div><div class="ex-specs"><span class="sp sp-g">3 series</span><span class="sp sp-g">8–12 reps</span></div><div class="ex-tip">Acuéstate bajo mesa resistente. Tira el pecho hacia arriba. Cuerpo rígido.</div><div class="vid-label"><div class="yt-dot"></div>Tutorial en video</div><div class="vid-wrap"><iframe src="https://www.youtube.com/embed/B6N9KoLMhY4" allowfullscreen loading="lazy"></iframe></div></div>
+      <div class="ex-card"><div class="ex-hd"><div class="ex-num">2</div><div><div class="ex-name">Dominadas (Pull-ups)</div><div class="ex-muscle">Dorsal ancho · Bíceps</div></div></div><div class="ex-specs"><span class="sp sp-g">3 series</span><span class="sp sp-g">Máx reps buena forma</span></div><div class="ex-tip">Sin barra: negativas — sube con silla, baja lento 5 seg.</div><div class="vid-label"><div class="yt-dot"></div>Tutorial en video</div><div class="vid-wrap"><iframe src="https://www.youtube.com/embed/eGo4IYlbE5g" allowfullscreen loading="lazy"></iframe></div></div>
+      <div class="ex-card"><div class="ex-hd"><div class="ex-num">3</div><div><div class="ex-name">Remo con mochila/botella (un brazo)</div><div class="ex-muscle">Dorsal unilateral</div></div></div><div class="ex-specs"><span class="sp sp-g">3 series</span><span class="sp sp-g">12 reps/lado</span></div><div class="ex-tip">Rodilla y mano contraria en silla. Tira hacia la cadera, improvisa el peso.</div><div class="vid-label"><div class="yt-dot"></div>Tutorial en video</div><div class="vid-wrap"><iframe src="https://www.youtube.com/embed/pYcpY20QaE8" allowfullscreen loading="lazy"></iframe></div></div>
+      <div class="ex-card"><div class="ex-hd"><div class="ex-num">4</div><div><div class="ex-name">Superman hold</div><div class="ex-muscle">Erector espinal · Glúteo</div></div></div><div class="ex-specs"><span class="sp sp-g">3 series</span><span class="sp sp-g">12–15 reps</span><span class="sp sp-gray">2 seg arriba</span></div><div class="ex-tip">Boca abajo. Levanta brazos y piernas simultáneamente. Aprieta glúteos.</div><div class="vid-label"><div class="yt-dot"></div>Tutorial en video</div><div class="vid-wrap"><iframe src="https://www.youtube.com/embed/z6PJMT2y8GQ" allowfullscreen loading="lazy"></iframe></div></div>
+      <div class="ex-card"><div class="ex-hd"><div class="ex-num">5</div><div><div class="ex-name">Curl de bíceps con botellas/mochila</div><div class="ex-muscle">Bíceps · Braquial</div></div></div><div class="ex-specs"><span class="sp sp-g">3 series</span><span class="sp sp-g">12–15 reps</span><span class="sp sp-gray">Tempo 2-0-3</span></div><div class="ex-tip">Excéntrico lento 3 seg bajando. La fase negativa construye igual o más.</div><div class="vid-label"><div class="yt-dot"></div>Tutorial en video</div><div class="vid-wrap"><iframe src="https://www.youtube.com/embed/ykJmrZ5v0Oo" allowfullscreen loading="lazy"></iframe></div></div>
+      <div class="ex-card"><div class="ex-hd"><div class="ex-num">6</div><div><div class="ex-name">Plancha lateral (cada lado)</div><div class="ex-muscle">Core lateral · Oblicuos</div></div></div><div class="ex-specs"><span class="sp sp-g">3 series</span><span class="sp sp-g">25–35 seg/lado</span></div><div class="ex-tip">Cadera arriba, cuerpo en línea recta. Progresión: eleva la pierna de arriba.</div><div class="vid-label"><div class="yt-dot"></div>Tutorial en video</div><div class="vid-wrap"><iframe src="https://www.youtube.com/embed/K2eVMIl4ze0" allowfullscreen loading="lazy"></iframe></div></div>
+    </div>
+  </div>
+
+  <!-- DÍA 3 -->
+  <div class="tab-content" id="pt-d3">
+    <div style="height:4px"></div>
+    <div class="sec-header"><div class="sec-title">DÍA 3 — PIERNAS</div><div class="sec-meta"><span class="tag tag-a">Cuádriceps</span><span class="tag tag-a">Glúteo</span><span class="tag tag-a">Femoral</span><span class="tag tag-a">~50 min</span></div></div>
+    <div class="stab-bar"><button class="stab-btn active" onclick="switchSub('d3g','d3h',this)">🏢 Gimnasio</button><button class="stab-btn" onclick="switchSub('d3h','d3g',this)">🏠 Casa</button></div>
+    <div class="subsection active" id="d3g">
+      <div class="banner b-amber"><span>⏱</span>Descanso: 2–3 min sentadilla y RDL · 60–90 seg aislamiento</div>
+      <div class="ex-card"><div class="ex-hd"><div class="ex-num">1</div><div><div class="ex-name">Sentadilla con barra (back squat)</div><div class="ex-muscle">Cuádriceps · Glúteo · Femoral</div></div></div><div class="ex-specs"><span class="sp sp-g">3 series</span><span class="sp sp-g">8–10 reps</span><span class="sp sp-gray">El rey</span></div><div class="ex-tip">Pies a anchura de hombros, puntas 15–30° afuera. Muslos paralelos al suelo.</div><div class="vid-label"><div class="yt-dot"></div>Tutorial en video</div><div class="vid-wrap"><iframe src="https://www.youtube.com/embed/ultWZbUMPL8" allowfullscreen loading="lazy"></iframe></div></div>
+      <div class="ex-card"><div class="ex-hd"><div class="ex-num">2</div><div><div class="ex-name">Prensa de piernas</div><div class="ex-muscle">Cuádriceps · Glúteo</div></div></div><div class="ex-specs"><span class="sp sp-g">3 series</span><span class="sp sp-g">12 reps</span></div><div class="ex-tip">Pies al centro de la plataforma. No bloquees las rodillas al extender.</div><div class="vid-label"><div class="yt-dot"></div>Tutorial en video</div><div class="vid-wrap"><iframe src="https://www.youtube.com/embed/IZxyjW7MPJQ" allowfullscreen loading="lazy"></iframe></div></div>
+      <div class="ex-card"><div class="ex-hd"><div class="ex-num">3</div><div><div class="ex-name">Peso muerto rumano (RDL)</div><div class="ex-muscle">Femoral · Glúteo · Erector espinal</div></div></div><div class="ex-specs"><span class="sp sp-g">3 series</span><span class="sp sp-g">10–12 reps</span></div><div class="ex-tip">Rodillas ligeramente dobladas, espalda SIEMPRE plana. Baja hasta sentir el femoral.</div><div class="vid-label"><div class="yt-dot"></div>Tutorial en video</div><div class="vid-wrap"><iframe src="https://www.youtube.com/embed/hCDzSR6bW10" allowfullscreen loading="lazy"></iframe></div></div>
+      <div class="ex-card"><div class="ex-hd"><div class="ex-num">4</div><div><div class="ex-name">Zancadas caminando con mancuernas</div><div class="ex-muscle">Cuádriceps · Glúteo unilateral</div></div></div><div class="ex-specs"><span class="sp sp-g">3 series</span><span class="sp sp-g">10 reps/pierna</span></div><div class="ex-tip">Rodilla trasera casi toca el suelo. Rodilla delantera no pase la punta.</div><div class="vid-label"><div class="yt-dot"></div>Tutorial en video</div><div class="vid-wrap"><iframe src="https://www.youtube.com/embed/D7KaRcUTQeE" allowfullscreen loading="lazy"></iframe></div></div>
+      <div class="ex-card"><div class="ex-hd"><div class="ex-num">5</div><div><div class="ex-name">Hip thrust en banco</div><div class="ex-muscle">Glúteo mayor · máxima activación</div></div></div><div class="ex-specs"><span class="sp sp-g">3 series</span><span class="sp sp-g">12–15 reps</span><span class="sp sp-gray">Pausa 1 seg arriba</span></div><div class="ex-tip">Hombros en el borde del banco, barbilla al pecho. Aprieta glúteo al máximo.</div><div class="vid-label"><div class="yt-dot"></div>Tutorial en video</div><div class="vid-wrap"><iframe src="https://www.youtube.com/embed/SEdqd1n0cvg" allowfullscreen loading="lazy"></iframe></div></div>
+      <div class="ex-card"><div class="ex-hd"><div class="ex-num">6</div><div><div class="ex-name">Calf raise de pie</div><div class="ex-muscle">Gastrocnemio · Sóleo</div></div></div><div class="ex-specs"><span class="sp sp-g">3 series</span><span class="sp sp-g">20 reps</span><span class="sp sp-gray">Rango completo</span></div><div class="ex-tip">Baja lento hasta el estiramiento completo. Usa escalón si hay.</div><div class="vid-label"><div class="yt-dot"></div>Tutorial en video</div><div class="vid-wrap"><iframe src="https://www.youtube.com/embed/-M4-G8p1fCI" allowfullscreen loading="lazy"></iframe></div></div>
+    </div>
+    <div class="subsection" id="d3h">
+      <div class="banner b-green"><span>🏠</span>Sin equipo o con mochila. Igual de efectivo con buena progresión.</div>
+      <div class="ex-card"><div class="ex-hd"><div class="ex-num">1</div><div><div class="ex-name">Sentadilla búlgara (pie en silla)</div><div class="ex-muscle">Cuádriceps · Glúteo unilateral</div></div></div><div class="ex-specs"><span class="sp sp-g">3 series</span><span class="sp sp-g">10 reps/pierna</span></div><div class="ex-tip">Pie trasero en silla. Desciende lento. Mochila con peso para progresar.</div><div class="vid-label"><div class="yt-dot"></div>Tutorial en video</div><div class="vid-wrap"><iframe src="https://www.youtube.com/embed/2C-uNgKwPLE" allowfullscreen loading="lazy"></iframe></div></div>
+      <div class="ex-card"><div class="ex-hd"><div class="ex-num">2</div><div><div class="ex-name">Sentadilla sumo con peso improvisado</div><div class="ex-muscle">Cuádriceps · Aductores · Glúteo</div></div></div><div class="ex-specs"><span class="sp sp-g">3 series</span><span class="sp sp-g">15 reps</span></div><div class="ex-tip">Pies más anchos que hombros, puntas 45°. Sostén mochila o garrafón.</div><div class="vid-label"><div class="yt-dot"></div>Tutorial en video</div><div class="vid-wrap"><iframe src="https://www.youtube.com/embed/qJwx0dJCfEk" allowfullscreen loading="lazy"></iframe></div></div>
+      <div class="ex-card"><div class="ex-hd"><div class="ex-num">3</div><div><div class="ex-name">Good morning (sin peso o mochila)</div><div class="ex-muscle">Femoral · Glúteo · Erector espinal</div></div></div><div class="ex-specs"><span class="sp sp-g">3 series</span><span class="sp sp-g">12–15 reps</span></div><div class="ex-tip">Rodillas semi-dobladas. Inclínate controlando el femoral. Espalda plana.</div><div class="vid-label"><div class="yt-dot"></div>Tutorial en video</div><div class="vid-wrap"><iframe src="https://www.youtube.com/embed/YA-h3n9L4YU" allowfullscreen loading="lazy"></iframe></div></div>
+      <div class="ex-card"><div class="ex-hd"><div class="ex-num">4</div><div><div class="ex-name">Zancadas alternas en el lugar</div><div class="ex-muscle">Cuádriceps · Glúteo</div></div></div><div class="ex-specs"><span class="sp sp-g">3 series</span><span class="sp sp-g">10 reps/pierna</span></div><div class="ex-tip">Alterna piernas. Con mochila o botellas para aumentar la intensidad.</div><div class="vid-label"><div class="yt-dot"></div>Tutorial en video</div><div class="vid-wrap"><iframe src="https://www.youtube.com/embed/wrwwXE_x-pQ" allowfullscreen loading="lazy"></iframe></div></div>
+      <div class="ex-card"><div class="ex-hd"><div class="ex-num">5</div><div><div class="ex-name">Hip thrust con hombros en el sofá</div><div class="ex-muscle">Glúteo mayor</div></div></div><div class="ex-specs"><span class="sp sp-g">3 series</span><span class="sp sp-g">15 reps</span><span class="sp sp-gray">Pausa 1 seg arriba</span></div><div class="ex-tip">Hombros en sofá. Mochila o garrafón en el regazo. Idéntico al del gym.</div><div class="vid-label"><div class="yt-dot"></div>Tutorial en video</div><div class="vid-wrap"><iframe src="https://www.youtube.com/embed/xDmFkJxPzeM" allowfullscreen loading="lazy"></iframe></div></div>
+      <div class="ex-card"><div class="ex-hd"><div class="ex-num">6</div><div><div class="ex-name">Calf raise en escalón (una pierna)</div><div class="ex-muscle">Gastrocnemio · Sóleo</div></div></div><div class="ex-specs"><span class="sp sp-g">3 series</span><span class="sp sp-g">15–20 reps/pierna</span></div><div class="ex-tip">Un pie en el escalón. Una sola pierna duplica la intensidad. Rango completo.</div><div class="vid-label"><div class="yt-dot"></div>Tutorial en video</div><div class="vid-wrap"><iframe src="https://www.youtube.com/embed/gwLzBJYoWlI" allowfullscreen loading="lazy"></iframe></div></div>
+    </div>
+  </div>
+
+  <!-- ALIMENTACIÓN -->
+  <div class="tab-content" id="pt-diet">
+    <div style="height:4px"></div>
+    <div class="macros-card"><div class="macros-title">MACROS DIARIOS</div><div class="macros-grid"><div class="macro-item"><div class="macro-val">2,000</div><div class="macro-lbl">Calorías</div></div><div class="macro-item"><div class="macro-val">160g</div><div class="macro-lbl">Proteína</div></div><div class="macro-item"><div class="macro-val">~180g</div><div class="macro-lbl">Carbos</div></div><div class="macro-item"><div class="macro-val">~60g</div><div class="macro-lbl">Grasas</div></div></div></div>
+    <div class="banner b-green"><span>💡</span>Proteína alta en 5 comidas · Carbos cerca del entreno · Grasas alejadas del gym</div>
+    <div class="meal-card"><div class="meal-hd"><div><div class="meal-time">7–8 am</div><div class="meal-title-txt">Desayuno</div></div><div class="meal-kcal">~500 kcal<br><strong>40g prot</strong></div></div><div class="meal-body"><div class="opt-lbl">Opción A</div><div class="opt-item">4 huevos enteros + 200g claras revueltas + 2 rebanadas pan integral + café negro</div><div class="opt-lbl">Opción B</div><div class="opt-item">250g yogur griego 0% + 30g avena + 1 scoop proteína whey + 1 fruta pequeña</div><div class="opt-lbl">Opción C</div><div class="opt-item">Omelette 3 huevos + pechuga de pavo + espinacas salteadas + 1 tostada integral</div></div></div>
+    <div class="meal-card"><div class="meal-hd"><div><div class="meal-time">10–11 am</div><div class="meal-title-txt">Colación mañana</div></div><div class="meal-kcal">~250 kcal<br><strong>30g prot</strong></div></div><div class="meal-body"><div class="opt-lbl">Opción A</div><div class="opt-item">200g requesón o cottage cheese + pepino + sal y limón</div><div class="opt-lbl">Opción B</div><div class="opt-item">1 scoop proteína whey en agua + 1 manzana o naranja</div><div class="opt-lbl">Opción C</div><div class="opt-item">100g pechuga de pollo fría + jícama en bastones + limón y chile</div></div></div>
+    <div class="meal-card"><div class="meal-hd"><div><div class="meal-time">1–2 pm</div><div class="meal-title-txt">Comida principal</div></div><div class="meal-kcal">~550 kcal<br><strong>45g prot</strong></div></div><div class="meal-body"><div class="opt-lbl">Opción A — Pollo</div><div class="opt-item">180g pechuga a la plancha + 150g arroz integral + ensalada grande + 1 cdita aceite de oliva</div><div class="opt-lbl">Opción B — Res</div><div class="opt-item">150g carne molida 90/10 + 120g frijoles + 2 tortillas de maíz + 30g guacamole + salsa</div><div class="opt-lbl">Opción C — Pavo</div><div class="opt-item">180g milanesa de pavo horneada + 150g camote + brócoli al vapor + limón</div><div class="opt-lbl">Opción D — Vegetariana</div><div class="opt-item">200g tofu firme salteado + 100g lentejas + 120g arroz cocido + verduras mixtas</div></div></div>
+    <div class="meal-card"><div class="meal-hd"><div><div class="meal-time">4–6 pm</div><div class="meal-title-txt">Pre / Post entrenamiento</div></div><div class="meal-kcal">~350 kcal<br><strong>30g prot</strong></div></div><div class="meal-body"><div class="opt-lbl">Opción A — Post-entreno</div><div class="opt-item">1 scoop proteína whey + 1 plátano + 1 tortilla con 80g pechuga de pollo</div><div class="opt-lbl">Opción B — Pre-entreno</div><div class="opt-item">2 rebanadas pan integral + 2 huevos cocidos + café negro sin azúcar</div><div class="opt-lbl">Opción C — Sin suplementos</div><div class="opt-item">200g yogur griego + 150g fresas o berries + 20g nueces o almendras</div></div></div>
+    <div class="meal-card"><div class="meal-hd"><div><div class="meal-time">8–9 pm</div><div class="meal-title-txt">Cena</div></div><div class="meal-kcal">~350 kcal<br><strong>35g prot</strong></div></div><div class="meal-body"><div class="opt-lbl">Opción A — Ligera</div><div class="opt-item">150g pechuga al horno + ensalada grande (lechuga, pepino, tomate, zanahoria) + aceite de oliva</div><div class="opt-lbl">Opción B — Saciante</div><div class="opt-item">6 claras en omelette + espinacas + 30g queso Oaxaca + calabacitas salteadas</div><div class="opt-lbl">Opción C — Proteína y grasa sana</div><div class="opt-item">130g bistec de res magro + ensalada con ¼ aguacate + brócoli + limón y sal</div><div class="opt-lbl">Opción D — Rápida</div><div class="opt-item">200g requesón + tomate cherry + zanahoria cruda + 2 claras cocidas</div></div></div>
+    <div class="tips-card"><div class="tips-title">💊 Suplementos y tips</div><div class="tip-item"><div class="tip-icon">💧</div><div class="tip-text"><strong>Hidratación:</strong> 2.5–3 litros de agua al día.</div></div><div class="tip-item"><div class="tip-icon">🔬</div><div class="tip-text"><strong>Creatina monohidratada:</strong> 5g al día, sin ciclar.</div></div><div class="tip-item"><div class="tip-icon">🥛</div><div class="tip-text"><strong>Proteína whey:</strong> Solo si no llegas a 160g con comida real.</div></div><div class="tip-item"><div class="tip-icon">🍕</div><div class="tip-text"><strong>Día libre semanal:</strong> +300–400 kcal extra de comida real. Sin romper el déficit semanal.</div></div></div>
+  </div>
+  <footer><strong>Plan Fitness Pro</strong> · Principiante · Sin pescado · 2,000 kcal · 160g proteína</footer>
+</div>
+
+<!-- ═══════════════════════════════════════
+     BITÁCORA
+════════════════════════════════════════ -->
+<div class="page" id="page-bit">
+  <div class="page-header">
+    <button class="back-btn" onclick="goTo('page-home')">‹</button>
+    <div class="page-header-title">BITÁCORA</div>
+  </div>
+  <div class="bit-hero">
+    <div class="bit-hero-lbl">Plan Fitness Pro</div>
+    <h2>BITÁCORA<br>DE ENTRENO</h2>
+    <p class="bit-hero-sub">Registra cada sesión · Monitorea tu progreso</p>
+    <div class="bit-chips"><span class="bit-chip">3 días/semana</span><span class="bit-chip">Principiante</span><span class="bit-chip">Déficit calórico</span></div>
+  </div>
+  <div class="btab-bar">
+    <button class="btab-btn active" onclick="switchBitTab('bt-reg')">📝 Registrar</button>
+    <button class="btab-btn" onclick="switchBitTab('bt-hist')">📋 Historial</button>
+    <button class="btab-btn" onclick="switchBitTab('bt-stats')">📊 Estadísticas</button>
+  </div>
+
+  <!-- REGISTRAR -->
+  <div class="bcontent active" id="bt-reg">
+    <div style="height:4px"></div>
+    <div class="week-bar">
+      <button class="week-nav" onclick="changeWeek(-1)">‹</button>
+      <div><div class="week-num" id="weekLabel">SEMANA 1</div><div class="week-dates" id="weekDates"></div></div>
+      <button class="week-nav" onclick="changeWeek(1)">›</button>
+    </div>
+
+    <!-- DÍA 1 -->
+    <div class="sess-card">
+      <div class="sess-hd" onclick="toggleSess('ss1')">
+        <div class="sess-left"><div class="sess-dot" style="background:var(--g)"></div><div><div class="sess-day-lbl">Lunes</div><div class="sess-name">Día 1 — Empuje</div></div></div>
+        <button class="sess-toggle" id="tgl-ss1">▾</button>
+      </div>
+      <div class="sess-body" id="body-ss1">
+        <div class="s-meta">
+          <div class="f-group"><div class="f-lbl">Fecha</div><input type="date" class="f-input" id="d1-date"></div>
+          <div class="f-group"><div class="f-lbl">Modo</div><select class="f-input" id="d1-modo"><option value="gym">🏢 Gimnasio</option><option value="home">🏠 Casa</option></select></div>
+        </div>
+        <div class="f-lbl" style="margin-bottom:7px">¿Cómo te sentiste?</div>
+        <div class="feel-row" id="feel-d1">
+          <button class="feel-btn" onclick="setFeel('d1',1)">😫<span class="feel-lbl">Pesado</span></button>
+          <button class="feel-btn" onclick="setFeel('d1',2)">😐<span class="feel-lbl">Regular</span></button>
+          <button class="feel-btn" onclick="setFeel('d1',3)">💪<span class="feel-lbl">Bien</span></button>
+          <button class="feel-btn" onclick="setFeel('d1',4)">🔥<span class="feel-lbl">Brutal</span></button>
+        </div>
+        <div class="el-hd"><div class="el-num">1</div><div><div class="el-name">Press de banca con barra</div><div class="el-target">3 × 8–10 reps</div></div></div>
+        <div class="s-grid"><div class="s-head">S</div><div class="s-head">Kg</div><div class="s-head">Reps</div><div class="s-head">RPE</div><div></div></div>
+        <div class="s-grid"><div class="s-num">1</div><input class="s-inp" placeholder="—" type="number" inputmode="decimal"><input class="s-inp" placeholder="—" type="number" inputmode="numeric"><input class="s-inp" placeholder="1–10" type="number" inputmode="numeric"><button class="chk-btn" onclick="toggleChk(this)">✓</button></div>
+        <div class="s-grid"><div class="s-num">2</div><input class="s-inp" placeholder="—" type="number" inputmode="decimal"><input class="s-inp" placeholder="—" type="number" inputmode="numeric"><input class="s-inp" placeholder="1–10" type="number" inputmode="numeric"><button class="chk-btn" onclick="toggleChk(this)">✓</button></div>
+        <div class="s-grid"><div class="s-num">3</div><input class="s-inp" placeholder="—" type="number" inputmode="decimal"><input class="s-inp" placeholder="—" type="number" inputmode="numeric"><input class="s-inp" placeholder="1–10" type="number" inputmode="numeric"><button class="chk-btn" onclick="toggleChk(this)">✓</button></div>
+        <div class="el-notes"><textarea placeholder="Notas del ejercicio..."></textarea></div>
+        <div class="el-div"></div>
+        <div class="el-hd"><div class="el-num">2</div><div><div class="el-name">Press inclinado mancuernas</div><div class="el-target">3 × 10–12 reps</div></div></div>
+        <div class="s-grid"><div class="s-head">S</div><div class="s-head">Kg</div><div class="s-head">Reps</div><div class="s-head">RPE</div><div></div></div>
+        <div class="s-grid"><div class="s-num">1</div><input class="s-inp" placeholder="—" type="number" inputmode="decimal"><input class="s-inp" placeholder="—" type="number" inputmode="numeric"><input class="s-inp" placeholder="1–10" type="number" inputmode="numeric"><button class="chk-btn" onclick="toggleChk(this)">✓</button></div>
+        <div class="s-grid"><div class="s-num">2</div><input class="s-inp" placeholder="—" type="number" inputmode="decimal"><input class="s-inp" placeholder="—" type="number" inputmode="numeric"><input class="s-inp" placeholder="1–10" type="number" inputmode="numeric"><button class="chk-btn" onclick="toggleChk(this)">✓</button></div>
+        <div class="s-grid"><div class="s-num">3</div><input class="s-inp" placeholder="—" type="number" inputmode="decimal"><input class="s-inp" placeholder="—" type="number" inputmode="numeric"><input class="s-inp" placeholder="1–10" type="number" inputmode="numeric"><button class="chk-btn" onclick="toggleChk(this)">✓</button></div>
+        <div class="el-notes"><textarea placeholder="Notas..."></textarea></div>
+        <div class="el-div"></div>
+        <div class="el-hd"><div class="el-num">3</div><div><div class="el-name">Press de hombros mancuernas</div><div class="el-target">3 × 10–12 reps</div></div></div>
+        <div class="s-grid"><div class="s-head">S</div><div class="s-head">Kg</div><div class="s-head">Reps</div><div class="s-head">RPE</div><div></div></div>
+        <div class="s-grid"><div class="s-num">1</div><input class="s-inp" placeholder="—" type="number" inputmode="decimal"><input class="s-inp" placeholder="—" type="number" inputmode="numeric"><input class="s-inp" placeholder="1–10" type="number" inputmode="numeric"><button class="chk-btn" onclick="toggleChk(this)">✓</button></div>
+        <div class="s-grid"><div class="s-num">2</div><input class="s-inp" placeholder="—" type="number" inputmode="decimal"><input class="s-inp" placeholder="—" type="number" inputmode="numeric"><input class="s-inp" placeholder="1–10" type="number" inputmode="numeric"><button class="chk-btn" onclick="toggleChk(this)">✓</button></div>
+        <div class="s-grid"><div class="s-num">3</div><input class="s-inp" placeholder="—" type="number" inputmode="decimal"><input class="s-inp" placeholder="—" type="number" inputmode="numeric"><input class="s-inp" placeholder="1–10" type="number" inputmode="numeric"><button class="chk-btn" onclick="toggleChk(this)">✓</button></div>
+        <div class="el-notes"><textarea placeholder="Notas..."></textarea></div>
+        <div class="el-div"></div>
+        <div class="el-hd"><div class="el-num">4</div><div><div class="el-name">Elevaciones laterales</div><div class="el-target">3 × 12–15 reps</div></div></div>
+        <div class="s-grid"><div class="s-head">S</div><div class="s-head">Kg</div><div class="s-head">Reps</div><div class="s-head">RPE</div><div></div></div>
+        <div class="s-grid"><div class="s-num">1</div><input class="s-inp" placeholder="—" type="number" inputmode="decimal"><input class="s-inp" placeholder="—" type="number" inputmode="numeric"><input class="s-inp" placeholder="1–10" type="number" inputmode="numeric"><button class="chk-btn" onclick="toggleChk(this)">✓</button></div>
+        <div class="s-grid"><div class="s-num">2</div><input class="s-inp" placeholder="—" type="number" inputmode="decimal"><input class="s-inp" placeholder="—" type="number" inputmode="numeric"><input class="s-inp" placeholder="1–10" type="number" inputmode="numeric"><button class="chk-btn" onclick="toggleChk(this)">✓</button></div>
+        <div class="s-grid"><div class="s-num">3</div><input class="s-inp" placeholder="—" type="number" inputmode="decimal"><input class="s-inp" placeholder="—" type="number" inputmode="numeric"><input class="s-inp" placeholder="1–10" type="number" inputmode="numeric"><button class="chk-btn" onclick="toggleChk(this)">✓</button></div>
+        <div class="el-notes"><textarea placeholder="Notas..."></textarea></div>
+        <div class="el-div"></div>
+        <div class="el-hd"><div class="el-num">5</div><div><div class="el-name">Extensión tríceps en polea</div><div class="el-target">3 × 12–15 reps</div></div></div>
+        <div class="s-grid"><div class="s-head">S</div><div class="s-head">Kg</div><div class="s-head">Reps</div><div class="s-head">RPE</div><div></div></div>
+        <div class="s-grid"><div class="s-num">1</div><input class="s-inp" placeholder="—" type="number" inputmode="decimal"><input class="s-inp" placeholder="—" type="number" inputmode="numeric"><input class="s-inp" placeholder="1–10" type="number" inputmode="numeric"><button class="chk-btn" onclick="toggleChk(this)">✓</button></div>
+        <div class="s-grid"><div class="s-num">2</div><input class="s-inp" placeholder="—" type="number" inputmode="decimal"><input class="s-inp" placeholder="—" type="number" inputmode="numeric"><input class="s-inp" placeholder="1–10" type="number" inputmode="numeric"><button class="chk-btn" onclick="toggleChk(this)">✓</button></div>
+        <div class="s-grid"><div class="s-num">3</div><input class="s-inp" placeholder="—" type="number" inputmode="decimal"><input class="s-inp" placeholder="—" type="number" inputmode="numeric"><input class="s-inp" placeholder="1–10" type="number" inputmode="numeric"><button class="chk-btn" onclick="toggleChk(this)">✓</button></div>
+        <div class="el-notes"><textarea placeholder="Notas..."></textarea></div>
+        <div class="el-div"></div>
+        <div class="el-hd"><div class="el-num">6</div><div><div class="el-name">Fondos entre bancos</div><div class="el-target">3 × 10–12 reps</div></div></div>
+        <div class="s-grid"><div class="s-head">S</div><div class="s-head">Kg</div><div class="s-head">Reps</div><div class="s-head">RPE</div><div></div></div>
+        <div class="s-grid"><div class="s-num">1</div><input class="s-inp" placeholder="—" type="number" inputmode="decimal"><input class="s-inp" placeholder="—" type="number" inputmode="numeric"><input class="s-inp" placeholder="1–10" type="number" inputmode="numeric"><button class="chk-btn" onclick="toggleChk(this)">✓</button></div>
+        <div class="s-grid"><div class="s-num">2</div><input class="s-inp" placeholder="—" type="number" inputmode="decimal"><input class="s-inp" placeholder="—" type="number" inputmode="numeric"><input class="s-inp" placeholder="1–10" type="number" inputmode="numeric"><button class="chk-btn" onclick="toggleChk(this)">✓</button></div>
+        <div class="s-grid"><div class="s-num">3</div><input class="s-inp" placeholder="—" type="number" inputmode="decimal"><input class="s-inp" placeholder="—" type="number" inputmode="numeric"><input class="s-inp" placeholder="1–10" type="number" inputmode="numeric"><button class="chk-btn" onclick="toggleChk(this)">✓</button></div>
+        <div class="el-notes"><textarea placeholder="Notas..."></textarea></div>
+        <div class="gen-notes"><div class="gen-notes-lbl">📝 Notas generales</div><textarea id="gn-d1" placeholder="¿Cómo fue la sesión? ¿Algo que ajustar?..."></textarea></div>
+        <button class="save-btn" onclick="saveSess('d1','Día 1 — Empuje')">GUARDAR SESIÓN</button>
+      </div>
+    </div>
+
+    <!-- DÍA 2 -->
+    <div class="sess-card">
+      <div class="sess-hd" onclick="toggleSess('ss2')">
+        <div class="sess-left"><div class="sess-dot" style="background:var(--blue)"></div><div><div class="sess-day-lbl">Miércoles</div><div class="sess-name">Día 2 — Jalón</div></div></div>
+        <button class="sess-toggle" id="tgl-ss2">▾</button>
+      </div>
+      <div class="sess-body" id="body-ss2">
+        <div class="s-meta"><div class="f-group"><div class="f-lbl">Fecha</div><input type="date" class="f-input" id="d2-date"></div><div class="f-group"><div class="f-lbl">Modo</div><select class="f-input" id="d2-modo"><option value="gym">🏢 Gimnasio</option><option value="home">🏠 Casa</option></select></div></div>
+        <div class="f-lbl" style="margin-bottom:7px">¿Cómo te sentiste?</div>
+        <div class="feel-row" id="feel-d2"><button class="feel-btn" onclick="setFeel('d2',1)">😫<span class="feel-lbl">Pesado</span></button><button class="feel-btn" onclick="setFeel('d2',2)">😐<span class="feel-lbl">Regular</span></button><button class="feel-btn" onclick="setFeel('d2',3)">💪<span class="feel-lbl">Bien</span></button><button class="feel-btn" onclick="setFeel('d2',4)">🔥<span class="feel-lbl">Brutal</span></button></div>
+        <div class="el-hd"><div class="el-num">1</div><div><div class="el-name">Jalón al pecho en polea</div><div class="el-target">3 × 10–12 reps</div></div></div><div class="s-grid"><div class="s-head">S</div><div class="s-head">Kg</div><div class="s-head">Reps</div><div class="s-head">RPE</div><div></div></div><div class="s-grid"><div class="s-num">1</div><input class="s-inp" placeholder="—" type="number" inputmode="decimal"><input class="s-inp" placeholder="—" type="number" inputmode="numeric"><input class="s-inp" placeholder="1–10" type="number" inputmode="numeric"><button class="chk-btn" onclick="toggleChk(this)">✓</button></div><div class="s-grid"><div class="s-num">2</div><input class="s-inp" placeholder="—" type="number" inputmode="decimal"><input class="s-inp" placeholder="—" type="number" inputmode="numeric"><input class="s-inp" placeholder="1–10" type="number" inputmode="numeric"><button class="chk-btn" onclick="toggleChk(this)">✓</button></div><div class="s-grid"><div class="s-num">3</div><input class="s-inp" placeholder="—" type="number" inputmode="decimal"><input class="s-inp" placeholder="—" type="number" inputmode="numeric"><input class="s-inp" placeholder="1–10" type="number" inputmode="numeric"><button class="chk-btn" onclick="toggleChk(this)">✓</button></div><div class="el-notes"><textarea placeholder="Notas..."></textarea></div>
+        <div class="el-div"></div>
+        <div class="el-hd"><div class="el-num">2</div><div><div class="el-name">Remo en polea baja</div><div class="el-target">3 × 10–12 reps</div></div></div><div class="s-grid"><div class="s-head">S</div><div class="s-head">Kg</div><div class="s-head">Reps</div><div class="s-head">RPE</div><div></div></div><div class="s-grid"><div class="s-num">1</div><input class="s-inp" placeholder="—" type="number" inputmode="decimal"><input class="s-inp" placeholder="—" type="number" inputmode="numeric"><input class="s-inp" placeholder="1–10" type="number" inputmode="numeric"><button class="chk-btn" onclick="toggleChk(this)">✓</button></div><div class="s-grid"><div class="s-num">2</div><input class="s-inp" placeholder="—" type="number" inputmode="decimal"><input class="s-inp" placeholder="—" type="number" inputmode="numeric"><input class="s-inp" placeholder="1–10" type="number" inputmode="numeric"><button class="chk-btn" onclick="toggleChk(this)">✓</button></div><div class="s-grid"><div class="s-num">3</div><input class="s-inp" placeholder="—" type="number" inputmode="decimal"><input class="s-inp" placeholder="—" type="number" inputmode="numeric"><input class="s-inp" placeholder="1–10" type="number" inputmode="numeric"><button class="chk-btn" onclick="toggleChk(this)">✓</button></div><div class="el-notes"><textarea placeholder="Notas..."></textarea></div>
+        <div class="el-div"></div>
+        <div class="el-hd"><div class="el-num">3</div><div><div class="el-name">Remo con mancuerna (un brazo)</div><div class="el-target">3 × 10–12 reps/lado</div></div></div><div class="s-grid"><div class="s-head">S</div><div class="s-head">Kg</div><div class="s-head">Reps</div><div class="s-head">RPE</div><div></div></div><div class="s-grid"><div class="s-num">1</div><input class="s-inp" placeholder="—" type="number" inputmode="decimal"><input class="s-inp" placeholder="—" type="number" inputmode="numeric"><input class="s-inp" placeholder="1–10" type="number" inputmode="numeric"><button class="chk-btn" onclick="toggleChk(this)">✓</button></div><div class="s-grid"><div class="s-num">2</div><input class="s-inp" placeholder="—" type="number" inputmode="decimal"><input class="s-inp" placeholder="—" type="number" inputmode="numeric"><input class="s-inp" placeholder="1–10" type="number" inputmode="numeric"><button class="chk-btn" onclick="toggleChk(this)">✓</button></div><div class="s-grid"><div class="s-num">3</div><input class="s-inp" placeholder="—" type="number" inputmode="decimal"><input class="s-inp" placeholder="—" type="number" inputmode="numeric"><input class="s-inp" placeholder="1–10" type="number" inputmode="numeric"><button class="chk-btn" onclick="toggleChk(this)">✓</button></div><div class="el-notes"><textarea placeholder="Notas..."></textarea></div>
+        <div class="el-div"></div>
+        <div class="el-hd"><div class="el-num">4</div><div><div class="el-name">Curl de bíceps con mancuernas</div><div class="el-target">3 × 10–12 reps</div></div></div><div class="s-grid"><div class="s-head">S</div><div class="s-head">Kg</div><div class="s-head">Reps</div><div class="s-head">RPE</div><div></div></div><div class="s-grid"><div class="s-num">1</div><input class="s-inp" placeholder="—" type="number" inputmode="decimal"><input class="s-inp" placeholder="—" type="number" inputmode="numeric"><input class="s-inp" placeholder="1–10" type="number" inputmode="numeric"><button class="chk-btn" onclick="toggleChk(this)">✓</button></div><div class="s-grid"><div class="s-num">2</div><input class="s-inp" placeholder="—" type="number" inputmode="decimal"><input class="s-inp" placeholder="—" type="number" inputmode="numeric"><input class="s-inp" placeholder="1–10" type="number" inputmode="numeric"><button class="chk-btn" onclick="toggleChk(this)">✓</button></div><div class="s-grid"><div class="s-num">3</div><input class="s-inp" placeholder="—" type="number" inputmode="decimal"><input class="s-inp" placeholder="—" type="number" inputmode="numeric"><input class="s-inp" placeholder="1–10" type="number" inputmode="numeric"><button class="chk-btn" onclick="toggleChk(this)">✓</button></div><div class="el-notes"><textarea placeholder="Notas..."></textarea></div>
+        <div class="el-div"></div>
+        <div class="el-hd"><div class="el-num">5</div><div><div class="el-name">Curl martillo</div><div class="el-target">3 × 12 reps</div></div></div><div class="s-grid"><div class="s-head">S</div><div class="s-head">Kg</div><div class="s-head">Reps</div><div class="s-head">RPE</div><div></div></div><div class="s-grid"><div class="s-num">1</div><input class="s-inp" placeholder="—" type="number" inputmode="decimal"><input class="s-inp" placeholder="—" type="number" inputmode="numeric"><input class="s-inp" placeholder="1–10" type="number" inputmode="numeric"><button class="chk-btn" onclick="toggleChk(this)">✓</button></div><div class="s-grid"><div class="s-num">2</div><input class="s-inp" placeholder="—" type="number" inputmode="decimal"><input class="s-inp" placeholder="—" type="number" inputmode="numeric"><input class="s-inp" placeholder="1–10" type="number" inputmode="numeric"><button class="chk-btn" onclick="toggleChk(this)">✓</button></div><div class="s-grid"><div class="s-num">3</div><input class="s-inp" placeholder="—" type="number" inputmode="decimal"><input class="s-inp" placeholder="—" type="number" inputmode="numeric"><input class="s-inp" placeholder="1–10" type="number" inputmode="numeric"><button class="chk-btn" onclick="toggleChk(this)">✓</button></div><div class="el-notes"><textarea placeholder="Notas..."></textarea></div>
+        <div class="el-div"></div>
+        <div class="el-hd"><div class="el-num">6</div><div><div class="el-name">Plancha frontal</div><div class="el-target">3 × 30–40 seg</div></div></div><div class="s-grid"><div class="s-head">S</div><div class="s-head">Seg</div><div class="s-head">—</div><div class="s-head">RPE</div><div></div></div><div class="s-grid"><div class="s-num">1</div><input class="s-inp" placeholder="—" type="number" inputmode="numeric"><input class="s-inp" placeholder="—" disabled style="opacity:.3"><input class="s-inp" placeholder="1–10" type="number" inputmode="numeric"><button class="chk-btn" onclick="toggleChk(this)">✓</button></div><div class="s-grid"><div class="s-num">2</div><input class="s-inp" placeholder="—" type="number" inputmode="numeric"><input class="s-inp" placeholder="—" disabled style="opacity:.3"><input class="s-inp" placeholder="1–10" type="number" inputmode="numeric"><button class="chk-btn" onclick="toggleChk(this)">✓</button></div><div class="s-grid"><div class="s-num">3</div><input class="s-inp" placeholder="—" type="number" inputmode="numeric"><input class="s-inp" placeholder="—" disabled style="opacity:.3"><input class="s-inp" placeholder="1–10" type="number" inputmode="numeric"><button class="chk-btn" onclick="toggleChk(this)">✓</button></div><div class="el-notes"><textarea placeholder="Notas..."></textarea></div>
+        <div class="gen-notes"><div class="gen-notes-lbl">📝 Notas generales</div><textarea id="gn-d2" placeholder="¿Cómo fue la sesión?..."></textarea></div>
+        <button class="save-btn" onclick="saveSess('d2','Día 2 — Jalón')">GUARDAR SESIÓN</button>
+      </div>
+    </div>
+
+    <!-- DÍA 3 -->
+    <div class="sess-card">
+      <div class="sess-hd" onclick="toggleSess('ss3')">
+        <div class="sess-left"><div class="sess-dot" style="background:var(--amber)"></div><div><div class="sess-day-lbl">Viernes</div><div class="sess-name">Día 3 — Piernas</div></div></div>
+        <button class="sess-toggle" id="tgl-ss3">▾</button>
+      </div>
+      <div class="sess-body" id="body-ss3">
+        <div class="s-meta"><div class="f-group"><div class="f-lbl">Fecha</div><input type="date" class="f-input" id="d3-date"></div><div class="f-group"><div class="f-lbl">Modo</div><select class="f-input" id="d3-modo"><option value="gym">🏢 Gimnasio</option><option value="home">🏠 Casa</option></select></div></div>
+        <div class="f-lbl" style="margin-bottom:7px">¿Cómo te sentiste?</div>
+        <div class="feel-row" id="feel-d3"><button class="feel-btn" onclick="setFeel('d3',1)">😫<span class="feel-lbl">Pesado</span></button><button class="feel-btn" onclick="setFeel('d3',2)">😐<span class="feel-lbl">Regular</span></button><button class="feel-btn" onclick="setFeel('d3',3)">💪<span class="feel-lbl">Bien</span></button><button class="feel-btn" onclick="setFeel('d3',4)">🔥<span class="feel-lbl">Brutal</span></button></div>
+        <div class="el-hd"><div class="el-num">1</div><div><div class="el-name">Sentadilla con barra</div><div class="el-target">3 × 8–10 reps</div></div></div><div class="s-grid"><div class="s-head">S</div><div class="s-head">Kg</div><div class="s-head">Reps</div><div class="s-head">RPE</div><div></div></div><div class="s-grid"><div class="s-num">1</div><input class="s-inp" placeholder="—" type="number" inputmode="decimal"><input class="s-inp" placeholder="—" type="number" inputmode="numeric"><input class="s-inp" placeholder="1–10" type="number" inputmode="numeric"><button class="chk-btn" onclick="toggleChk(this)">✓</button></div><div class="s-grid"><div class="s-num">2</div><input class="s-inp" placeholder="—" type="number" inputmode="decimal"><input class="s-inp" placeholder="—" type="number" inputmode="numeric"><input class="s-inp" placeholder="1–10" type="number" inputmode="numeric"><button class="chk-btn" onclick="toggleChk(this)">✓</button></div><div class="s-grid"><div class="s-num">3</div><input class="s-inp" placeholder="—" type="number" inputmode="decimal"><input class="s-inp" placeholder="—" type="number" inputmode="numeric"><input class="s-inp" placeholder="1–10" type="number" inputmode="numeric"><button class="chk-btn" onclick="toggleChk(this)">✓</button></div><div class="el-notes"><textarea placeholder="Notas..."></textarea></div>
+        <div class="el-div"></div>
+        <div class="el-hd"><div class="el-num">2</div><div><div class="el-name">Prensa de piernas</div><div class="el-target">3 × 12 reps</div></div></div><div class="s-grid"><div class="s-head">S</div><div class="s-head">Kg</div><div class="s-head">Reps</div><div class="s-head">RPE</div><div></div></div><div class="s-grid"><div class="s-num">1</div><input class="s-inp" placeholder="—" type="number" inputmode="decimal"><input class="s-inp" placeholder="—" type="number" inputmode="numeric"><input class="s-inp" placeholder="1–10" type="number" inputmode="numeric"><button class="chk-btn" onclick="toggleChk(this)">✓</button></div><div class="s-grid"><div class="s-num">2</div><input class="s-inp" placeholder="—" type="number" inputmode="decimal"><input class="s-inp" placeholder="—" type="number" inputmode="numeric"><input class="s-inp" placeholder="1–10" type="number" inputmode="numeric"><button class="chk-btn" onclick="toggleChk(this)">✓</button></div><div class="s-grid"><div class="s-num">3</div><input class="s-inp" placeholder="—" type="number" inputmode="decimal"><input class="s-inp" placeholder="—" type="number" inputmode="numeric"><input class="s-inp" placeholder="1–10" type="number" inputmode="numeric"><button class="chk-btn" onclick="toggleChk(this)">✓</button></div><div class="el-notes"><textarea placeholder="Notas..."></textarea></div>
+        <div class="el-div"></div>
+        <div class="el-hd"><div class="el-num">3</div><div><div class="el-name">Peso muerto rumano (RDL)</div><div class="el-target">3 × 10–12 reps</div></div></div><div class="s-grid"><div class="s-head">S</div><div class="s-head">Kg</div><div class="s-head">Reps</div><div class="s-head">RPE</div><div></div></div><div class="s-grid"><div class="s-num">1</div><input class="s-inp" placeholder="—" type="number" inputmode="decimal"><input class="s-inp" placeholder="—" type="number" inputmode="numeric"><input class="s-inp" placeholder="1–10" type="number" inputmode="numeric"><button class="chk-btn" onclick="toggleChk(this)">✓</button></div><div class="s-grid"><div class="s-num">2</div><input class="s-inp" placeholder="—" type="number" inputmode="decimal"><input class="s-inp" placeholder="—" type="number" inputmode="numeric"><input class="s-inp" placeholder="1–10" type="number" inputmode="numeric"><button class="chk-btn" onclick="toggleChk(this)">✓</button></div><div class="s-grid"><div class="s-num">3</div><input class="s-inp" placeholder="—" type="number" inputmode="decimal"><input class="s-inp" placeholder="—" type="number" inputmode="numeric"><input class="s-inp" placeholder="1–10" type="number" inputmode="numeric"><button class="chk-btn" onclick="toggleChk(this)">✓</button></div><div class="el-notes"><textarea placeholder="Notas..."></textarea></div>
+        <div class="el-div"></div>
+        <div class="el-hd"><div class="el-num">4</div><div><div class="el-name">Zancadas caminando</div><div class="el-target">3 × 10 reps/pierna</div></div></div><div class="s-grid"><div class="s-head">S</div><div class="s-head">Kg</div><div class="s-head">Reps</div><div class="s-head">RPE</div><div></div></div><div class="s-grid"><div class="s-num">1</div><input class="s-inp" placeholder="—" type="number" inputmode="decimal"><input class="s-inp" placeholder="—" type="number" inputmode="numeric"><input class="s-inp" placeholder="1–10" type="number" inputmode="numeric"><button class="chk-btn" onclick="toggleChk(this)">✓</button></div><div class="s-grid"><div class="s-num">2</div><input class="s-inp" placeholder="—" type="number" inputmode="decimal"><input class="s-inp" placeholder="—" type="number" inputmode="numeric"><input class="s-inp" placeholder="1–10" type="number" inputmode="numeric"><button class="chk-btn" onclick="toggleChk(this)">✓</button></div><div class="s-grid"><div class="s-num">3</div><input class="s-inp" placeholder="—" type="number" inputmode="decimal"><input class="s-inp" placeholder="—" type="number" inputmode="numeric"><input class="s-inp" placeholder="1–10" type="number" inputmode="numeric"><button class="chk-btn" onclick="toggleChk(this)">✓</button></div><div class="el-notes"><textarea placeholder="Notas..."></textarea></div>
+        <div class="el-div"></div>
+        <div class="el-hd"><div class="el-num">5</div><div><div class="el-name">Hip thrust en banco</div><div class="el-target">3 × 12–15 reps</div></div></div><div class="s-grid"><div class="s-head">S</div><div class="s-head">Kg</div><div class="s-head">Reps</div><div class="s-head">RPE</div><div></div></div><div class="s-grid"><div class="s-num">1</div><input class="s-inp" placeholder="—" type="number" inputmode="decimal"><input class="s-inp" placeholder="—" type="number" inputmode="numeric"><input class="s-inp" placeholder="1–10" type="number" inputmode="numeric"><button class="chk-btn" onclick="toggleChk(this)">✓</button></div><div class="s-grid"><div class="s-num">2</div><input class="s-inp" placeholder="—" type="number" inputmode="decimal"><input class="s-inp" placeholder="—" type="number" inputmode="numeric"><input class="s-inp" placeholder="1–10" type="number" inputmode="numeric"><button class="chk-btn" onclick="toggleChk(this)">✓</button></div><div class="s-grid"><div class="s-num">3</div><input class="s-inp" placeholder="—" type="number" inputmode="decimal"><input class="s-inp" placeholder="—" type="number" inputmode="numeric"><input class="s-inp" placeholder="1–10" type="number" inputmode="numeric"><button class="chk-btn" onclick="toggleChk(this)">✓</button></div><div class="el-notes"><textarea placeholder="Notas..."></textarea></div>
+        <div class="el-div"></div>
+        <div class="el-hd"><div class="el-num">6</div><div><div class="el-name">Calf raise de pie</div><div class="el-target">3 × 20 reps</div></div></div><div class="s-grid"><div class="s-head">S</div><div class="s-head">Kg</div><div class="s-head">Reps</div><div class="s-head">RPE</div><div></div></div><div class="s-grid"><div class="s-num">1</div><input class="s-inp" placeholder="—" type="number" inputmode="decimal"><input class="s-inp" placeholder="—" type="number" inputmode="numeric"><input class="s-inp" placeholder="1–10" type="number" inputmode="numeric"><button class="chk-btn" onclick="toggleChk(this)">✓</button></div><div class="s-grid"><div class="s-num">2</div><input class="s-inp" placeholder="—" type="number" inputmode="decimal"><input class="s-inp" placeholder="—" type="number" inputmode="numeric"><input class="s-inp" placeholder="1–10" type="number" inputmode="numeric"><button class="chk-btn" onclick="toggleChk(this)">✓</button></div><div class="s-grid"><div class="s-num">3</div><input class="s-inp" placeholder="—" type="number" inputmode="decimal"><input class="s-inp" placeholder="—" type="number" inputmode="numeric"><input class="s-inp" placeholder="1–10" type="number" inputmode="numeric"><button class="chk-btn" onclick="toggleChk(this)">✓</button></div><div class="el-notes"><textarea placeholder="Notas..."></textarea></div>
+        <div class="gen-notes"><div class="gen-notes-lbl">📝 Notas generales</div><textarea id="gn-d3" placeholder="¿Cómo fue la sesión?..."></textarea></div>
+        <button class="save-btn" onclick="saveSess('d3','Día 3 — Piernas')">GUARDAR SESIÓN</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- HISTORIAL -->
+  <div class="bcontent" id="bt-hist">
+    <div style="height:4px"></div>
+    <div id="hist-list"><div class="empty-hist"><span class="empty-icon">📋</span>Aún no hay sesiones guardadas.<br>¡Registra tu primer entreno!</div></div>
+  </div>
+
+  <!-- ESTADÍSTICAS -->
+  <div class="bcontent" id="bt-stats">
+    <div style="height:4px"></div>
+    <div class="streak-card"><div class="streak-num" id="stat-total">0</div><div class="streak-lbl">sesiones completadas en total</div></div>
+    <div class="stats-grid">
+      <div class="stat-card"><div class="stat-val" id="stat-weeks">0</div><div class="stat-lbl">Semanas activas</div></div>
+      <div class="stat-card"><div class="stat-val" id="stat-thisweek">0/3</div><div class="stat-lbl">Esta semana</div></div>
+    </div>
+    <div class="prog-sec">
+      <div class="prog-title">Sesiones por tipo de día</div>
+      <div class="prog-row"><div class="prog-lbl-row"><span>Día 1 — Empuje</span><span id="pc-d1">0 sesiones</span></div><div class="prog-bar"><div class="prog-fill" id="pf-d1" style="width:0%"></div></div></div>
+      <div class="prog-row"><div class="prog-lbl-row"><span>Día 2 — Jalón</span><span id="pc-d2">0 sesiones</span></div><div class="prog-bar"><div class="prog-fill" id="pf-d2" style="width:0%"></div></div></div>
+      <div class="prog-row"><div class="prog-lbl-row"><span>Día 3 — Piernas</span><span id="pc-d3">0 sesiones</span></div><div class="prog-bar"><div class="prog-fill" id="pf-d3" style="width:0%"></div></div></div>
+    </div>
+  </div>
+  <footer><strong>Bitácora</strong> · Los datos se guardan en este dispositivo</footer>
+</div>
+
+<script>
+var feels={},currentWeek=1;
+var sessions=JSON.parse(localStorage.getItem('fitPro_sessions')||'[]');
+
+function goTo(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function switchPlanTab(id){
+  document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  event.target.classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function switchBitTab(id){
+  document.querySelectorAll('.bcontent').forEach(c=>c.classList.remove('active'));
+  document.querySelectorAll('.btab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  event.target.classList.add('active');
+  if(id==='bt-hist') renderHist();
+  if(id==='bt-stats') renderStats();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function switchSub(showId,hideId,btn){
+  document.getElementById(showId).classList.add('active');
+  document.getElementById(hideId).classList.remove('active');
+  btn.closest('.stab-bar').querySelectorAll('.stab-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+}
+function toggleSess(id){
+  var body=document.getElementById('body-'+id);
+  var tgl=document.getElementById('tgl-'+id);
+  var open=body.classList.contains('open');
+  body.classList.toggle('open',!open);
+  tgl.classList.toggle('open',!open);
+}
+function toggleChk(btn){btn.classList.toggle('done')}
+function setFeel(day,val){
+  feels[day]=val;
+  var map={1:'😫',2:'😐',3:'💪',4:'🔥'};
+  document.getElementById('feel-'+day).querySelectorAll('.feel-btn').forEach((b,i)=>b.classList.toggle('selected',i+1===val));
+}
+function changeWeek(dir){
+  currentWeek=Math.max(1,currentWeek+dir);
+  var lbl=document.getElementById('weekLabel');
+  var dates=document.getElementById('weekDates');
+  if(lbl) lbl.textContent='SEMANA '+currentWeek;
+  if(dates){
+    var base=new Date();
+    base.setDate(base.getDate()-base.getDay()+1+(currentWeek-1)*7);
+    var end=new Date(base);end.setDate(base.getDate()+6);
+    var fmt=d=>d.getDate()+'/'+(d.getMonth()+1);
+    dates.textContent=fmt(base)+' — '+fmt(end);
+  }
+}
+function saveSess(dayId,dayName){
+  var date=document.getElementById(dayId+'-date').value;
+  var modo=document.getElementById(dayId+'-modo').value;
+  var notes=document.getElementById('gn-'+dayId).value;
+  var feel=feels[dayId]||0;
+  var fmap={1:'😫 Pesado',2:'😐 Regular',3:'💪 Bien',4:'🔥 Brutal'};
+  var bodyEl=document.getElementById('body-ss'+(dayId==='d1'?1:dayId==='d2'?2:3));
+  var exEls=bodyEl.querySelectorAll('.el-hd');
+  var exData=[];
+  exEls.forEach(function(elHd){
+    var name=elHd.querySelector('.el-name');
+    var target=elHd.querySelector('.el-target');
+    var parent=elHd.parentElement;
+    var rows=parent.querySelectorAll('.s-grid:not(:first-of-type)');
+    var series=[];
+    rows.forEach(function(row){
+      var inps=row.querySelectorAll('.s-inp');
+      if(inps.length>=2) series.push({kg:inps[0].value,reps:inps[1].value,rpe:inps[2]?inps[2].value:''});
+    });
+    var noteEl=parent.querySelector('.el-notes textarea');
+    if(name) exData.push({name:name.textContent,target:target?target.textContent:'',series:series,note:noteEl?noteEl.value:''});
+  });
+  var sess={id:Date.now(),week:currentWeek,day:dayName,dayId:dayId,date:date||new Date().toISOString().split('T')[0],modo:modo,feel:feel,feelText:fmap[feel]||'—',notes:notes,exercises:exData};
+  sessions.unshift(sess);
+  localStorage.setItem('fitPro_sessions',JSON.stringify(sessions));
+  var btn=event.target;
+  var orig=btn.textContent;
+  btn.textContent='✓ SESIÓN GUARDADA';
+  btn.style.background='#085041';
+  setTimeout(function(){btn.textContent=orig;btn.style.background='';},2000);
+}
+function renderHist(){
+  var list=document.getElementById('hist-list');
+  if(!sessions.length){list.innerHTML='<div class="empty-hist"><span class="empty-icon">📋</span>Aún no hay sesiones guardadas.<br>¡Registra tu primer entreno!</div>';return;}
+  var html='';
+  sessions.forEach(function(s){
+    var dc=s.dayId==='d1'?'var(--g)':s.dayId==='d2'?'var(--blue)':'var(--amber)';
+    var exHtml='';
+    if(s.exercises) s.exercises.forEach(function(ex){
+      var pills=ex.series.filter(sr=>sr.kg||sr.reps).map((sr,i)=>'<span class="hpill">S'+(i+1)+': '+(sr.kg||'—')+'kg × '+(sr.reps||'—')+'</span>').join('');
+      if(pills) exHtml+='<div class="hist-ex"><div class="hist-ex-name">'+ex.name+'</div><div class="hist-pills">'+pills+'</div>'+(ex.note?'<div class="hist-note">'+ex.note+'</div>':'')+'</div>';
+    });
+    html+='<div class="hist-card"><div class="hist-hd"><div><div class="hist-ttl" style="display:flex;align-items:center;gap:7px"><span style="width:7px;height:7px;border-radius:50%;background:'+dc+';display:inline-block"></span>'+s.day+'</div><div class="hist-dt">Sem '+s.week+' · '+s.date+' · '+(s.modo==='gym'?'🏢':'🏠')+'</div></div><div style="font-size:18px">'+(s.feelText?s.feelText.split(' ')[0]:'')+'</div></div><div class="hist-body">'+exHtml+(s.notes?'<div class="hist-note" style="margin-top:6px">'+s.notes+'</div>':'')+'</div></div>';
+  });
+  list.innerHTML=html;
+}
+function renderStats(){
+  var total=sessions.length;
+  document.getElementById('stat-total').textContent=total;
+  var weeks=new Set(sessions.map(s=>s.week)).size;
+  document.getElementById('stat-weeks').textContent=weeks;
+  var tw=sessions.filter(s=>s.week===currentWeek).length;
+  document.getElementById('stat-thisweek').textContent=Math.min(tw,3)+'/3';
+  var d1=sessions.filter(s=>s.dayId==='d1').length;
+  var d2=sessions.filter(s=>s.dayId==='d2').length;
+  var d3=sessions.filter(s=>s.dayId==='d3').length;
+  var mx=Math.max(d1,d2,d3,1);
+  document.getElementById('pc-d1').textContent=d1+' sesiones';
+  document.getElementById('pc-d2').textContent=d2+' sesiones';
+  document.getElementById('pc-d3').textContent=d3+' sesiones';
+  document.getElementById('pf-d1').style.width=Math.round(d1/mx*100)+'%';
+  document.getElementById('pf-d2').style.width=Math.round(d2/mx*100)+'%';
+  document.getElementById('pf-d3').style.width=Math.round(d3/mx*100)+'%';
+}
+changeWeek(0);
+</script>
+</body>
+</html>
