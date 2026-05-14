@@ -252,7 +252,22 @@ async function loadSesiones(clientId){
     const snap = await getDocs(q);
     const docs = snap.docs.map(d=>d.data());
     if(!docs.length){c.innerHTML='<div class="empty-msg">Sin sesiones registradas aún.</div>';return;}
-    c.innerHTML=`<table class="sessions-table"><thead><tr><th>Fecha</th><th>Día</th><th>Modo</th><th>Estado</th><th>Detalle</th></tr></thead><tbody>${docs.map(s=>`<tr><td>${s.fecha||'—'}<br><span style="font-size:10px;color:var(--text3)">Sem ${s.week||'—'}</span></td><td>${s.day||'—'}</td><td>${s.modo||'—'}</td><td><span class="feel-tag">${s.feel||'—'}</span></td><td style="font-size:12px;color:var(--text2)">${(s.exercises||[]).map(e=>{const done=(e.sets||[]).filter(x=>x.done);return`${e.name}: ${done.length} sets${done[0]?.kg?' · '+done[0].kg+'kg':''}`;}).join('<br>')}${s.notes?`<br><em style="color:var(--text3)">${s.notes}</em>`:''}</td></tr>`).join('')}</tbody></table>`;
+    c.innerHTML=`<table class="sessions-table"><thead><tr><th>Fecha</th><th>Día</th><th>Modo</th><th>Estado</th><th>Detalle</th></tr></thead><tbody>${docs.map(s=>{
+      // Support both Eduardo format (day, modo, feel, exercises) and Gabriel format (dia, ejercicio, series, reps, peso)
+      const fecha = s.fecha||'—';
+      const semana = s.week ? `Sem ${s.week}` : '';
+      const dia = s.day||s.dia||'—';
+      const modo = s.modo||'—';
+      const feel = s.feel||'—';
+      let detalle = '';
+      if(s.exercises&&s.exercises.length){
+        detalle = s.exercises.map(e=>{const done=(e.sets||[]).filter(x=>x.done);return`${e.name}: ${done.length} sets${done[0]?.kg?' · '+done[0].kg+'kg':''}`;}).join('<br>');
+      } else if(s.ejercicio){
+        detalle = `${s.ejercicio}: ${s.series||'—'} series × ${s.reps||'—'} reps${s.peso?' · '+s.peso+'kg':''}`;
+      }
+      if(s.notes||s.nota) detalle += `<br><em style="color:var(--text3)">${s.notes||s.nota}</em>`;
+      return `<tr><td>${fecha}<br><span style="font-size:10px;color:var(--text3)">${semana}</span></td><td>${dia}</td><td>${modo}</td><td><span class="feel-tag">${feel}</span></td><td style="font-size:12px;color:var(--text2)">${detalle}</td></tr>`;
+    }).join('')}</tbody></table>`;
   }catch(e){c.innerHTML='<div class="empty-msg">Error cargando sesiones.</div>';}
 }
 
