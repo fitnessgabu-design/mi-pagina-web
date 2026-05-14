@@ -1690,18 +1690,29 @@ async function renderPesoLog() {
 }
 
 // ── FOTOS ──
-function saveFoto(event, tipo) {
+async function uploadToImgur(file) {
+  const formData = new FormData();
+  formData.append('image', file);
+  formData.append('type', 'file');
+  const response = await fetch('https://api.imgur.com/3/image', {
+    method: 'POST',
+    headers: { 'Authorization': 'Client-ID 546c25a59c58ad7' },
+    body: formData
+  });
+  const data = await response.json();
+  if (!data.success) throw new Error('Error subiendo imagen');
+  return data.data.link;
+}
+
+async function saveFoto(event, tipo) {
   const file = event.target.files[0];
   if (!file || !CLIENT_ID) return;
-  const reader = new FileReader();
-  reader.onload = async function(e) {
+  try {
     const semana = getCurrentWeekLabel();
-    try {
-      await FB.addDoc(FB.collection(DB, `clients/${CLIENT_ID}/fotos`), { tipo, semana, img: e.target.result, fecha: new Date().toLocaleDateString('es-MX'), ts: Date.now() });
-      renderGallery();
-    } catch(err) { alert('Error al guardar foto'); }
-  };
-  reader.readAsDataURL(file);
+    const imgUrl = await uploadToImgur(file);
+    await FB.addDoc(FB.collection(DB, `clients/${CLIENT_ID}/fotos`), { tipo, semana, img: imgUrl, fecha: new Date().toLocaleDateString('es-MX'), ts: Date.now() });
+    renderGallery();
+  } catch(err) { alert('Error al guardar foto: ' + err.message); }
 }
 async function deleteFoto(id) {
   if (!CLIENT_ID) return;
