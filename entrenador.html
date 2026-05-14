@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Panel Entrenador — Fitness Gabu</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#0a0a0a;--bg2:#111;--bg3:#1a1a1a;--bg4:#222;--accent:#c8f542;--text:#f0f0f0;--text2:#aaa;--text3:#666;--border:#2a2a2a;--green:#44ff88;--red:#ff4444;--radius:12px;--radius-sm:8px}
+html,body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;min-height:100vh}
+#loginScreen{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:2rem}
+.login-box{background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);padding:2rem;width:100%;max-width:380px;text-align:center}
+.login-logo{font-family:'Bebas Neue',sans-serif;font-size:36px;color:var(--accent);margin-bottom:.25rem}
+.login-sub{font-size:13px;color:var(--text3);margin-bottom:2rem}
+.login-field{text-align:left;margin-bottom:1rem}
+.login-field label{font-size:11px;color:var(--text3);display:block;margin-bottom:4px;text-transform:uppercase;letter-spacing:.06em}
+.login-field input{width:100%;background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:10px 12px;color:var(--text);font-size:14px;font-family:inherit}
+.login-field input:focus{outline:none;border-color:var(--accent)}
+.login-btn{width:100%;padding:12px;background:var(--accent);color:#000;font-weight:700;font-size:14px;border:none;border-radius:var(--radius-sm);cursor:pointer;margin-top:.5rem}
+.login-error{font-size:12px;color:var(--red);margin-top:.75rem;display:none}
+#dashboard{display:none}
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:1rem 1.5rem;border-bottom:1px solid var(--border);position:sticky;top:0;background:var(--bg);z-index:10}
+.topbar-title{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:.04em}
+.topbar-title span{color:var(--accent)}
+.logout-btn{background:transparent;border:1px solid var(--border);color:var(--text2);padding:6px 14px;border-radius:20px;cursor:pointer;font-size:12px}
+.dash-content{padding:1.5rem;max-width:900px;margin:0 auto}
+.section-label{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--text3);margin-bottom:1rem}
+.add-client-box{background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);padding:1.25rem;margin-bottom:2rem}
+.add-client-box h3{font-size:14px;font-weight:600;margin-bottom:1rem}
+.add-row{display:flex;gap:.75rem;flex-wrap:wrap}
+.field{flex:1;min-width:140px}
+.field label{font-size:11px;color:var(--text3);display:block;margin-bottom:4px}
+.field input{width:100%;background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:8px 10px;color:var(--text);font-size:13px;font-family:inherit}
+.add-btn{padding:8px 18px;background:var(--accent);color:#000;font-weight:700;font-size:13px;border:none;border-radius:var(--radius-sm);cursor:pointer;align-self:flex-end}
+.clients-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:.75rem;margin-bottom:2rem}
+.client-card{background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);padding:1.25rem;cursor:pointer;transition:all .2s}
+.client-card:hover{border-color:var(--accent)}
+.client-card.active{border-color:var(--accent);background:var(--bg4)}
+.client-name{font-size:15px;font-weight:600;margin-bottom:4px}
+.client-goal{font-size:12px;color:var(--text2);margin-bottom:.75rem}
+.client-link{font-size:10px;color:var(--accent);word-break:break-all;margin-bottom:.75rem;line-height:1.4}
+.copy-btn{font-size:11px;padding:4px 10px;background:transparent;border:1px solid var(--border);border-radius:10px;color:var(--text2);cursor:pointer;margin-right:6px}
+.copy-btn:hover{border-color:var(--accent);color:var(--accent)}
+.del-client{font-size:11px;padding:4px 10px;background:transparent;border:1px solid var(--border);border-radius:10px;color:var(--text3);cursor:pointer}
+.del-client:hover{border-color:var(--red);color:var(--red)}
+#clientDetail{display:none;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);padding:1.5rem;margin-top:1rem}
+.detail-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem}
+.detail-title{font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:.04em}
+.close-detail{background:none;border:none;color:var(--text2);cursor:pointer;font-size:22px}
+.detail-tabs{display:flex;gap:6px;margin-bottom:1.5rem;overflow-x:auto}
+.dtab{padding:6px 14px;border-radius:20px;border:1px solid var(--border);font-size:12px;cursor:pointer;background:transparent;color:var(--text2);white-space:nowrap}
+.dtab.active{background:var(--accent);color:#000;border-color:var(--accent)}
+.dpanel{display:none}
+.dpanel.active{display:block}
+.sessions-table{width:100%;border-collapse:collapse}
+.sessions-table th{text-align:left;font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;padding:.5rem .75rem;border-bottom:1px solid var(--border)}
+.sessions-table td{padding:.75rem;border-bottom:1px solid var(--border);font-size:13px;vertical-align:top}
+.sessions-table tr:last-child td{border-bottom:none}
+.feel-tag{font-size:11px;padding:2px 8px;border-radius:10px;background:var(--bg4)}
+.empty-msg{text-align:center;padding:3rem;color:var(--text3);font-size:13px}
+.chart-wrap{position:relative;height:200px;margin-bottom:1.5rem}
+.peso-table{width:100%;border-collapse:collapse}
+.peso-table th{font-size:11px;color:var(--text3);text-transform:uppercase;padding:.5rem .75rem;border-bottom:1px solid var(--border);text-align:left}
+.peso-table td{padding:.5rem .75rem;border-bottom:1px solid var(--border);font-size:13px}
+.peso-delta{font-size:11px;font-weight:600;padding:2px 7px;border-radius:10px}
+.down{background:rgba(68,255,136,.12);color:var(--green)}
+.up{background:rgba(255,68,68,.12);color:var(--red)}
+.photo-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:.75rem}
+.photo-item{border-radius:var(--radius-sm);overflow:hidden;border:1px solid var(--border)}
+.photo-item img{width:100%;aspect-ratio:3/4;object-fit:cover;display:block}
+.photo-caption{padding:.5rem .75rem;font-size:11px;color:var(--text2)}
+.photo-type{font-weight:700;color:var(--text);display:block;margin-bottom:2px}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--accent);color:#000;font-weight:700;font-size:13px;padding:10px 20px;border-radius:20px;z-index:999;transition:transform .3s;pointer-events:none}
+.toast.show{transform:translateX(-50%) translateY(0)}
+</style>
+</head>
+<body>
+<div class="toast" id="toast"></div>
+
+<div id="loginScreen">
+  <div class="login-box">
+    <div class="login-logo">FITNESS GABU</div>
+    <div class="login-sub">Panel de Entrenador</div>
+    <div class="login-field"><label>Contraseña</label><input type="password" id="passInput" placeholder="••••••••" onkeydown="if(event.key==='Enter')login()"></div>
+    <button class="login-btn" onclick="login()">Entrar</button>
+    <div class="login-error" id="loginError">Contraseña incorrecta</div>
+  </div>
+</div>
+
+<div id="dashboard">
+  <div class="topbar">
+    <div class="topbar-title">PANEL <span>ENTRENADOR</span></div>
+    <button class="logout-btn" onclick="logout()">Cerrar sesión</button>
+  </div>
+  <div class="dash-content">
+    <div class="add-client-box">
+      <h3>➕ Agregar nuevo cliente</h3>
+      <div class="add-row">
+        <div class="field"><label>Nombre</label><input type="text" id="newName" placeholder="Ej: Juan García"></div>
+        <div class="field"><label>Objetivo</label><input type="text" id="newGoal" placeholder="Ej: Perder grasa"></div>
+        <button class="add-btn" onclick="addClient()">Agregar</button>
+      </div>
+    </div>
+    <div class="section-label">Mis clientes</div>
+    <div class="clients-grid" id="clientsGrid"><div class="empty-msg" style="grid-column:1/-1">Cargando...</div></div>
+    <div id="clientDetail">
+      <div class="detail-header">
+        <div class="detail-title" id="detailTitle">—</div>
+        <button class="close-detail" onclick="closeDetail()">✕</button>
+      </div>
+      <div class="detail-tabs">
+        <button class="dtab active" onclick="switchDTab('sesiones',this)">📓 Sesiones</button>
+        <button class="dtab" onclick="switchDTab('peso',this)">⚖️ Peso</button>
+        <button class="dtab" onclick="switchDTab('fotos',this)">📸 Fotos</button>
+      </div>
+      <div class="dpanel active" id="dp-sesiones"><div id="sesionesContent"></div></div>
+      <div class="dpanel" id="dp-peso"><div class="chart-wrap"><canvas id="trainerPesoChart"></canvas></div><table class="peso-table"><thead><tr><th>Fecha</th><th>Peso</th><th>Cambio</th><th>Nota</th></tr></thead><tbody id="pesoTableBody"></tbody></table></div>
+      <div class="dpanel" id="dp-fotos"><div class="photo-grid" id="fotosGrid"></div></div>
+    </div>
+  </div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-app.js";
+import { getFirestore, doc, setDoc, collection, addDoc, getDocs, deleteDoc, query, orderBy } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-firestore.js";
+const firebaseConfig = {apiKey:"AIzaSyDuRau6qbQ05rEKonlj8MuCZc4vvTxNESI",authDomain:"fitness-gabu.firebaseapp.com",projectId:"fitness-gabu",storageBucket:"fitness-gabu.firebasestorage.app",messagingSenderId:"716823173331",appId:"1:716823173331:web:0b4cdf457342090c681c26"};
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+window.DB = db;
+window.fbModules = {doc,setDoc,collection,addDoc,getDocs,deleteDoc,query,orderBy};
+
+// ⚠️ CAMBIA ESTA CONTRASEÑA
+const TRAINER_PASSWORD = "gabu2024";
+const CLIENT_BASE_URL = "https://fitnessgabu-design.github.io/mi-pagina-web/?id=";
+
+let clients = [];
+let selectedClient = null;
+let trainerChart = null;
+
+window.login = function(){
+  const pass = document.getElementById('passInput').value;
+  if(pass === TRAINER_PASSWORD){
+    document.getElementById('loginScreen').style.display='none';
+    document.getElementById('dashboard').style.display='block';
+    loadClients();
+  } else {
+    document.getElementById('loginError').style.display='block';
+  }
+};
+
+window.logout = function(){
+  document.getElementById('loginScreen').style.display='flex';
+  document.getElementById('dashboard').style.display='none';
+  document.getElementById('passInput').value='';
+};
+
+async function loadClients(){
+  const {getDocs,collection} = window.fbModules;
+  const grid = document.getElementById('clientsGrid');
+  try{
+    const snap = await getDocs(collection(db,'clients'));
+    clients = [];
+    snap.docs.forEach(d=>{const data=d.data();if(data.name)clients.push({id:d.id,...data});});
+    renderClients();
+  }catch(e){grid.innerHTML='<div class="empty-msg">Error cargando clientes.</div>';}
+}
+
+function renderClients(){
+  const grid = document.getElementById('clientsGrid');
+  if(!clients.length){grid.innerHTML='<div class="empty-msg" style="grid-column:1/-1">Sin clientes aún. Agrega el primero. 💪</div>';return;}
+  grid.innerHTML = clients.map(c=>`
+    <div class="client-card" id="card-${c.id}" onclick="selectClient('${c.id}')">
+      <div class="client-name">${c.name}</div>
+      <div class="client-goal">${c.goal||'Sin objetivo especificado'}</div>
+      <div class="client-link">${CLIENT_BASE_URL}${c.id}</div>
+      <button class="copy-btn" onclick="event.stopPropagation();copyLink('${c.id}')">📋 Copiar link</button>
+      <button class="del-client" onclick="event.stopPropagation();deleteClient('${c.id}')">🗑 Eliminar</button>
+    </div>`).join('');
+}
+
+window.addClient = async function(){
+  const name = document.getElementById('newName').value.trim();
+  const goal = document.getElementById('newGoal').value.trim();
+  if(!name){showToast('⚠️ Escribe el nombre');return;}
+  const {doc,setDoc} = window.fbModules;
+  const id = 'c'+Date.now().toString(36);
+  await setDoc(doc(db,'clients',id),{name,goal,createdAt:Date.now()});
+  document.getElementById('newName').value='';
+  document.getElementById('newGoal').value='';
+  await loadClients();
+  showToast('✅ Cliente agregado');
+};
+
+window.deleteClient = async function(id){
+  if(!confirm('¿Eliminar este cliente?'))return;
+  const {doc,deleteDoc} = window.fbModules;
+  await deleteDoc(doc(db,'clients',id));
+  await loadClients();
+  closeDetail();
+  showToast('🗑 Cliente eliminado');
+};
+
+window.copyLink = function(id){
+  navigator.clipboard.writeText(CLIENT_BASE_URL+id);
+  showToast('📋 Link copiado');
+};
+
+window.selectClient = async function(id){
+  selectedClient = clients.find(c=>c.id===id);
+  document.getElementById('detailTitle').textContent = selectedClient.name;
+  document.getElementById('clientDetail').style.display='block';
+  document.querySelectorAll('.client-card').forEach(c=>c.classList.remove('active'));
+  document.getElementById('card-'+id)?.classList.add('active');
+  document.getElementById('clientDetail').scrollIntoView({behavior:'smooth'});
+  await loadSesiones(id);
+};
+
+window.closeDetail = function(){
+  document.getElementById('clientDetail').style.display='none';
+  document.querySelectorAll('.client-card').forEach(c=>c.classList.remove('active'));
+  selectedClient=null;
+};
+
+window.switchDTab = async function(id,btn){
+  document.querySelectorAll('.dpanel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.dtab').forEach(b=>b.classList.remove('active'));
+  document.getElementById('dp-'+id).classList.add('active');
+  btn.classList.add('active');
+  if(!selectedClient)return;
+  if(id==='sesiones')await loadSesiones(selectedClient.id);
+  if(id==='peso')await loadPeso(selectedClient.id);
+  if(id==='fotos')await loadFotos(selectedClient.id);
+};
+
+async function loadSesiones(clientId){
+  const {getDocs,collection,query,orderBy} = window.fbModules;
+  const c = document.getElementById('sesionesContent');
+  c.innerHTML='<div class="empty-msg">Cargando...</div>';
+  try{
+    const q = query(collection(db,`clients/${clientId}/sessions`),orderBy('ts','desc'));
+    const snap = await getDocs(q);
+    const docs = snap.docs.map(d=>d.data());
+    if(!docs.length){c.innerHTML='<div class="empty-msg">Sin sesiones registradas aún.</div>';return;}
+    c.innerHTML=`<table class="sessions-table"><thead><tr><th>Fecha</th><th>Día</th><th>Modo</th><th>Estado</th><th>Detalle</th></tr></thead><tbody>${docs.map(s=>`<tr><td>${s.fecha||'—'}<br><span style="font-size:10px;color:var(--text3)">Sem ${s.week||'—'}</span></td><td>${s.day||'—'}</td><td>${s.modo||'—'}</td><td><span class="feel-tag">${s.feel||'—'}</span></td><td style="font-size:12px;color:var(--text2)">${(s.exercises||[]).map(e=>{const done=(e.sets||[]).filter(x=>x.done);return`${e.name}: ${done.length} sets${done[0]?.kg?' · '+done[0].kg+'kg':''}`;}).join('<br>')}${s.notes?`<br><em style="color:var(--text3)">${s.notes}</em>`:''}</td></tr>`).join('')}</tbody></table>`;
+  }catch(e){c.innerHTML='<div class="empty-msg">Error cargando sesiones.</div>';}
+}
+
+async function loadPeso(clientId){
+  const {getDocs,collection,query,orderBy} = window.fbModules;
+  const tbody = document.getElementById('pesoTableBody');
+  try{
+    const q = query(collection(db,`clients/${clientId}/peso`),orderBy('fecha','asc'));
+    const snap = await getDocs(q);
+    const docs = snap.docs.map(d=>d.data());
+    if(!docs.length){tbody.innerHTML='<tr><td colspan="4" style="text-align:center;padding:2rem;color:var(--text3)">Sin registros de peso.</td></tr>';drawTrainerChart([]);return;}
+    tbody.innerHTML=[...docs].reverse().map((e,i,arr)=>{const prev=arr[i+1];let delta='';if(prev){const diff=(e.val-prev.val).toFixed(1);delta=`<span class="peso-delta ${diff<0?'down':'up'}">${diff<0?'▼':'▲'} ${Math.abs(diff)}</span>`;}const d=new Date(e.fecha+'T12:00:00');return`<tr><td>${d.toLocaleDateString('es-MX',{day:'numeric',month:'short',year:'numeric'})}</td><td style="font-weight:700">${e.val} kg</td><td>${delta}</td><td style="color:var(--text3)">${e.nota||''}</td></tr>`;}).join('');
+    drawTrainerChart(docs);
+  }catch(e){tbody.innerHTML='<tr><td colspan="4">Error.</td></tr>';}
+}
+
+function drawTrainerChart(data){
+  const canvas=document.getElementById('trainerPesoChart');if(!canvas)return;
+  const ctx=canvas.getContext('2d');
+  if(trainerChart){trainerChart.destroy();trainerChart=null;}
+  if(!data.length)return;
+  const labels=data.map(e=>{const d=new Date(e.fecha+'T12:00:00');return d.toLocaleDateString('es-MX',{day:'numeric',month:'short'});});
+  const vals=data.map(e=>e.val);const mn=Math.min(...vals)-2,mx=Math.max(...vals)+2;
+  trainerChart=new Chart(ctx,{type:'line',data:{labels,datasets:[{data:vals,borderColor:'#c8f542',backgroundColor:'rgba(200,245,66,0.08)',pointBackgroundColor:'#c8f542',pointRadius:5,tension:.3,fill:true}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{color:'#666',font:{size:10}},grid:{color:'#1a1a1a'}},y:{min:mn,max:mx,ticks:{color:'#666',font:{size:10},callback:v=>v+'kg'},grid:{color:'#1a1a1a'}}}}});
+}
+
+async function loadFotos(clientId){
+  const {getDocs,collection,query,orderBy} = window.fbModules;
+  const grid=document.getElementById('fotosGrid');
+  try{
+    const q=query(collection(db,`clients/${clientId}/fotos`),orderBy('ts','desc'));
+    const snap=await getDocs(q);const fotos=snap.docs.map(d=>d.data());
+    if(!fotos.length){grid.innerHTML='<div class="empty-msg" style="grid-column:1/-1">Sin fotos registradas.</div>';return;}
+    grid.innerHTML=fotos.map(p=>{const d=new Date(p.fecha+'T12:00:00');return`<div class="photo-item"><img src="${p.img}" alt="${p.type}"><div class="photo-caption"><span class="photo-type">${p.type}</span>Sem ${p.semana} · ${d.toLocaleDateString('es-MX',{day:'numeric',month:'short'})}</div></div>`;}).join('');
+  }catch(e){grid.innerHTML='<div>Error cargando fotos.</div>';}
+}
+
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2200);}
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+</body>
+</html>
