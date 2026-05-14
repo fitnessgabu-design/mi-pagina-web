@@ -1,0 +1,1721 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Plan Fitness · Gabriel Berezin</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0a0a0f;
+  --bg2: #111118;
+  --bg3: #1a1a24;
+  --card: #16161f;
+  --card2: #1e1e2a;
+  --border: #2a2a3a;
+  --accent: #6c63ff;
+  --accent2: #ff6b6b;
+  --accent3: #43e97b;
+  --text: #f0f0f8;
+  --text2: #8888a8;
+  --text3: #5555708;
+  --gold: #ffd166;
+}
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+html,body { background:var(--bg); color:var(--text); font-family:'DM Sans',sans-serif; min-height:100vh; overflow-x:hidden; }
+
+/* ── HOME ── */
+#home { display:block; }
+.home-header {
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+  padding: 48px 20px 32px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.home-header::before {
+  content:'';
+  position:absolute; inset:0;
+  background: radial-gradient(ellipse at 70% 0%, rgba(108,99,255,.3) 0%, transparent 60%),
+              radial-gradient(ellipse at 20% 100%, rgba(67,233,123,.15) 0%, transparent 60%);
+}
+.home-avatar {
+  width:72px; height:72px;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  border-radius:50%; margin:0 auto 12px;
+  display:flex; align-items:center; justify-content:center;
+  font-size:30px; position:relative; z-index:1;
+  box-shadow: 0 0 40px rgba(108,99,255,.5);
+}
+.home-name { font-family:'Bebas Neue',sans-serif; font-size:32px; letter-spacing:2px; position:relative; z-index:1; }
+.home-sub { font-size:12px; color:var(--text2); position:relative; z-index:1; margin-top:4px; letter-spacing:1px; text-transform:uppercase; }
+.home-badges {
+  display:flex; justify-content:center; gap:8px; margin-top:16px; position:relative; z-index:1; flex-wrap:wrap;
+}
+.badge {
+  background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.12);
+  border-radius:20px; padding:4px 12px; font-size:11px; color:var(--text2);
+}
+.badge.accent { background:rgba(108,99,255,.2); border-color:rgba(108,99,255,.4); color:#a8a2ff; }
+
+.home-stats {
+  display:grid; grid-template-columns:repeat(4,1fr); gap:1px;
+  background:var(--border); margin:0;
+}
+.home-stat {
+  background:var(--card); padding:16px 8px; text-align:center;
+}
+.home-stat-n { font-family:'Bebas Neue',sans-serif; font-size:24px; color:var(--accent); }
+.home-stat-l { font-size:10px; color:var(--text2); text-transform:uppercase; letter-spacing:.5px; margin-top:2px; }
+
+.menu-list { padding:16px; display:flex; flex-direction:column; gap:10px; }
+.menu-btn {
+  background:var(--card); border:1px solid var(--border);
+  border-radius:14px; padding:16px; display:flex; align-items:center; gap:14px;
+  cursor:pointer; transition:all .2s; text-align:left; width:100%;
+  color:var(--text);
+}
+.menu-btn:active { transform:scale(.98); background:var(--card2); }
+.menu-icon { font-size:24px; width:44px; height:44px; border-radius:12px; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+.menu-info { flex:1; }
+.menu-name { font-weight:600; font-size:15px; }
+.menu-desc { font-size:12px; color:var(--text2); margin-top:2px; }
+.menu-arrow { color:var(--text2); font-size:20px; }
+
+/* ── SECTIONS ── */
+.section { display:none; min-height:100vh; }
+.section-header {
+  position:sticky; top:0; z-index:100;
+  background:rgba(10,10,15,.9); backdrop-filter:blur(20px);
+  padding:16px 16px; display:flex; align-items:center; gap:12px;
+  border-bottom:1px solid var(--border);
+}
+.back-btn {
+  background:var(--card2); border:1px solid var(--border);
+  border-radius:10px; width:36px; height:36px;
+  display:flex; align-items:center; justify-content:center;
+  cursor:pointer; font-size:20px; color:var(--text); flex-shrink:0;
+}
+.section-title { font-family:'Bebas Neue',sans-serif; font-size:18px; letter-spacing:2px; }
+.section-content { padding:16px; }
+
+/* ── TABS ── */
+.tab-row {
+  display:flex; gap:6px; overflow-x:auto; padding:4px 0 8px;
+  scrollbar-width:none;
+}
+.tab-row::-webkit-scrollbar { display:none; }
+.tab {
+  background:var(--card); border:1px solid var(--border);
+  border-radius:20px; padding:7px 14px; font-size:12px; white-space:nowrap;
+  cursor:pointer; color:var(--text2); font-family:'DM Sans',sans-serif;
+  transition:all .2s;
+}
+.tab.active { background:var(--accent); border-color:var(--accent); color:#fff; }
+.tab-content { display:none; }
+.tab-content.active { display:block; }
+
+/* ── PLAN HERO ── */
+.plan-hero {
+  background: linear-gradient(135deg, #1a1a2e, #16213e);
+  border:1px solid var(--border); border-radius:16px;
+  padding:20px; margin-bottom:16px; text-align:center;
+}
+.plan-hero h2 { font-family:'Bebas Neue',sans-serif; font-size:28px; letter-spacing:3px; }
+.plan-hero p { font-size:12px; color:var(--text2); margin-top:4px; }
+.plan-stats-row { display:flex; justify-content:center; gap:24px; margin-top:16px; }
+.ps { text-align:center; }
+.ps-n { font-family:'Bebas Neue',sans-serif; font-size:26px; color:var(--accent); }
+.ps-l { font-size:10px; color:var(--text2); text-transform:uppercase; }
+
+/* ── WEEK GRID ── */
+.week-grid { display:grid; grid-template-columns:repeat(7,1fr); gap:4px; margin-bottom:16px; }
+.wday {
+  background:var(--card); border:1px solid var(--border);
+  border-radius:8px; padding:8px 4px; text-align:center;
+}
+.wday.train { border-color:var(--accent); background:rgba(108,99,255,.12); }
+.wday.rest { border-color:var(--border); }
+.wday-n { font-size:9px; color:var(--text2); text-transform:uppercase; }
+.wday-icon { font-size:16px; margin:4px 0; }
+.wday-l { font-size:8px; color:var(--text2); }
+
+/* ── EXERCISE CARD ── */
+.ex-card {
+  background:var(--card); border:1px solid var(--border);
+  border-radius:14px; margin-bottom:10px; overflow:hidden;
+}
+.ex-header {
+  display:flex; align-items:center; gap:12px;
+  padding:14px; cursor:pointer;
+}
+.ex-num {
+  width:28px; height:28px; border-radius:8px;
+  background:rgba(108,99,255,.2); color:var(--accent);
+  font-family:'DM Mono',monospace; font-size:12px; font-weight:500;
+  display:flex; align-items:center; justify-content:center; flex-shrink:0;
+}
+.ex-info { flex:1; }
+.ex-name { font-weight:600; font-size:14px; }
+.ex-sets { font-size:12px; color:var(--text2); margin-top:2px; }
+.ex-expand { color:var(--text2); font-size:18px; transition:transform .2s; }
+.ex-expand.open { transform:rotate(180deg); }
+.ex-body { display:none; padding:0 14px 14px; border-top:1px solid var(--border); }
+.ex-body.open { display:block; }
+.video-wrap {
+  position:relative; width:100%; padding-bottom:56.25%;
+  border-radius:10px; overflow:hidden; margin:12px 0 10px; background:#000;
+}
+.video-wrap iframe { position:absolute; inset:0; width:100%; height:100%; border:none; }
+.tip-box {
+  background:rgba(108,99,255,.1); border:1px solid rgba(108,99,255,.25);
+  border-radius:10px; padding:10px; font-size:12px; color:var(--text2); margin-bottom:8px;
+}
+.tip-box strong { color:var(--accent); }
+.alt-box {
+  background:rgba(67,233,123,.08); border:1px solid rgba(67,233,123,.2);
+  border-radius:10px; padding:10px; font-size:12px; color:var(--text2);
+}
+.alt-box strong { color:var(--accent3); }
+
+/* ── NUTRITION ── */
+.macro-row { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin-bottom:16px; }
+.macro-card {
+  background:var(--card); border:1px solid var(--border);
+  border-radius:12px; padding:12px 8px; text-align:center;
+}
+.macro-n { font-family:'Bebas Neue',sans-serif; font-size:22px; }
+.macro-l { font-size:10px; color:var(--text2); text-transform:uppercase; margin-top:2px; }
+.macro-card.kcal .macro-n { color:var(--gold); }
+.macro-card.prot .macro-n { color:var(--accent2); }
+.macro-card.carb .macro-n { color:var(--accent); }
+.macro-card.fat .macro-n { color:var(--accent3); }
+
+.meal-card {
+  background:var(--card); border:1px solid var(--border);
+  border-radius:14px; margin-bottom:10px; overflow:hidden;
+}
+.meal-header {
+  display:flex; align-items:center; gap:12px;
+  padding:14px; cursor:pointer;
+}
+.meal-time {
+  font-family:'DM Mono',monospace; font-size:11px; color:var(--accent);
+  background:rgba(108,99,255,.15); border-radius:6px; padding:3px 7px;
+  flex-shrink:0;
+}
+.meal-name { font-weight:600; font-size:14px; flex:1; }
+.meal-kcal { font-size:12px; color:var(--text2); }
+.meal-body { display:none; padding:0 14px 14px; border-top:1px solid var(--border); }
+.meal-body.open { display:block; }
+.meal-option {
+  background:var(--card2); border-radius:10px; padding:10px; margin-top:10px;
+}
+.meal-option-title { font-size:12px; font-weight:600; color:var(--accent3); margin-bottom:6px; }
+.meal-option ul { list-style:none; }
+.meal-option ul li { font-size:12px; color:var(--text2); padding:2px 0; }
+.meal-option ul li::before { content:'·  '; color:var(--accent); }
+.meal-macros { display:flex; gap:8px; margin-top:8px; flex-wrap:wrap; }
+.meal-macro-pill {
+  font-size:10px; background:rgba(255,255,255,.06);
+  border-radius:6px; padding:2px 7px; color:var(--text2);
+}
+
+/* ── BITÁCORA ── */
+.bit-form {
+  background:var(--card); border:1px solid var(--border);
+  border-radius:14px; padding:16px; margin-bottom:16px;
+}
+.bit-form h3 { font-size:14px; font-weight:600; margin-bottom:12px; }
+.form-row { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:8px; }
+.form-group { display:flex; flex-direction:column; gap:4px; }
+.form-group label { font-size:11px; color:var(--text2); text-transform:uppercase; letter-spacing:.5px; }
+.form-input {
+  background:var(--bg3); border:1px solid var(--border);
+  border-radius:8px; padding:9px 12px; color:var(--text);
+  font-family:'DM Sans',sans-serif; font-size:14px;
+}
+.form-input:focus { outline:none; border-color:var(--accent); }
+.form-input option { background:var(--bg2); }
+.btn-primary {
+  background:var(--accent); color:#fff; border:none;
+  border-radius:10px; padding:12px; width:100%;
+  font-family:'DM Sans',sans-serif; font-size:14px; font-weight:600;
+  cursor:pointer; margin-top:4px; transition:opacity .2s;
+}
+.btn-primary:active { opacity:.8; }
+.btn-danger {
+  background:rgba(255,107,107,.15); color:var(--accent2); border:1px solid rgba(255,107,107,.3);
+  border-radius:8px; padding:4px 10px; font-size:11px;
+  cursor:pointer; font-family:'DM Sans',sans-serif;
+}
+
+.bit-log { display:flex; flex-direction:column; gap:8px; }
+.bit-entry {
+  background:var(--card); border:1px solid var(--border);
+  border-radius:12px; padding:12px;
+}
+.bit-entry-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; }
+.bit-entry-date { font-size:11px; color:var(--accent); font-family:'DM Mono',monospace; }
+.bit-entry-day { font-size:13px; font-weight:600; }
+.bit-sets { display:flex; flex-direction:column; gap:4px; }
+.bit-set-row {
+  display:grid; grid-template-columns:auto 1fr 1fr 1fr;
+  gap:8px; align-items:center;
+  background:var(--bg3); border-radius:6px; padding:6px 10px;
+}
+.bit-set-num { font-family:'DM Mono',monospace; font-size:10px; color:var(--text2); }
+.bit-set-val { font-size:12px; text-align:center; }
+.bit-set-label { font-size:9px; color:var(--text2); text-align:center; display:block; }
+.empty-state { text-align:center; padding:32px; color:var(--text2); font-size:13px; }
+.empty-icon { font-size:40px; margin-bottom:8px; }
+
+/* ── PESO ── */
+.peso-form {
+  background:var(--card); border:1px solid var(--border);
+  border-radius:14px; padding:16px; margin-bottom:16px;
+}
+.peso-current {
+  background: linear-gradient(135deg, rgba(108,99,255,.2), rgba(108,99,255,.05));
+  border:1px solid rgba(108,99,255,.3);
+  border-radius:14px; padding:20px; text-align:center; margin-bottom:16px;
+}
+.peso-current-n { font-family:'Bebas Neue',sans-serif; font-size:48px; color:var(--accent); }
+.peso-current-l { font-size:12px; color:var(--text2); text-transform:uppercase; letter-spacing:1px; }
+.peso-trend { font-size:13px; margin-top:4px; }
+
+.chart-wrap {
+  background:var(--card); border:1px solid var(--border);
+  border-radius:14px; padding:16px; margin-bottom:16px;
+}
+.chart-title { font-size:13px; font-weight:600; margin-bottom:12px; color:var(--text2); }
+canvas { width:100% !important; }
+
+.peso-log { display:flex; flex-direction:column; gap:6px; }
+.peso-row {
+  display:flex; align-items:center; justify-content:space-between;
+  background:var(--card); border:1px solid var(--border);
+  border-radius:10px; padding:10px 14px;
+}
+.peso-row-date { font-family:'DM Mono',monospace; font-size:12px; color:var(--text2); }
+.peso-row-val { font-weight:600; font-size:15px; }
+.peso-row-diff { font-size:11px; }
+
+/* ── FOTOS ── */
+.foto-tips {
+  background:rgba(67,233,123,.08); border:1px solid rgba(67,233,123,.2);
+  border-radius:12px; padding:12px; margin-bottom:16px;
+}
+.foto-tips h4 { font-size:12px; color:var(--accent3); margin-bottom:6px; }
+.foto-tips ul { list-style:none; }
+.foto-tips ul li { font-size:11px; color:var(--text2); padding:2px 0; }
+.foto-tips ul li::before { content:'✓  '; color:var(--accent3); }
+
+.foto-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:16px; }
+.foto-upload {
+  background:var(--card); border:2px dashed var(--border);
+  border-radius:12px; padding:20px 10px; text-align:center;
+  cursor:pointer; transition:all .2s;
+}
+.foto-upload:active { border-color:var(--accent); background:rgba(108,99,255,.08); }
+.foto-upload input { display:none; }
+.foto-upload-icon { font-size:28px; margin-bottom:6px; }
+.foto-upload-label { font-size:11px; color:var(--text2); }
+
+.foto-gallery { display:flex; flex-direction:column; gap:16px; }
+.foto-week {
+  background:var(--card); border:1px solid var(--border);
+  border-radius:14px; overflow:hidden;
+}
+.foto-week-header {
+  padding:12px 14px; border-bottom:1px solid var(--border);
+  font-size:13px; font-weight:600; display:flex; justify-content:space-between; align-items:center;
+}
+.foto-week-imgs { display:grid; grid-template-columns:repeat(2,1fr); gap:8px; padding:12px; }
+.foto-item { position:relative; border-radius:8px; overflow:hidden; aspect-ratio:3/4; }
+.foto-item img { width:100%; height:100%; object-fit:cover; }
+.foto-item-label {
+  position:absolute; bottom:0; left:0; right:0;
+  background:linear-gradient(transparent, rgba(0,0,0,.7));
+  padding:8px; font-size:10px; color:#fff;
+}
+.foto-item-del {
+  position:absolute; top:6px; right:6px;
+  background:rgba(0,0,0,.6); border:none; border-radius:50%;
+  width:24px; height:24px; color:#fff; cursor:pointer;
+  display:flex; align-items:center; justify-content:center; font-size:12px;
+}
+
+/* ── UTILITY ── */
+.section-label {
+  font-size:10px; text-transform:uppercase; letter-spacing:1.5px;
+  color:var(--text2); margin:16px 0 8px; font-weight:600;
+}
+.divider { height:1px; background:var(--border); margin:16px 0; }
+.tag {
+  display:inline-block; font-size:10px; padding:2px 8px;
+  border-radius:6px; margin-right:4px; margin-bottom:4px;
+}
+.tag-purple { background:rgba(108,99,255,.2); color:#a8a2ff; }
+.tag-green  { background:rgba(67,233,123,.15); color:#43e97b; }
+.tag-red    { background:rgba(255,107,107,.15); color:#ff6b6b; }
+.tag-gold   { background:rgba(255,209,102,.15); color:#ffd166; }
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════ HOME ══════════════════════════════ -->
+<div id="home">
+  <div class="home-header">
+    <div class="home-avatar">💪</div>
+    <div class="home-name">Gabriel Berezin</div>
+    <div class="home-sub">Plan personalizado · 8 semanas</div>
+    <div class="home-badges">
+      <span class="badge">Avanzado</span>
+      <span class="badge">Gym Completo</span>
+      <span class="badge accent">Recomposición Corporal</span>
+    </div>
+  </div>
+  <div class="home-stats">
+    <div class="home-stat"><div class="home-stat-n">5</div><div class="home-stat-l">Días</div></div>
+    <div class="home-stat"><div class="home-stat-n">2500</div><div class="home-stat-l">Kcal</div></div>
+    <div class="home-stat"><div class="home-stat-n">150g</div><div class="home-stat-l">Prot</div></div>
+    <div class="home-stat"><div class="home-stat-n">8</div><div class="home-stat-l">Semanas</div></div>
+  </div>
+  <div class="menu-list">
+    <button class="menu-btn" onclick="show('train')">
+      <div class="menu-icon" style="background:rgba(108,99,255,.15)">🏋️</div>
+      <div class="menu-info">
+        <div class="menu-name">Plan de Entrenamiento</div>
+        <div class="menu-desc">5 días · PPL + Upper/Lower · Videos · Gym completo</div>
+      </div>
+      <span class="menu-arrow">›</span>
+    </button>
+    <button class="menu-btn" onclick="show('nutri')">
+      <div class="menu-icon" style="background:rgba(67,233,123,.12)">🥗</div>
+      <div class="menu-info">
+        <div class="menu-name">Plan de Alimentación</div>
+        <div class="menu-desc">2,500 kcal · 150g prot · 4 comidas · Alternativas</div>
+      </div>
+      <span class="menu-arrow">›</span>
+    </button>
+    <button class="menu-btn" onclick="show('bita')">
+      <div class="menu-icon" style="background:rgba(255,209,102,.12)">📓</div>
+      <div class="menu-info">
+        <div class="menu-name">Bitácora de Entrenamiento</div>
+        <div class="menu-desc">Registra series · pesos · reps · historial</div>
+      </div>
+      <span class="menu-arrow">›</span>
+    </button>
+    <button class="menu-btn" onclick="show('peso')">
+      <div class="menu-icon" style="background:rgba(255,107,107,.12)">⚖️</div>
+      <div class="menu-info">
+        <div class="menu-name">Registro de Peso</div>
+        <div class="menu-desc">Seguimiento diario · Gráfica de progreso</div>
+      </div>
+      <span class="menu-arrow">›</span>
+    </button>
+    <button class="menu-btn" onclick="show('fotos')">
+      <div class="menu-icon" style="background:rgba(67,233,123,.12)">📸</div>
+      <div class="menu-info">
+        <div class="menu-name">Fotos de Progreso</div>
+        <div class="menu-desc">Foto semanal · Galería comparativa</div>
+      </div>
+      <span class="menu-arrow">›</span>
+    </button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════ ENTRENAMIENTO ══════════════════════════════ -->
+<div class="section" id="train">
+  <div class="section-header">
+    <button class="back-btn" onclick="goHome()">‹</button>
+    <span class="section-title">Plan de Entrenamiento</span>
+  </div>
+  <div class="section-content">
+    <div class="plan-hero">
+      <h2>PPL + UPPER / LOWER</h2>
+      <p>Recomposición corporal · Nivel avanzado · 45 min/sesión</p>
+      <div class="plan-stats-row">
+        <div class="ps"><div class="ps-n">5</div><div class="ps-l">Días</div></div>
+        <div class="ps"><div class="ps-n">8</div><div class="ps-l">Semanas</div></div>
+        <div class="ps"><div class="ps-n">45'</div><div class="ps-l">Por sesión</div></div>
+      </div>
+    </div>
+
+    <div class="tab-row">
+      <button class="tab active" onclick="switchTab('resumen',this)">Semana</button>
+      <button class="tab" onclick="switchTab('dia1',this)">L · Push</button>
+      <button class="tab" onclick="switchTab('dia2',this)">M · Pull</button>
+      <button class="tab" onclick="switchTab('dia3',this)">X · Legs</button>
+      <button class="tab" onclick="switchTab('dia4',this)">J · Upper</button>
+      <button class="tab" onclick="switchTab('dia5',this)">V · Lower</button>
+    </div>
+
+    <!-- RESUMEN SEMANA -->
+    <div class="tab-content active" id="tab-resumen">
+      <div class="week-grid">
+        <div class="wday train"><div class="wday-n">Lun</div><div class="wday-icon">🔴</div><div class="wday-l">Push</div></div>
+        <div class="wday train"><div class="wday-n">Mar</div><div class="wday-icon">🔵</div><div class="wday-l">Pull</div></div>
+        <div class="wday train"><div class="wday-n">Mié</div><div class="wday-icon">🟢</div><div class="wday-l">Legs</div></div>
+        <div class="wday train"><div class="wday-n">Jue</div><div class="wday-icon">🟣</div><div class="wday-l">Upper</div></div>
+        <div class="wday train"><div class="wday-n">Vie</div><div class="wday-icon">🟡</div><div class="wday-l">Lower</div></div>
+        <div class="wday rest"><div class="wday-n">Sáb</div><div class="wday-icon">😴</div><div class="wday-l">Rest</div></div>
+        <div class="wday rest"><div class="wday-n">Dom</div><div class="wday-icon">😴</div><div class="wday-l">Rest</div></div>
+      </div>
+      <div class="section-label">Notas importantes</div>
+      <div class="tip-box">
+        <strong>Recomposición corporal</strong> — Come en mantenimiento calórico. El objetivo es perder grasa <em>y</em> ganar músculo simultáneamente. Funciona mejor en nivel avanzado con buena adherencia.<br><br>
+        <strong>Progresión de carga</strong> — Intenta aumentar 2.5 kg cada semana en los ejercicios principales. Si no puedes, sube reps antes que peso.<br><br>
+        <strong>Descanso entre series</strong> — 90–120 seg en compuestos, 60 seg en aislamiento.
+      </div>
+      <div class="section-label">Split Overview</div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <div class="bit-entry"><b style="color:#ff6b6b">🔴 Lunes — Push (Empuje)</b><br><span style="font-size:12px;color:var(--text2)">Pecho, hombros, tríceps. Enfoque en volumen e hipertrofia.</span></div>
+        <div class="bit-entry"><b style="color:#6c63ff">🔵 Martes — Pull (Jalón)</b><br><span style="font-size:12px;color:var(--text2)">Espalda, bíceps, femorales posteriores. Énfasis en tensión mecánica.</span></div>
+        <div class="bit-entry"><b style="color:#43e97b">🟢 Miércoles — Legs (Piernas)</b><br><span style="font-size:12px;color:var(--text2)">Cuádriceps, glúteos, pantorrillas. Día más intenso de la semana.</span></div>
+        <div class="bit-entry"><b style="color:#a78bfa">🟣 Jueves — Upper (Tren superior)</b><br><span style="font-size:12px;color:var(--text2)">Movimientos compuestos de empuje y jalón. Más peso, menos volumen.</span></div>
+        <div class="bit-entry"><b style="color:#ffd166">🟡 Viernes — Lower (Tren inferior)</b><br><span style="font-size:12px;color:var(--text2)">Pierna con énfasis en fuerza. Peso muerto, prensa, isquiotibiales.</span></div>
+      </div>
+    </div>
+
+    <!-- DÍA 1 — PUSH -->
+    <div class="tab-content" id="tab-dia1">
+      <div class="section-label">🔴 Lunes — Push · Pecho / Hombros / Tríceps</div>
+
+      <div class="ex-card">
+        <div class="ex-header" onclick="toggleEx(this)">
+          <div class="ex-num">01</div>
+          <div class="ex-info"><div class="ex-name">Press Banca con Barra</div><div class="ex-sets">4 × 6–8 · Descanso 2 min</div></div>
+          <div class="ex-expand">▾</div>
+        </div>
+        <div class="ex-body">
+          <div class="video-wrap"><iframe src="https://www.youtube.com/embed/vcBig73ojpE" allowfullscreen loading="lazy"></iframe></div>
+          <div class="tip-box"><strong>Técnica:</strong> Escápulas retraídas y deprimidas. Baja la barra hasta tocar el pecho (1.5–2 seg), explota hacia arriba. Arco natural en la espalda baja. Pies firmes en el suelo.</div>
+          <div class="alt-box"><strong>Alternativa gym:</strong> Press en máquina convergente o press con mancuernas 4×8</div>
+        </div>
+      </div>
+
+      <div class="ex-card">
+        <div class="ex-header" onclick="toggleEx(this)">
+          <div class="ex-num">02</div>
+          <div class="ex-info"><div class="ex-name">Press Inclinado con Mancuernas</div><div class="ex-sets">3 × 10–12 · Descanso 90 seg</div></div>
+          <div class="ex-expand">▾</div>
+        </div>
+        <div class="ex-body">
+          <div class="video-wrap"><iframe src="https://www.youtube.com/embed/8iPEnn-ltC8" allowfullscreen loading="lazy"></iframe></div>
+          <div class="tip-box"><strong>Técnica:</strong> Banco a 30–45°. Codos a 45° del cuerpo. Baja hasta sentir el estiramiento del pecho superior. Presiona con intención.</div>
+          <div class="alt-box"><strong>Alternativa:</strong> Press inclinado en barra / Crossover cable alto</div>
+        </div>
+      </div>
+
+      <div class="ex-card">
+        <div class="ex-header" onclick="toggleEx(this)">
+          <div class="ex-num">03</div>
+          <div class="ex-info"><div class="ex-name">Press Militar con Barra (Overhead Press)</div><div class="ex-sets">3 × 8–10 · Descanso 90 seg</div></div>
+          <div class="ex-expand">▾</div>
+        </div>
+        <div class="ex-body">
+          <div class="video-wrap"><iframe src="https://www.youtube.com/embed/2yjwXTZQDDI" allowfullscreen loading="lazy"></iframe></div>
+          <div class="tip-box"><strong>Técnica:</strong> De pie o sentado. Core activo, glúteos apretados. No hiperextiendas la lumbar. Presiona la barra en línea recta, mete la cabeza cuando la barra pase.</div>
+          <div class="alt-box"><strong>Alternativa:</strong> Press Arnold con mancuernas / Press en máquina shoulder</div>
+        </div>
+      </div>
+
+      <div class="ex-card">
+        <div class="ex-header" onclick="toggleEx(this)">
+          <div class="ex-num">04</div>
+          <div class="ex-info"><div class="ex-name">Elevaciones Laterales con Mancuernas</div><div class="ex-sets">4 × 15–20 · Descanso 60 seg</div></div>
+          <div class="ex-expand">▾</div>
+        </div>
+        <div class="ex-body">
+          <div class="video-wrap"><iframe src="https://www.youtube.com/embed/3VcKaXpzqRo" allowfullscreen loading="lazy"></iframe></div>
+          <div class="tip-box"><strong>Técnica:</strong> Ligera inclinación hacia adelante. Codos ligeramente doblados. Sube hasta paralelo. Controla la bajada en 2–3 seg. Peso ligero, mucho volumen.</div>
+          <div class="alt-box"><strong>Alternativa:</strong> Elevaciones en cable / Machine lateral raise</div>
+        </div>
+      </div>
+
+      <div class="ex-card">
+        <div class="ex-header" onclick="toggleEx(this)">
+          <div class="ex-num">05</div>
+          <div class="ex-info"><div class="ex-name">Extensión de Tríceps en Polea Alta</div><div class="ex-sets">3 × 12–15 · Descanso 60 seg</div></div>
+          <div class="ex-expand">▾</div>
+        </div>
+        <div class="ex-body">
+          <div class="video-wrap"><iframe src="https://www.youtube.com/embed/vB5OHsJ3EME" allowfullscreen loading="lazy"></iframe></div>
+          <div class="tip-box"><strong>Técnica:</strong> Codos pegados al cuerpo y fijos. Solo mueve el antebrazo. Aprieta en la extensión completa. Puedes usar cuerda, barra recta o barra V.</div>
+          <div class="alt-box"><strong>Alternativa:</strong> Fondos en paralelas / Skull crushers con barra EZ</div>
+        </div>
+      </div>
+
+      <div class="ex-card">
+        <div class="ex-header" onclick="toggleEx(this)">
+          <div class="ex-num">06</div>
+          <div class="ex-info"><div class="ex-name">Aperturas en Cable (Crossover)</div><div class="ex-sets">3 × 12–15 · Descanso 60 seg</div></div>
+          <div class="ex-expand">▾</div>
+        </div>
+        <div class="ex-body">
+          <div class="video-wrap"><iframe src="https://www.youtube.com/embed/taI4XduLpTk" allowfullscreen loading="lazy"></iframe></div>
+          <div class="tip-box"><strong>Técnica:</strong> Cables desde arriba. Ligera inclinación del torso. Junta las manos frente a tu pecho cruzándolas ligeramente. Mantén la tensión todo el recorrido.</div>
+          <div class="alt-box"><strong>Alternativa:</strong> Aperturas con mancuernas en banco plano / Pec deck</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DÍA 2 — PULL -->
+    <div class="tab-content" id="tab-dia2">
+      <div class="section-label">🔵 Martes — Pull · Espalda / Bíceps</div>
+
+      <div class="ex-card">
+        <div class="ex-header" onclick="toggleEx(this)">
+          <div class="ex-num">01</div>
+          <div class="ex-info"><div class="ex-name">Peso Muerto Convencional</div><div class="ex-sets">4 × 4–6 · Descanso 2–3 min</div></div>
+          <div class="ex-expand">▾</div>
+        </div>
+        <div class="ex-body">
+          <div class="video-wrap"><iframe src="https://www.youtube.com/embed/op9kVnSso6Q" allowfullscreen loading="lazy"></iframe></div>
+          <div class="tip-box"><strong>Técnica:</strong> Caderas atrás, espalda recta, mirada al frente. La barra roza las espinillas todo el camino. Activa el lat antes de jalar (piensa en "doblar la barra"). Extiende caderas y rodillas simultáneamente.</div>
+          <div class="alt-box"><strong>Alternativa:</strong> Peso muerto rumano / Peso muerto con hexagonal bar</div>
+        </div>
+      </div>
+
+      <div class="ex-card">
+        <div class="ex-header" onclick="toggleEx(this)">
+          <div class="ex-num">02</div>
+          <div class="ex-info"><div class="ex-name">Dominadas con Lastre (o asistidas)</div><div class="ex-sets">4 × 6–8 · Descanso 2 min</div></div>
+          <div class="ex-expand">▾</div>
+        </div>
+        <div class="ex-body">
+          <div class="video-wrap"><iframe src="https://www.youtube.com/embed/eGo4IYlbE5g" allowfullscreen loading="lazy"></iframe></div>
+          <div class="tip-box"><strong>Técnica:</strong> Agarre prono, ancho de hombros. Deprime las escápulas antes de jalar. Lleva el pecho a la barra. Baja controlado en 2–3 seg. Si ya haces 8 con tu peso, agrega lastre.</div>
+          <div class="alt-box"><strong>Alternativa:</strong> Jalón al pecho en polea 4×10 / Machine pull-down</div>
+        </div>
+      </div>
+
+      <div class="ex-card">
+        <div class="ex-header" onclick="toggleEx(this)">
+          <div class="ex-num">03</div>
+          <div class="ex-info"><div class="ex-name">Remo con Barra (Pendlay Row)</div><div class="ex-sets">3 × 8–10 · Descanso 90 seg</div></div>
+          <div class="ex-expand">▾</div>
+        </div>
+        <div class="ex-body">
+          <div class="video-wrap"><iframe src="https://www.youtube.com/embed/krPFbKMXWMI" allowfullscreen loading="lazy"></iframe></div>
+          <div class="tip-box"><strong>Técnica:</strong> Torso casi paralelo al suelo (30–45°). Jala la barra hacia el ombligo. Codos atrás y cerca del cuerpo. La barra toca el suelo entre cada rep (Pendlay) para resetear la posición.</div>
+          <div class="alt-box"><strong>Alternativa:</strong> Remo con mancuerna en banco / Remo en máquina</div>
+        </div>
+      </div>
+
+      <div class="ex-card">
+        <div class="ex-header" onclick="toggleEx(this)">
+          <div class="ex-num">04</div>
+          <div class="ex-info"><div class="ex-name">Remo en Polea Baja (Cable Row)</div><div class="ex-sets">3 × 12–15 · Descanso 60 seg</div></div>
+          <div class="ex-expand">▾</div>
+        </div>
+        <div class="ex-body">
+          <div class="video-wrap"><iframe src="https://www.youtube.com/embed/GZbfZ033f74" allowfullscreen loading="lazy"></iframe></div>
+          <div class="tip-box"><strong>Técnica:</strong> Espalda recta, ligeramente inclinado al frente. Jala los codos atrás y aprieta la espalda media en el pico. Controla la extensión del brazo al frente para estirar el lat.</div>
+          <div class="alt-box"><strong>Alternativa:</strong> Remo con kettlebell / TRX rows</div>
+        </div>
+      </div>
+
+      <div class="ex-card">
+        <div class="ex-header" onclick="toggleEx(this)">
+          <div class="ex-num">05</div>
+          <div class="ex-info"><div class="ex-name">Curl de Bíceps con Barra EZ</div><div class="ex-sets">3 × 10–12 · Descanso 60 seg</div></div>
+          <div class="ex-expand">▾</div>
+        </div>
+        <div class="ex-body">
+          <div class="video-wrap"><iframe src="https://www.youtube.com/embed/kwG2ipFRgfo" allowfullscreen loading="lazy"></iframe></div>
+          <div class="tip-box"><strong>Técnica:</strong> Codos fijos al costado. Baja despacio (2–3 seg). Sube con control sin balancear el torso. El rango completo importa más que el peso.</div>
+          <div class="alt-box"><strong>Alternativa:</strong> Curl alternado con mancuernas / Curl en predicador</div>
+        </div>
+      </div>
+
+      <div class="ex-card">
+        <div class="ex-header" onclick="toggleEx(this)">
+          <div class="ex-num">06</div>
+          <div class="ex-info"><div class="ex-name">Curl Martillo con Mancuernas</div><div class="ex-sets">3 × 12–15 · Descanso 60 seg</div></div>
+          <div class="ex-expand">▾</div>
+        </div>
+        <div class="ex-body">
+          <div class="video-wrap"><iframe src="https://www.youtube.com/embed/zC3nLlEvin4" allowfullscreen loading="lazy"></iframe></div>
+          <div class="tip-box"><strong>Técnica:</strong> Agarre neutro (pulgares arriba). Trabaja el braquial y braquiorradial además del bíceps. Movimiento controlado en ambas fases.</div>
+          <div class="alt-box"><strong>Alternativa:</strong> Curl martillo en cable / Curl concentrado</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DÍA 3 — LEGS -->
+    <div class="tab-content" id="tab-dia3">
+      <div class="section-label">🟢 Miércoles — Legs · Piernas completas</div>
+
+      <div class="ex-card">
+        <div class="ex-header" onclick="toggleEx(this)">
+          <div class="ex-num">01</div>
+          <div class="ex-info"><div class="ex-name">Sentadilla con Barra (Back Squat)</div><div class="ex-sets">4 × 5–6 · Descanso 2–3 min</div></div>
+          <div class="ex-expand">▾</div>
+        </div>
+        <div class="ex-body">
+          <div class="video-wrap"><iframe src="https://www.youtube.com/embed/ultWZbUMPL8" allowfullscreen loading="lazy"></iframe></div>
+          <div class="tip-box"><strong>Técnica:</strong> Barra en posición baja (low bar) o media. Rodillas siguen la punta del pie. Profundidad: muslo paralelo al suelo mínimo. Talones firmes. Core braceado. Empuja el suelo al subir.</div>
+          <div class="alt-box"><strong>Alternativa:</strong> Sentadilla frontal / Goblet squat con kettlebell</div>
+        </div>
+      </div>
+
+      <div class="ex-card">
+        <div class="ex-header" onclick="toggleEx(this)">
+          <div class="ex-num">02</div>
+          <div class="ex-info"><div class="ex-name">Prensa de Piernas</div><div class="ex-sets">3 × 10–12 · Descanso 90 seg</div></div>
+          <div class="ex-expand">▾</div>
+        </div>
+        <div class="ex-body">
+          <div class="video-wrap"><iframe src="https://www.youtube.com/embed/IZxyjW7MPJQ" allowfullscreen loading="lazy"></iframe></div>
+          <div class="tip-box"><strong>Técnica:</strong> Pies en la parte media-alta de la plataforma. Baja hasta 90° de flexión. NO bloquees las rodillas al extender. Espalda baja pegada al respaldo todo el tiempo.</div>
+          <div class="alt-box"><strong>Alternativa:</strong> Hack squat / Zancadas con barra</div>
+        </div>
+      </div>
+
+      <div class="ex-card">
+        <div class="ex-header" onclick="toggleEx(this)">
+          <div class="ex-num">03</div>
+          <div class="ex-info"><div class="ex-name">Extensión de Cuádriceps en Máquina</div><div class="ex-sets">3 × 15–20 · Descanso 60 seg</div></div>
+          <div class="ex-expand">▾</div>
+        </div>
+        <div class="ex-body">
+          <div class="video-wrap"><iframe src="https://www.youtube.com/embed/YyvSfVjQeL0" allowfullscreen loading="lazy"></iframe></div>
+          <div class="tip-box"><strong>Técnica:</strong> Ajusta el asiento para que la articulación de la rodilla quede alineada con el pivote. Extiende completamente y contrae el cuád 1 seg. Baja controlado. Ideal para aislamiento y alto volumen.</div>
+          <div class="alt-box"><strong>Alternativa:</strong> Sentadilla búlgara / Step-ups con mancuernas</div>
+        </div>
+      </div>
+
+      <div class="ex-card">
+        <div class="ex-header" onclick="toggleEx(this)">
+          <div class="ex-num">04</div>
+          <div class="ex-info"><div class="ex-name">Curl Femoral Tumbado (Leg Curl)</div><div class="ex-sets">4 × 10–12 · Descanso 60 seg</div></div>
+          <div class="ex-expand">▾</div>
+        </div>
+        <div class="ex-body">
+          <div class="video-wrap"><iframe src="https://www.youtube.com/embed/ELOCsoDSmrg" allowfullscreen loading="lazy"></iframe></div>
+          <div class="tip-box"><strong>Técnica:</strong> Caderas pegadas al banco. Baja completamente para el estiramiento. Sube explosivo, baja en 3 seg. Puedes hacer unilateral para detectar diferencias entre piernas.</div>
+          <div class="alt-box"><strong>Alternativa:</strong> Peso muerto rumano con mancuernas / Nordic curl</div>
+        </div>
+      </div>
+
+      <div class="ex-card">
+        <div class="ex-header" onclick="toggleEx(this)">
+          <div class="ex-num">05</div>
+          <div class="ex-info"><div class="ex-name">Hip Thrust con Barra</div><div class="ex-sets">3 × 12–15 · Descanso 90 seg</div></div>
+          <div class="ex-expand">▾</div>
+        </div>
+        <div class="ex-body">
+          <div class="video-wrap"><iframe src="https://www.youtube.com/embed/SEdqd9TzEYY" allowfullscreen loading="lazy"></iframe></div>
+          <div class="tip-box"><strong>Técnica:</strong> Banco a la altura de los omóplatos. Pies a ancho de cadera. Empuja las caderas hasta extensión completa apretando glúteos. No hiperextiendas la lumbar. Chin tucked.</div>
+          <div class="alt-box"><strong>Alternativa:</strong> Glute bridge en el suelo / Hip thrust en máquina</div>
+        </div>
+      </div>
+
+      <div class="ex-card">
+        <div class="ex-header" onclick="toggleEx(this)">
+          <div class="ex-num">06</div>
+          <div class="ex-info"><div class="ex-name">Elevación de Pantorrillas de Pie</div><div class="ex-sets">4 × 15–20 · Descanso 60 seg</div></div>
+          <div class="ex-expand">▾</div>
+        </div>
+        <div class="ex-body">
+          <div class="video-wrap"><iframe src="https://www.youtube.com/embed/-M4-G8p8fmc" allowfullscreen loading="lazy"></iframe></div>
+          <div class="tip-box"><strong>Técnica:</strong> Rango completo: baja el talón hasta el estiramiento máximo. Sube hasta punta de pie completa. Pausa arriba 1 seg. Las pantorrillas necesitan alto volumen para crecer.</div>
+          <div class="alt-box"><strong>Alternativa:</strong> Elevaciones de pantorrilla sentado / Donkey calf raises</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DÍA 4 — UPPER -->
+    <div class="tab-content" id="tab-dia4">
+      <div class="section-label">🟣 Jueves — Upper · Tren Superior (fuerza)</div>
+
+      <div class="ex-card">
+        <div class="ex-header" onclick="toggleEx(this)">
+          <div class="ex-num">01</div>
+          <div class="ex-info"><div class="ex-name">Press Banca con Mancuernas</div><div class="ex-sets">4 × 8–10 · Descanso 90 seg</div></div>
+          <div class="ex-expand">▾</div>
+        </div>
+        <div class="ex-body">
+          <div class="video-wrap"><iframe src="https://www.youtube.com/embed/VmB1G1K7v94" allowfullscreen loading="lazy"></iframe></div>
+          <div class="tip-box"><strong>Técnica:</strong> Mayor rango de movimiento que con barra. Permite trabajo unilateral implícito. Baja hasta sentir el estiramiento del pecho. Presiona juntando las mancuernas en la parte superior.</div>
+          <div class="alt-box"><strong>Alternativa:</strong> Press banca en Smith Machine / Press en máquina</div>
+        </div>
+      </div>
+
+      <div class="ex-card">
+        <div class="ex-header" onclick="toggleEx(this)">
+          <div class="ex-num">02</div>
+          <div class="ex-info"><div class="ex-name">Remo con Mancuerna (1 brazo)</div><div class="ex-sets">4 × 10 c/u · Descanso 60 seg</div></div>
+          <div class="ex-expand">▾</div>
+        </div>
+        <div class="ex-body">
+          <div class="video-wrap"><iframe src="https://www.youtube.com/embed/pYcpY20QaE8" allowfullscreen loading="lazy"></iframe></div>
+          <div class="tip-box"><strong>Técnica:</strong> Rodilla y mano ipsilateral apoyadas en banco. Espalda paralela al suelo. Jala la mancuerna hacia la cadera, codo atrás. Rota ligeramente el torso para más recorrido.</div>
+          <div class="alt-box"><strong>Alternativa:</strong> Remo en máquina / Remo con kettlebell</div>
+        </div>
+      </div>
+
+      <div class="ex-card">
+        <div class="ex-header" onclick="toggleEx(this)">
+          <div class="ex-num">03</div>
+          <div class="ex-info"><div class="ex-name">Press Hombro con Mancuernas</div><div class="ex-sets">3 × 10–12 · Descanso 90 seg</div></div>
+          <div class="ex-expand">▾</div>
+        </div>
+        <div class="ex-body">
+          <div class="video-wrap"><iframe src="https://www.youtube.com/embed/qEwKCR5JCog" allowfullscreen loading="lazy"></iframe></div>
+          <div class="tip-box"><strong>Técnica:</strong> Sentado, core activo. Codos a 90° al bajar. No bloquees los codos al subir. Muñecas neutras. Alterna con press Arnold para mayor activación del deltoides anterior.</div>
+          <div class="alt-box"><strong>Alternativa:</strong> Press en máquina shoulder / Push press con barra</div>
+        </div>
+      </div>
+
+      <div class="ex-card">
+        <div class="ex-header" onclick="toggleEx(this)">
+          <div class="ex-num">04</div>
+          <div class="ex-info"><div class="ex-name">Face Pulls en Polea</div><div class="ex-sets">3 × 15–20 · Descanso 60 seg</div></div>
+          <div class="ex-expand">▾</div>
+        </div>
+        <div class="ex-body">
+          <div class="video-wrap"><iframe src="https://www.youtube.com/embed/rep-qVOkqgk" allowfullscreen loading="lazy"></iframe></div>
+          <div class="tip-box"><strong>Técnica:</strong> Cable a la altura de la cara, cuerda. Jala hacia la frente separando las manos al final. Trabaja el deltoides posterior y manguito rotador. Fundamental para salud del hombro.</div>
+          <div class="alt-box"><strong>Alternativa:</strong> Rear delt fly con mancuernas / Band pull-apart</div>
+        </div>
+      </div>
+
+      <div class="ex-card">
+        <div class="ex-header" onclick="toggleEx(this)">
+          <div class="ex-num">05</div>
+          <div class="ex-info"><div class="ex-name">Curl Inclinado con Mancuernas</div><div class="ex-sets">3 × 12 · Descanso 60 seg</div></div>
+          <div class="ex-expand">▾</div>
+        </div>
+        <div class="ex-body">
+          <div class="video-wrap"><iframe src="https://www.youtube.com/embed/soxrZlIl35U" allowfullscreen loading="lazy"></iframe></div>
+          <div class="tip-box"><strong>Técnica:</strong> Banco a 45°. El estiramiento en la posición baja es mayor que en curl normal. Esto es clave para hipertrofia del bíceps largo. No balancees el codo.</div>
+          <div class="alt-box"><strong>Alternativa:</strong> Curl en polea baja / Curl con agarre supino en máquina</div>
+        </div>
+      </div>
+
+      <div class="ex-card">
+        <div class="ex-header" onclick="toggleEx(this)">
+          <div class="ex-num">06</div>
+          <div class="ex-info"><div class="ex-name">Press Francés con Barra EZ (Skull Crusher)</div><div class="ex-sets">3 × 10–12 · Descanso 60 seg</div></div>
+          <div class="ex-expand">▾</div>
+        </div>
+        <div class="ex-body">
+          <div class="video-wrap"><iframe src="https://www.youtube.com/embed/d_KZxkY_0cM" allowfullscreen loading="lazy"></iframe></div>
+          <div class="tip-box"><strong>Técnica:</strong> Tumbado en banco. Baja la barra hacia la frente o detrás de la cabeza. Codos fijos apuntando al techo. Extiende completamente. Trabaja el tríceps largo con estiramiento.</div>
+          <div class="alt-box"><strong>Alternativa:</strong> Extensión de tríceps overhead con mancuerna / Fondos en banco</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DÍA 5 — LOWER -->
+    <div class="tab-content" id="tab-dia5">
+      <div class="section-label">🟡 Viernes — Lower · Fuerza de pierna</div>
+
+      <div class="ex-card">
+        <div class="ex-header" onclick="toggleEx(this)">
+          <div class="ex-num">01</div>
+          <div class="ex-info"><div class="ex-name">Peso Muerto Rumano (RDL)</div><div class="ex-sets">4 × 8–10 · Descanso 2 min</div></div>
+          <div class="ex-expand">▾</div>
+        </div>
+        <div class="ex-body">
+          <div class="video-wrap"><iframe src="https://www.youtube.com/embed/JCXUYuzwNrM" allowfullscreen loading="lazy"></iframe></div>
+          <div class="tip-box"><strong>Técnica:</strong> Rodillas ligeramente dobladas. Empuja las caderas atrás mientras bajas la barra por las piernas. Estiramiento en isquiotibiales. Sube apretando glúteos. Espalda neutra en todo momento.</div>
+          <div class="alt-box"><strong>Alternativa:</strong> RDL con mancuernas / Good mornings con barra</div>
+        </div>
+      </div>
+
+      <div class="ex-card">
+        <div class="ex-header" onclick="toggleEx(this)">
+          <div class="ex-num">02</div>
+          <div class="ex-info"><div class="ex-name">Sentadilla Búlgara (Split Squat)</div><div class="ex-sets">3 × 10 c/u · Descanso 90 seg</div></div>
+          <div class="ex-expand">▾</div>
+        </div>
+        <div class="ex-body">
+          <div class="video-wrap"><iframe src="https://www.youtube.com/embed/2C-uNgKwPLE" allowfullscreen loading="lazy"></iframe></div>
+          <div class="tip-box"><strong>Técnica:</strong> Pie trasero elevado en banco. Pie delantero suficientemente adelante. Baja hasta que la rodilla trasera casi toque el suelo. Torso vertical para más cuád, inclinado para más glúteo.</div>
+          <div class="alt-box"><strong>Alternativa:</strong> Zancada con barra / Step-up en caja</div>
+        </div>
+      </div>
+
+      <div class="ex-card">
+        <div class="ex-header" onclick="toggleEx(this)">
+          <div class="ex-num">03</div>
+          <div class="ex-info"><div class="ex-name">Prensa de Piernas (pies altos)</div><div class="ex-sets">3 × 12–15 · Descanso 90 seg</div></div>
+          <div class="ex-expand">▾</div>
+        </div>
+        <div class="ex-body">
+          <div class="video-wrap"><iframe src="https://www.youtube.com/embed/IZxyjW7MPJQ" allowfullscreen loading="lazy"></iframe></div>
+          <div class="tip-box"><strong>Técnica:</strong> Pies en la parte alta de la plataforma para mayor activación de isquiotibiales y glúteos. Baja controlado hasta 90°. Complementa el trabajo de RDL con volumen extra.</div>
+          <div class="alt-box"><strong>Alternativa:</strong> Hack squat / Sentadilla con pausa</div>
+        </div>
+      </div>
+
+      <div class="ex-card">
+        <div class="ex-header" onclick="toggleEx(this)">
+          <div class="ex-num">04</div>
+          <div class="ex-info"><div class="ex-name">Curl Femoral Sentado</div><div class="ex-sets">4 × 10–12 · Descanso 60 seg</div></div>
+          <div class="ex-expand">▾</div>
+        </div>
+        <div class="ex-body">
+          <div class="video-wrap"><iframe src="https://www.youtube.com/embed/1Tq3QdYUuHs" allowfullscreen loading="lazy"></iframe></div>
+          <div class="tip-box"><strong>Técnica:</strong> La posición sentada estira más el isquiotibial proximal vs. tumbado. Estudios muestran mayor hipertrofia en esta variante. Rango completo y fase excéntrica controlada.</div>
+          <div class="alt-box"><strong>Alternativa:</strong> Curl femoral tumbado / Glute-ham raise</div>
+        </div>
+      </div>
+
+      <div class="ex-card">
+        <div class="ex-header" onclick="toggleEx(this)">
+          <div class="ex-num">05</div>
+          <div class="ex-info"><div class="ex-name">Abductores en Máquina</div><div class="ex-sets">3 × 15–20 · Descanso 60 seg</div></div>
+          <div class="ex-expand">▾</div>
+        </div>
+        <div class="ex-body">
+          <div class="video-wrap"><iframe src="https://www.youtube.com/embed/BOLN1Kd8vo0" allowfullscreen loading="lazy"></iframe></div>
+          <div class="tip-box"><strong>Técnica:</strong> Abre las piernas lento, aprieta en el pico, regresa controlado. Trabaja glúteo medio — fundamental para estabilidad de cadera y estética. No uses demasiado peso.</div>
+          <div class="alt-box"><strong>Alternativa:</strong> Clamshell con banda / Side-lying hip abduction</div>
+        </div>
+      </div>
+
+      <div class="ex-card">
+        <div class="ex-header" onclick="toggleEx(this)">
+          <div class="ex-num">06</div>
+          <div class="ex-info"><div class="ex-name">Pantorrillas Sentado en Máquina</div><div class="ex-sets">4 × 15–20 · Descanso 60 seg</div></div>
+          <div class="ex-expand">▾</div>
+        </div>
+        <div class="ex-body">
+          <div class="video-wrap"><iframe src="https://www.youtube.com/embed/JbyjNymZOt0" allowfullscreen loading="lazy"></iframe></div>
+          <div class="tip-box"><strong>Técnica:</strong> La posición sentada activa el sóleo (músculo profundo de la pantorrilla). Complementa las elevaciones de pie que trabajaron el gastrocnemio. Rango completo, pausa en el estiramiento.</div>
+          <div class="alt-box"><strong>Alternativa:</strong> Elevaciones de pantorrilla sentado con mancuerna en rodilla</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════ NUTRICIÓN ══════════════════════════════ -->
+<div class="section" id="nutri">
+  <div class="section-header">
+    <button class="back-btn" onclick="goHome()">‹</button>
+    <span class="section-title">Plan de Alimentación</span>
+  </div>
+  <div class="section-content">
+
+    <div class="macro-row">
+      <div class="macro-card kcal"><div class="macro-n">2500</div><div class="macro-l">Calorías</div></div>
+      <div class="macro-card prot"><div class="macro-n">150g</div><div class="macro-l">Proteína</div></div>
+      <div class="macro-card carb"><div class="macro-n">270g</div><div class="macro-l">Carbs</div></div>
+      <div class="macro-card fat"><div class="macro-n">70g</div><div class="macro-l">Grasas</div></div>
+    </div>
+
+    <div class="tip-box" style="margin-bottom:16px">
+      <strong>Recomposición corporal</strong> — Mantén las calorías en mantenimiento (2,500). Come más carbohidratos los días de entrenamiento y reduce ligeramente los días de descanso (−200 kcal en grasa/carbs). Prioriza proteína en cada comida.
+    </div>
+
+    <div class="tab-row">
+      <button class="tab active" onclick="switchTab('nutri-train',this)">Días de gym</button>
+      <button class="tab" onclick="switchTab('nutri-rest',this)">Días de descanso</button>
+      <button class="tab" onclick="switchTab('nutri-tips',this)">Tips</button>
+    </div>
+
+    <!-- DÍAS DE ENTRENAMIENTO -->
+    <div class="tab-content active" id="tab-nutri-train">
+      <div class="section-label">4 comidas · 2,500 kcal</div>
+
+      <!-- COMIDA 1 -->
+      <div class="meal-card">
+        <div class="meal-header" onclick="toggleMeal(this)">
+          <div class="meal-time">7:00</div>
+          <div class="meal-name">Desayuno</div>
+          <div class="meal-kcal">~600 kcal</div>
+          <div class="ex-expand">▾</div>
+        </div>
+        <div class="meal-body">
+          <div class="meal-option">
+            <div class="meal-option-title">🍳 Opción A — Huevos y avena</div>
+            <ul>
+              <li>4 huevos enteros revueltos</li>
+              <li>100g avena en hojuelas con leche semi</li>
+              <li>1 plátano mediano</li>
+              <li>Café negro o con leche descremada</li>
+            </ul>
+            <div class="meal-macros">
+              <span class="meal-macro-pill">~42g prot</span>
+              <span class="meal-macro-pill">~70g carbs</span>
+              <span class="meal-macro-pill">~18g grasa</span>
+            </div>
+          </div>
+          <div class="meal-option">
+            <div class="meal-option-title">🥛 Opción B — Yogur y frutas</div>
+            <ul>
+              <li>250g yogur griego natural (sin azúcar)</li>
+              <li>50g granola casera o avena</li>
+              <li>1 puño de fresas o arándanos</li>
+              <li>1 scoop proteína en polvo (opcional)</li>
+            </ul>
+            <div class="meal-macros">
+              <span class="meal-macro-pill">~45g prot</span>
+              <span class="meal-macro-pill">~55g carbs</span>
+              <span class="meal-macro-pill">~12g grasa</span>
+            </div>
+          </div>
+          <div class="meal-option">
+            <div class="meal-option-title">🌮 Opción C — Tortillas con huevo</div>
+            <ul>
+              <li>3 tortillas de maíz</li>
+              <li>4 claras + 2 huevos enteros revueltos</li>
+              <li>Frijoles negros 80g</li>
+              <li>Aguacate ¼ pieza</li>
+            </ul>
+            <div class="meal-macros">
+              <span class="meal-macro-pill">~40g prot</span>
+              <span class="meal-macro-pill">~65g carbs</span>
+              <span class="meal-macro-pill">~16g grasa</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- COMIDA 2 -->
+      <div class="meal-card">
+        <div class="meal-header" onclick="toggleMeal(this)">
+          <div class="meal-time">13:00</div>
+          <div class="meal-name">Comida principal</div>
+          <div class="meal-kcal">~800 kcal</div>
+          <div class="ex-expand">▾</div>
+        </div>
+        <div class="meal-body">
+          <div class="meal-option">
+            <div class="meal-option-title">🍗 Opción A — Pollo y arroz</div>
+            <ul>
+              <li>200g pechuga de pollo a la plancha</li>
+              <li>150g arroz blanco o integral cocido</li>
+              <li>Ensalada verde grande (lechuga, jitomate, pepino)</li>
+              <li>1 cdta aceite de oliva para aderezar</li>
+            </ul>
+            <div class="meal-macros">
+              <span class="meal-macro-pill">~55g prot</span>
+              <span class="meal-macro-pill">~85g carbs</span>
+              <span class="meal-macro-pill">~15g grasa</span>
+            </div>
+          </div>
+          <div class="meal-option">
+            <div class="meal-option-title">🥩 Opción B — Res y papas</div>
+            <ul>
+              <li>180g milanesa de res al horno o a la plancha</li>
+              <li>200g papa cambray cocida</li>
+              <li>Verduras al vapor (brócoli, zanahoria)</li>
+              <li>Salsa de jitomate natural</li>
+            </ul>
+            <div class="meal-macros">
+              <span class="meal-macro-pill">~52g prot</span>
+              <span class="meal-macro-pill">~70g carbs</span>
+              <span class="meal-macro-pill">~18g grasa</span>
+            </div>
+          </div>
+          <div class="meal-option">
+            <div class="meal-option-title">🐖 Opción C — Lomo de cerdo y frijoles</div>
+            <ul>
+              <li>200g lomo de cerdo asado</li>
+              <li>120g frijoles negros guisados</li>
+              <li>2 tortillas de maíz</li>
+              <li>Aguacate ½ pieza</li>
+            </ul>
+            <div class="meal-macros">
+              <span class="meal-macro-pill">~54g prot</span>
+              <span class="meal-macro-pill">~60g carbs</span>
+              <span class="meal-macro-pill">~20g grasa</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- COMIDA 3 — PRE/POST ENTRENO -->
+      <div class="meal-card">
+        <div class="meal-header" onclick="toggleMeal(this)">
+          <div class="meal-time">16:30</div>
+          <div class="meal-name">Pre/Post entreno</div>
+          <div class="meal-kcal">~500 kcal</div>
+          <div class="ex-expand">▾</div>
+        </div>
+        <div class="meal-body">
+          <div class="tip-box"><strong>Timing:</strong> Come 60–90 min antes del entrenamiento. Si entrenas de noche, esta es tu cena y la siguiente es opcional ligera.</div>
+          <div class="meal-option">
+            <div class="meal-option-title">🍌 Opción A — Shake + fruta</div>
+            <ul>
+              <li>2 scoops proteína whey en leche descremada</li>
+              <li>1 plátano</li>
+              <li>30g avena en el shake</li>
+              <li>1 cdta mantequilla de maní (opcional)</li>
+            </ul>
+            <div class="meal-macros">
+              <span class="meal-macro-pill">~55g prot</span>
+              <span class="meal-macro-pill">~60g carbs</span>
+              <span class="meal-macro-pill">~8g grasa</span>
+            </div>
+          </div>
+          <div class="meal-option">
+            <div class="meal-option-title">🥪 Opción B — Sándwich proteico</div>
+            <ul>
+              <li>2 rebanadas pan integral</li>
+              <li>150g pavo en rebanadas</li>
+              <li>2 rebanadas queso panela</li>
+              <li>Jitomate, lechuga, mostaza</li>
+            </ul>
+            <div class="meal-macros">
+              <span class="meal-macro-pill">~48g prot</span>
+              <span class="meal-macro-pill">~45g carbs</span>
+              <span class="meal-macro-pill">~14g grasa</span>
+            </div>
+          </div>
+          <div class="meal-option">
+            <div class="meal-option-title">🫙 Opción C — Cottage con fruta</div>
+            <ul>
+              <li>250g queso cottage</li>
+              <li>1 taza fruta picada (mango, piña o papaya)</li>
+              <li>2 galletas de arroz</li>
+              <li>1 puño de nueces mixtas</li>
+            </ul>
+            <div class="meal-macros">
+              <span class="meal-macro-pill">~38g prot</span>
+              <span class="meal-macro-pill">~50g carbs</span>
+              <span class="meal-macro-pill">~16g grasa</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- COMIDA 4 -->
+      <div class="meal-card">
+        <div class="meal-header" onclick="toggleMeal(this)">
+          <div class="meal-time">21:00</div>
+          <div class="meal-name">Cena</div>
+          <div class="meal-kcal">~600 kcal</div>
+          <div class="ex-expand">▾</div>
+        </div>
+        <div class="meal-body">
+          <div class="meal-option">
+            <div class="meal-option-title">🥗 Opción A — Ensalada proteica</div>
+            <ul>
+              <li>200g atún en agua (escurrido)</li>
+              <li>Base de espinacas frescas</li>
+              <li>½ aguacate, jitomate cherry</li>
+              <li>2 cdas vinagreta de limón y aceite de oliva</li>
+              <li>Pan integral tostado 2 rebanadas</li>
+            </ul>
+            <div class="meal-macros">
+              <span class="meal-macro-pill">~52g prot</span>
+              <span class="meal-macro-pill">~30g carbs</span>
+              <span class="meal-macro-pill">~20g grasa</span>
+            </div>
+          </div>
+          <div class="meal-option">
+            <div class="meal-option-title">🍳 Opción B — Omelette nocturno</div>
+            <ul>
+              <li>4 huevos enteros en omelette</li>
+              <li>100g queso panela o Oaxaca</li>
+              <li>Hongos, espinacas, cebolla salteados</li>
+              <li>2 tortillas de maíz</li>
+            </ul>
+            <div class="meal-macros">
+              <span class="meal-macro-pill">~48g prot</span>
+              <span class="meal-macro-pill">~35g carbs</span>
+              <span class="meal-macro-pill">~22g grasa</span>
+            </div>
+          </div>
+          <div class="meal-option">
+            <div class="meal-option-title">🍲 Opción C — Sopa de pollo ligera</div>
+            <ul>
+              <li>150g pechuga de pollo desmenuzada</li>
+              <li>Caldo natural de verduras</li>
+              <li>Zanahoria, calabacitas, ejotes</li>
+              <li>50g fideos o arroz en el caldo</li>
+            </ul>
+            <div class="meal-macros">
+              <span class="meal-macro-pill">~40g prot</span>
+              <span class="meal-macro-pill">~40g carbs</span>
+              <span class="meal-macro-pill">~8g grasa</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DÍAS DE DESCANSO -->
+    <div class="tab-content" id="tab-nutri-rest">
+      <div class="section-label">4 comidas · ~2,300 kcal (−200 kcal)</div>
+      <div class="tip-box" style="margin-bottom:12px">
+        Los días de descanso reduce ligeramente carbohidratos. Mantén la proteína igual. Esto optimiza la recomposición sin afectar la recuperación muscular.
+      </div>
+      <div class="meal-card">
+        <div class="meal-header" onclick="toggleMeal(this)">
+          <div class="meal-time">8:00</div>
+          <div class="meal-name">Desayuno</div>
+          <div class="meal-kcal">~550 kcal</div>
+          <div class="ex-expand">▾</div>
+        </div>
+        <div class="meal-body">
+          <div class="meal-option">
+            <div class="meal-option-title">🥚 Opción — Huevos y verduras</div>
+            <ul>
+              <li>3 huevos revueltos con espinacas y jitomate</li>
+              <li>70g avena con agua o leche descremada</li>
+              <li>1 fruta mediana</li>
+            </ul>
+            <div class="meal-macros">
+              <span class="meal-macro-pill">~35g prot</span>
+              <span class="meal-macro-pill">~55g carbs</span>
+              <span class="meal-macro-pill">~15g grasa</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="meal-card">
+        <div class="meal-header" onclick="toggleMeal(this)">
+          <div class="meal-time">13:00</div>
+          <div class="meal-name">Comida</div>
+          <div class="meal-kcal">~750 kcal</div>
+          <div class="ex-expand">▾</div>
+        </div>
+        <div class="meal-body">
+          <div class="meal-option">
+            <div class="meal-option-title">🐔 Opción — Pollo con verduras y arroz reducido</div>
+            <ul>
+              <li>200g pollo a la plancha</li>
+              <li>100g arroz cocido (−50g vs día de gym)</li>
+              <li>Ensalada verde abundante con aceite de oliva</li>
+              <li>Frijoles negros 80g</li>
+            </ul>
+            <div class="meal-macros">
+              <span class="meal-macro-pill">~54g prot</span>
+              <span class="meal-macro-pill">~65g carbs</span>
+              <span class="meal-macro-pill">~15g grasa</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="meal-card">
+        <div class="meal-header" onclick="toggleMeal(this)">
+          <div class="meal-time">17:00</div>
+          <div class="meal-name">Merienda</div>
+          <div class="meal-kcal">~400 kcal</div>
+          <div class="ex-expand">▾</div>
+        </div>
+        <div class="meal-body">
+          <div class="meal-option">
+            <div class="meal-option-title">🧀 Opción — Snack proteico</div>
+            <ul>
+              <li>200g yogur griego</li>
+              <li>1 puño nueces o almendras (30g)</li>
+              <li>1 manzana o pera</li>
+            </ul>
+            <div class="meal-macros">
+              <span class="meal-macro-pill">~28g prot</span>
+              <span class="meal-macro-pill">~35g carbs</span>
+              <span class="meal-macro-pill">~16g grasa</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="meal-card">
+        <div class="meal-header" onclick="toggleMeal(this)">
+          <div class="meal-time">20:30</div>
+          <div class="meal-name">Cena</div>
+          <div class="meal-kcal">~600 kcal</div>
+          <div class="ex-expand">▾</div>
+        </div>
+        <div class="meal-body">
+          <div class="meal-option">
+            <div class="meal-option-title">🥗 Opción — Bowl proteico</div>
+            <ul>
+              <li>180g atún o salmón</li>
+              <li>Base de espinacas + zanahoria rallada</li>
+              <li>½ aguacate</li>
+              <li>Aceite oliva + limón + sal</li>
+            </ul>
+            <div class="meal-macros">
+              <span class="meal-macro-pill">~45g prot</span>
+              <span class="meal-macro-pill">~15g carbs</span>
+              <span class="meal-macro-pill">~22g grasa</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TIPS -->
+    <div class="tab-content" id="tab-nutri-tips">
+      <div class="section-label">Hidratación</div>
+      <div class="tip-box">Mínimo <strong>3 litros de agua</strong> al día. Agrega electrolitos (sal + limón) si sudas mucho. El agua es el nutriente más subestimado en recomposición.</div>
+      <div class="section-label">Suplementación básica</div>
+      <div class="alt-box">
+        <strong>Recomendados:</strong> Creatina monohidrato 5g/día (cualquier hora, con comida). Proteína whey si no llegas a 150g. Vitamina D3 2,000 UI si no te da el sol.<br><br>
+        <strong>Opcionales:</strong> Cafeína pre-entreno (café o suplemento). Omega-3 si no comes grasas grasosas con frecuencia. Zinc y magnesio para mejor sueño (ZMA).
+      </div>
+      <div class="section-label">Trucos para la adherencia</div>
+      <div class="tip-box">
+        · Prepara proteína al granel (pollo, res) una vez a la semana.<br>
+        · Ten siempre yogur griego y huevos en el refri — salvan cualquier comida.<br>
+        · Si sales a comer: pide proteína + ensalada y pide el arroz/pan aparte para controlar porciones.<br>
+        · Los domingos está bien comer libremente — no arruina nada si el resto de la semana fue sólido.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════ BITÁCORA ══════════════════════════════ -->
+<div class="section" id="bita">
+  <div class="section-header">
+    <button class="back-btn" onclick="goHome()">‹</button>
+    <span class="section-title">Bitácora</span>
+  </div>
+  <div class="section-content">
+    <div class="bit-form">
+      <h3>📝 Registrar sesión</h3>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Fecha</label>
+          <input type="date" class="form-input" id="b-fecha">
+        </div>
+        <div class="form-group">
+          <label>Día</label>
+          <select class="form-input" id="b-dia">
+            <option>Lunes — Push</option>
+            <option>Martes — Pull</option>
+            <option>Miércoles — Legs</option>
+            <option>Jueves — Upper</option>
+            <option>Viernes — Lower</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group" style="margin-bottom:8px">
+        <label>Ejercicio</label>
+        <select class="form-input" id="b-ejercicio">
+          <option>Press Banca con Barra</option>
+          <option>Press Inclinado Mancuernas</option>
+          <option>Press Militar con Barra</option>
+          <option>Elevaciones Laterales</option>
+          <option>Extensión Tríceps Polea</option>
+          <option>Aperturas en Cable</option>
+          <option>Peso Muerto Convencional</option>
+          <option>Dominadas</option>
+          <option>Remo con Barra</option>
+          <option>Remo Polea Baja</option>
+          <option>Curl Barra EZ</option>
+          <option>Curl Martillo</option>
+          <option>Sentadilla con Barra</option>
+          <option>Prensa de Piernas</option>
+          <option>Extensión Cuádriceps</option>
+          <option>Curl Femoral Tumbado</option>
+          <option>Hip Thrust</option>
+          <option>Pantorrillas de Pie</option>
+          <option>Peso Muerto Rumano</option>
+          <option>Sentadilla Búlgara</option>
+          <option>Curl Femoral Sentado</option>
+          <option>Abductores Máquina</option>
+          <option>Pantorrillas Sentado</option>
+          <option>Press Banca Mancuernas</option>
+          <option>Remo 1 Brazo</option>
+          <option>Face Pulls</option>
+          <option>Curl Inclinado</option>
+          <option>Skull Crusher</option>
+        </select>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Series</label>
+          <input type="number" class="form-input" id="b-series" placeholder="4" min="1" max="10">
+        </div>
+        <div class="form-group">
+          <label>Reps</label>
+          <input type="text" class="form-input" id="b-reps" placeholder="8 / 8 / 7 / 6">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Peso (kg)</label>
+          <input type="text" class="form-input" id="b-peso" placeholder="60 / 60 / 62.5">
+        </div>
+        <div class="form-group">
+          <label>Nota</label>
+          <input type="text" class="form-input" id="b-nota" placeholder="Fácil, subir peso">
+        </div>
+      </div>
+      <button class="btn-primary" onclick="saveBit()">Guardar registro</button>
+    </div>
+
+    <div class="section-label">Historial</div>
+    <div id="bit-log" class="bit-log">
+      <div class="empty-state"><div class="empty-icon">📓</div>Aún no hay registros.<br>¡Empieza hoy!</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════ PESO ══════════════════════════════ -->
+<div class="section" id="peso">
+  <div class="section-header">
+    <button class="back-btn" onclick="goHome()">‹</button>
+    <span class="section-title">Registro de Peso</span>
+  </div>
+  <div class="section-content">
+    <div id="peso-current" class="peso-current">
+      <div class="peso-current-n" id="peso-display">73.0 kg</div>
+      <div class="peso-current-l">Peso inicial · 73 kg</div>
+      <div class="peso-trend" id="peso-trend">—</div>
+    </div>
+
+    <div class="peso-form">
+      <h3 style="font-size:14px;font-weight:600;margin-bottom:12px">➕ Agregar registro</h3>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Fecha</label>
+          <input type="date" class="form-input" id="p-fecha">
+        </div>
+        <div class="form-group">
+          <label>Peso (kg)</label>
+          <input type="number" class="form-input" id="p-peso" placeholder="73.0" step="0.1">
+        </div>
+      </div>
+      <div class="form-group" style="margin-bottom:8px">
+        <label>Nota (opcional)</label>
+        <input type="text" class="form-input" id="p-nota" placeholder="Ej: Después de despertar">
+      </div>
+      <button class="btn-primary" onclick="savePeso()">Guardar peso</button>
+    </div>
+
+    <div class="chart-wrap">
+      <div class="chart-title">📈 Progreso de peso</div>
+      <canvas id="pesoChart" height="200"></canvas>
+    </div>
+
+    <div class="section-label">Historial</div>
+    <div id="peso-log" class="peso-log">
+      <div class="empty-state"><div class="empty-icon">⚖️</div>Sin registros aún.<br>Pésate mañana en ayunas.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════ FOTOS ══════════════════════════════ -->
+<div class="section" id="fotos">
+  <div class="section-header">
+    <button class="back-btn" onclick="goHome()">‹</button>
+    <span class="section-title">Fotos de Progreso</span>
+  </div>
+  <div class="section-content">
+    <div class="foto-tips">
+      <h4>📌 Cómo tomar una buena foto de progreso</h4>
+      <ul>
+        <li>Misma hora siempre (mañana en ayunas)</li>
+        <li>Misma iluminación y fondo</li>
+        <li>Misma postura y distancia de la cámara</li>
+        <li>Ropa ajustada o sin camisa para comparar bien</li>
+        <li>Toma las 4 posiciones: frente, perfil der, perfil izq, espalda</li>
+      </ul>
+    </div>
+
+    <div class="section-label">Subir foto semanal</div>
+    <div class="foto-grid">
+      <label class="foto-upload">
+        <input type="file" accept="image/*" capture="environment" onchange="saveFoto(event,'Frente')">
+        <div class="foto-upload-icon">🧍</div>
+        <div class="foto-upload-label">Frente</div>
+      </label>
+      <label class="foto-upload">
+        <input type="file" accept="image/*" capture="environment" onchange="saveFoto(event,'Perfil Der')">
+        <div class="foto-upload-icon">🧍</div>
+        <div class="foto-upload-label">Perfil Der</div>
+      </label>
+      <label class="foto-upload">
+        <input type="file" accept="image/*" capture="environment" onchange="saveFoto(event,'Perfil Izq')">
+        <div class="foto-upload-icon">🧍</div>
+        <div class="foto-upload-label">Perfil Izq</div>
+      </label>
+      <label class="foto-upload">
+        <input type="file" accept="image/*" capture="environment" onchange="saveFoto(event,'Espalda')">
+        <div class="foto-upload-icon">🧍</div>
+        <div class="foto-upload-label">Espalda</div>
+      </label>
+    </div>
+
+    <div class="section-label">Galería</div>
+    <div id="foto-gallery" class="foto-gallery">
+      <div class="empty-state"><div class="empty-icon">📸</div>Sube tu primera foto de progreso.<br>¡En 8 semanas querrás comparar!</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════ SCRIPTS ══════════════════════════════ -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script>
+// ── NAV ──
+function show(id) {
+  document.getElementById('home').style.display = 'none';
+  document.querySelectorAll('.section').forEach(s => s.style.display = 'none');
+  const el = document.getElementById(id);
+  el.style.display = 'block';
+  el.scrollTop = 0;
+  window.scrollTo(0,0);
+  if (id === 'peso') renderPesoChart();
+  if (id === 'fotos') renderGallery();
+  if (id === 'bita') renderBit();
+}
+function goHome() {
+  document.querySelectorAll('.section').forEach(s => s.style.display = 'none');
+  document.getElementById('home').style.display = 'block';
+  window.scrollTo(0,0);
+}
+
+// ── TABS ──
+function switchTab(id, btn) {
+  const parent = btn.closest('.section-content') || btn.closest('#home');
+  btn.closest('.tab-row').querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.tab-content').forEach(t => {
+    if(t.id === 'tab-' + id) { t.classList.add('active'); }
+    else { t.classList.remove('active'); }
+  });
+}
+
+// ── EXERCISES ──
+function toggleEx(header) {
+  const body = header.nextElementSibling;
+  const arrow = header.querySelector('.ex-expand');
+  body.classList.toggle('open');
+  arrow.classList.toggle('open');
+}
+function toggleMeal(header) {
+  const body = header.nextElementSibling;
+  const arrow = header.querySelector('.ex-expand');
+  body.classList.toggle('open');
+  arrow.classList.toggle('open');
+}
+
+// ── BITÁCORA ──
+function saveBit() {
+  const fecha = document.getElementById('b-fecha').value;
+  const dia   = document.getElementById('b-dia').value;
+  const ejercicio = document.getElementById('b-ejercicio').value;
+  const series= document.getElementById('b-series').value;
+  const reps  = document.getElementById('b-reps').value;
+  const peso  = document.getElementById('b-peso').value;
+  const nota  = document.getElementById('b-nota').value;
+  if (!fecha || !ejercicio || !series) { alert('Por favor llena fecha, ejercicio y series.'); return; }
+  const log = JSON.parse(localStorage.getItem('gabriel_bit') || '[]');
+  log.unshift({ fecha, dia, ejercicio, series, reps, peso, nota, id: Date.now() });
+  localStorage.setItem('gabriel_bit', JSON.stringify(log));
+  document.getElementById('b-fecha').value = '';
+  document.getElementById('b-series').value = '';
+  document.getElementById('b-reps').value = '';
+  document.getElementById('b-peso').value = '';
+  document.getElementById('b-nota').value = '';
+  renderBit();
+}
+function deleteBit(id) {
+  let log = JSON.parse(localStorage.getItem('gabriel_bit') || '[]');
+  log = log.filter(e => e.id !== id);
+  localStorage.setItem('gabriel_bit', JSON.stringify(log));
+  renderBit();
+}
+function renderBit() {
+  const log = JSON.parse(localStorage.getItem('gabriel_bit') || '[]');
+  const container = document.getElementById('bit-log');
+  if (!log.length) {
+    container.innerHTML = '<div class="empty-state"><div class="empty-icon">📓</div>Aún no hay registros.<br>¡Empieza hoy!</div>';
+    return;
+  }
+  container.innerHTML = log.map(e => `
+    <div class="bit-entry">
+      <div class="bit-entry-header">
+        <div>
+          <div class="bit-entry-date">${e.fecha}</div>
+          <div class="bit-entry-day">${e.dia}</div>
+        </div>
+        <button class="btn-danger" onclick="deleteBit(${e.id})">✕</button>
+      </div>
+      <div style="font-weight:600;font-size:14px;margin-bottom:8px">${e.ejercicio}</div>
+      <div class="bit-set-row">
+        <span class="bit-set-num">SER</span>
+        <div><span class="bit-set-val">${e.series}</span><span class="bit-set-label">Series</span></div>
+        <div><span class="bit-set-val">${e.reps || '—'}</span><span class="bit-set-label">Reps</span></div>
+        <div><span class="bit-set-val">${e.peso || '—'}</span><span class="bit-set-label">Peso kg</span></div>
+      </div>
+      ${e.nota ? `<div style="font-size:11px;color:var(--text2);margin-top:8px">📝 ${e.nota}</div>` : ''}
+    </div>
+  `).join('');
+}
+
+// ── PESO ──
+function savePeso() {
+  const fecha = document.getElementById('p-fecha').value;
+  const peso  = parseFloat(document.getElementById('p-peso').value);
+  const nota  = document.getElementById('p-nota').value;
+  if (!fecha || isNaN(peso)) { alert('Llena fecha y peso.'); return; }
+  const log = JSON.parse(localStorage.getItem('gabriel_peso') || '[]');
+  log.push({ fecha, peso, nota, id: Date.now() });
+  log.sort((a,b) => a.fecha.localeCompare(b.fecha));
+  localStorage.setItem('gabriel_peso', JSON.stringify(log));
+  document.getElementById('p-fecha').value = '';
+  document.getElementById('p-peso').value = '';
+  document.getElementById('p-nota').value = '';
+  updatePesoDisplay();
+  renderPesoChart();
+  renderPesoLog();
+}
+function deletePeso(id) {
+  let log = JSON.parse(localStorage.getItem('gabriel_peso') || '[]');
+  log = log.filter(e => e.id !== id);
+  localStorage.setItem('gabriel_peso', JSON.stringify(log));
+  updatePesoDisplay();
+  renderPesoChart();
+  renderPesoLog();
+}
+function updatePesoDisplay() {
+  const log = JSON.parse(localStorage.getItem('gabriel_peso') || '[]');
+  if (!log.length) {
+    document.getElementById('peso-display').textContent = '73.0 kg';
+    document.getElementById('peso-trend').textContent = '—';
+    return;
+  }
+  const last = log[log.length - 1].peso;
+  document.getElementById('peso-display').textContent = last.toFixed(1) + ' kg';
+  if (log.length >= 2) {
+    const prev = log[log.length - 2].peso;
+    const diff = (last - prev).toFixed(1);
+    const arrow = diff > 0 ? '▲' : diff < 0 ? '▼' : '→';
+    const color = diff < 0 ? '#43e97b' : diff > 0 ? '#ff6b6b' : 'var(--text2)';
+    document.getElementById('peso-trend').innerHTML = `<span style="color:${color}">${arrow} ${Math.abs(diff)} kg vs anterior</span>`;
+  }
+}
+let pesoChart = null;
+function renderPesoChart() {
+  const log = JSON.parse(localStorage.getItem('gabriel_peso') || '[]');
+  const labels = log.map(e => e.fecha.slice(5));
+  const data   = log.map(e => e.peso);
+  const ctx = document.getElementById('pesoChart').getContext('2d');
+  if (pesoChart) pesoChart.destroy();
+  pesoChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels,
+      datasets: [{
+        label: 'Peso (kg)',
+        data,
+        borderColor: '#6c63ff',
+        backgroundColor: 'rgba(108,99,255,.15)',
+        pointBackgroundColor: '#6c63ff',
+        pointRadius: 5,
+        fill: true,
+        tension: 0.3,
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: { legend: { display: false } },
+      scales: {
+        x: { ticks: { color: '#8888a8', font: { size: 10 } }, grid: { color: '#2a2a3a' } },
+        y: { ticks: { color: '#8888a8', font: { size: 10 } }, grid: { color: '#2a2a3a' } }
+      }
+    }
+  });
+}
+function renderPesoLog() {
+  const log = JSON.parse(localStorage.getItem('gabriel_peso') || '[]').slice().reverse();
+  const container = document.getElementById('peso-log');
+  if (!log.length) {
+    container.innerHTML = '<div class="empty-state"><div class="empty-icon">⚖️</div>Sin registros aún.<br>Pésate mañana en ayunas.</div>';
+    return;
+  }
+  const arr = JSON.parse(localStorage.getItem('gabriel_peso') || '[]');
+  container.innerHTML = log.map((e, i) => {
+    const idx = arr.findIndex(x => x.id === e.id);
+    const prev = idx > 0 ? arr[idx - 1].peso : null;
+    let diffHtml = '';
+    if (prev !== null) {
+      const d = (e.peso - prev).toFixed(1);
+      const color = d < 0 ? '#43e97b' : d > 0 ? '#ff6b6b' : 'var(--text2)';
+      const arrow = d < 0 ? '▼' : d > 0 ? '▲' : '→';
+      diffHtml = `<span style="color:${color};font-size:12px">${arrow}${Math.abs(d)}</span>`;
+    }
+    return `
+      <div class="peso-row">
+        <div>
+          <div class="peso-row-date">${e.fecha}</div>
+          ${e.nota ? `<div style="font-size:11px;color:var(--text2)">${e.nota}</div>` : ''}
+        </div>
+        <div style="display:flex;align-items:center;gap:10px">
+          <div class="peso-row-val">${e.peso.toFixed(1)} kg</div>
+          ${diffHtml}
+          <button class="btn-danger" onclick="deletePeso(${e.id})">✕</button>
+        </div>
+      </div>`;
+  }).join('');
+}
+
+// ── FOTOS ──
+function saveFoto(event, tipo) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    const fotos = JSON.parse(localStorage.getItem('gabriel_fotos') || '[]');
+    const semana = getCurrentWeekLabel();
+    fotos.push({ tipo, semana, src: e.target.result, fecha: new Date().toLocaleDateString('es-MX'), id: Date.now() });
+    localStorage.setItem('gabriel_fotos', JSON.stringify(fotos));
+    renderGallery();
+  };
+  reader.readAsDataURL(file);
+}
+function deleteFoto(id) {
+  let fotos = JSON.parse(localStorage.getItem('gabriel_fotos') || '[]');
+  fotos = fotos.filter(f => f.id !== id);
+  localStorage.setItem('gabriel_fotos', JSON.stringify(fotos));
+  renderGallery();
+}
+function getCurrentWeekLabel() {
+  const start = new Date('2026-05-13');
+  const now   = new Date();
+  const diff  = Math.floor((now - start) / (7 * 24 * 60 * 60 * 1000));
+  return `Semana ${diff + 1}`;
+}
+function renderGallery() {
+  const fotos = JSON.parse(localStorage.getItem('gabriel_fotos') || '[]');
+  const container = document.getElementById('foto-gallery');
+  if (!fotos.length) {
+    container.innerHTML = '<div class="empty-state"><div class="empty-icon">📸</div>Sube tu primera foto de progreso.<br>¡En 8 semanas querrás comparar!</div>';
+    return;
+  }
+  const semanas = [...new Set(fotos.map(f => f.semana))].reverse();
+  container.innerHTML = semanas.map(sem => `
+    <div class="foto-week">
+      <div class="foto-week-header">
+        <span>${sem}</span>
+        <span style="font-size:11px;color:var(--text2)">${fotos.filter(f=>f.semana===sem)[0]?.fecha || ''}</span>
+      </div>
+      <div class="foto-week-imgs">
+        ${fotos.filter(f => f.semana === sem).map(f => `
+          <div class="foto-item">
+            <img src="${f.src}" alt="${f.tipo}">
+            <div class="foto-item-label">${f.tipo}</div>
+            <button class="foto-item-del" onclick="deleteFoto(${f.id})">✕</button>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+  `).join('');
+}
+
+// ── INIT ──
+document.addEventListener('DOMContentLoaded', () => {
+  const today = new Date().toISOString().split('T')[0];
+  document.getElementById('b-fecha').value = today;
+  document.getElementById('p-fecha').value = today;
+  updatePesoDisplay();
+  renderPesoLog();
+  renderBit();
+});
+</script>
+</body>
+</html>
