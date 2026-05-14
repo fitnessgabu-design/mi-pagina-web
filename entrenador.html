@@ -212,6 +212,16 @@ window.selectClient = async function(id){
   document.getElementById('clientDetail').style.display='block';
   document.querySelectorAll('.client-card').forEach(c=>c.classList.remove('active'));
   document.getElementById('card-'+id)?.classList.add('active');
+  // Reset all panels
+  document.getElementById('sesionesContent').innerHTML='<div class="empty-msg">Cargando...</div>';
+  document.getElementById('pesoTableBody').innerHTML='';
+  document.getElementById('fotosGrid').innerHTML='';
+  if(trainerChart){trainerChart.destroy();trainerChart=null;}
+  // Reset tabs to sesiones
+  document.querySelectorAll('.dpanel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.dtab').forEach(b=>b.classList.remove('active'));
+  document.getElementById('dp-sesiones').classList.add('active');
+  document.querySelector('.dtab').classList.add('active');
   document.getElementById('clientDetail').scrollIntoView({behavior:'smooth'});
   await loadSesiones(id);
 };
