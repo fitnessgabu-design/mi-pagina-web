@@ -1493,8 +1493,29 @@ function toggleMeal(header) {
   arrow.classList.toggle('open');
 }
 
+// ── FIREBASE ──
+let DB = null, CLIENT_ID = null, FB = null;
+async function initFirebase() {
+  const { initializeApp } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js");
+  const { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, query, orderBy } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js");
+  const app = initializeApp({apiKey:"AIzaSyDuRau6qbQ05rEKonlj8MuCZc4vvTxNESI",authDomain:"fitness-gabu.firebaseapp.com",projectId:"fitness-gabu",storageBucket:"fitness-gabu.firebasestorage.app",messagingSenderId:"716823173331",appId:"1:716823173331:web:0b4cdf457342090c681c26"});
+  DB = getFirestore(app);
+  FB = { collection, addDoc, getDocs, deleteDoc, doc, query, orderBy };
+  const params = new URLSearchParams(window.location.search);
+  CLIENT_ID = params.get('id');
+  if (!CLIENT_ID) {
+    document.body.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;min-height:100vh;background:#0a0a0f;flex-direction:column;gap:1rem"><div style="font-family:Bebas Neue,sans-serif;font-size:36px;color:#6c63ff">FITNESS PRO</div><p style="color:#888;font-size:14px">Link inválido. Pide tu link personalizado a tu entrenador.</p></div>';
+    return;
+  }
+  updatePesoDisplay();
+  renderPesoLog();
+  renderBit();
+  renderGallery();
+}
+
 // ── BITÁCORA ──
-function saveBit() {
+async function saveBit() {
+  if (!CLIENT_ID) return;
   const fecha = document.getElementById('b-fecha').value;
   const dia   = document.getElementById('b-dia').value;
   const ejercicio = document.getElementById('b-ejercicio').value;
@@ -1503,24 +1524,28 @@ function saveBit() {
   const peso  = document.getElementById('b-peso').value;
   const nota  = document.getElementById('b-nota').value;
   if (!fecha || !ejercicio || !series) { alert('Por favor llena fecha, ejercicio y series.'); return; }
-  const log = JSON.parse(localStorage.getItem('gabriel_bit') || '[]');
-  log.unshift({ fecha, dia, ejercicio, series, reps, peso, nota, id: Date.now() });
-  localStorage.setItem('gabriel_bit', JSON.stringify(log));
-  document.getElementById('b-fecha').value = '';
-  document.getElementById('b-series').value = '';
-  document.getElementById('b-reps').value = '';
-  document.getElementById('b-peso').value = '';
-  document.getElementById('b-nota').value = '';
-  renderBit();
+  try {
+    await FB.addDoc(FB.collection(DB, `clients/${CLIENT_ID}/sessions`), { fecha, dia, ejercicio, series, reps, peso, nota, ts: Date.now() });
+    document.getElementById('b-fecha').value = '';
+    document.getElementById('b-series').value = '';
+    document.getElementById('b-reps').value = '';
+    document.getElementById('b-peso').value = '';
+    document.getElementById('b-nota').value = '';
+    renderBit();
+  } catch(e) { alert('Error al guardar'); }
 }
-function deleteBit(id) {
-  let log = JSON.parse(localStorage.getItem('gabriel_bit') || '[]');
-  log = log.filter(e => e.id !== id);
-  localStorage.setItem('gabriel_bit', JSON.stringify(log));
-  renderBit();
+async function deleteBit(id) {
+  if (!CLIENT_ID) return;
+  try {
+    await FB.deleteDoc(FB.doc(DB, `clients/${CLIENT_ID}/sessions`, id));
+    renderBit();
+  } catch(e) {}
 }
-function renderBit() {
-  const log = JSON.parse(localStorage.getItem('gabriel_bit') || '[]');
+async function renderBit() {
+  if (!CLIENT_ID) return;
+  const q = FB.query(FB.collection(DB, `clients/${CLIENT_ID}/sessions`), FB.orderBy('ts','desc'));
+  const snap = await FB.getDocs(q);
+  const log = snap.docs.map(d => ({...d.data(), _id: d.id}));
   const container = document.getElementById('bit-log');
   if (!log.length) {
     container.innerHTML = '<div class="empty-state"><div class="empty-icon">📓</div>Aún no hay registros.<br>¡Empieza hoy!</div>';
@@ -1533,7 +1558,7 @@ function renderBit() {
           <div class="bit-entry-date">${e.fecha}</div>
           <div class="bit-entry-day">${e.dia}</div>
         </div>
-        <button class="btn-danger" onclick="deleteBit(${e.id})">✕</button>
+        <button class="btn-danger" onclick="deleteBit('${e._id}')">✕</button>
       </div>
       <div style="font-weight:600;font-size:14px;margin-bottom:8px">${e.ejercicio}</div>
       <div class="bit-set-row">
@@ -1548,41 +1573,45 @@ function renderBit() {
 }
 
 // ── PESO ──
-function savePeso() {
+async function savePeso() {
+  if (!CLIENT_ID) return;
   const fecha = document.getElementById('p-fecha').value;
   const peso  = parseFloat(document.getElementById('p-peso').value);
   const nota  = document.getElementById('p-nota').value;
   if (!fecha || isNaN(peso)) { alert('Llena fecha y peso.'); return; }
-  const log = JSON.parse(localStorage.getItem('gabriel_peso') || '[]');
-  log.push({ fecha, peso, nota, id: Date.now() });
-  log.sort((a,b) => a.fecha.localeCompare(b.fecha));
-  localStorage.setItem('gabriel_peso', JSON.stringify(log));
-  document.getElementById('p-fecha').value = '';
-  document.getElementById('p-peso').value = '';
-  document.getElementById('p-nota').value = '';
-  updatePesoDisplay();
-  renderPesoChart();
-  renderPesoLog();
+  try {
+    await FB.addDoc(FB.collection(DB, `clients/${CLIENT_ID}/peso`), { fecha, val: peso, nota, ts: Date.now() });
+    document.getElementById('p-fecha').value = '';
+    document.getElementById('p-peso').value = '';
+    document.getElementById('p-nota').value = '';
+    await updatePesoDisplay();
+    await renderPesoChart();
+    await renderPesoLog();
+  } catch(e) { alert('Error al guardar peso'); }
 }
-function deletePeso(id) {
-  let log = JSON.parse(localStorage.getItem('gabriel_peso') || '[]');
-  log = log.filter(e => e.id !== id);
-  localStorage.setItem('gabriel_peso', JSON.stringify(log));
-  updatePesoDisplay();
-  renderPesoChart();
-  renderPesoLog();
+async function deletePeso(id) {
+  if (!CLIENT_ID) return;
+  try {
+    await FB.deleteDoc(FB.doc(DB, `clients/${CLIENT_ID}/peso`, id));
+    await updatePesoDisplay();
+    await renderPesoChart();
+    await renderPesoLog();
+  } catch(e) {}
 }
-function updatePesoDisplay() {
-  const log = JSON.parse(localStorage.getItem('gabriel_peso') || '[]');
+async function updatePesoDisplay() {
+  if (!CLIENT_ID) return;
+  const q = FB.query(FB.collection(DB, `clients/${CLIENT_ID}/peso`), FB.orderBy('fecha','asc'));
+  const snap = await FB.getDocs(q);
+  const log = snap.docs.map(d => ({...d.data(), _id: d.id}));
   if (!log.length) {
-    document.getElementById('peso-display').textContent = '73.0 kg';
+    document.getElementById('peso-display').textContent = '— kg';
     document.getElementById('peso-trend').textContent = '—';
     return;
   }
-  const last = log[log.length - 1].peso;
+  const last = log[log.length - 1].val;
   document.getElementById('peso-display').textContent = last.toFixed(1) + ' kg';
   if (log.length >= 2) {
-    const prev = log[log.length - 2].peso;
+    const prev = log[log.length - 2].val;
     const diff = (last - prev).toFixed(1);
     const arrow = diff > 0 ? '▲' : diff < 0 ? '▼' : '→';
     const color = diff < 0 ? '#43e97b' : diff > 0 ? '#ff6b6b' : 'var(--text2)';
@@ -1590,10 +1619,13 @@ function updatePesoDisplay() {
   }
 }
 let pesoChart = null;
-function renderPesoChart() {
-  const log = JSON.parse(localStorage.getItem('gabriel_peso') || '[]');
+async function renderPesoChart() {
+  if (!CLIENT_ID) return;
+  const q = FB.query(FB.collection(DB, `clients/${CLIENT_ID}/peso`), FB.orderBy('fecha','asc'));
+  const snap = await FB.getDocs(q);
+  const log = snap.docs.map(d => d.data());
   const labels = log.map(e => e.fecha.slice(5));
-  const data   = log.map(e => e.peso);
+  const data   = log.map(e => e.val);
   const ctx = document.getElementById('pesoChart').getContext('2d');
   if (pesoChart) pesoChart.destroy();
   pesoChart = new Chart(ctx, {
@@ -1621,20 +1653,23 @@ function renderPesoChart() {
     }
   });
 }
-function renderPesoLog() {
-  const log = JSON.parse(localStorage.getItem('gabriel_peso') || '[]').slice().reverse();
+async function renderPesoLog() {
+  if (!CLIENT_ID) return;
+  const q = FB.query(FB.collection(DB, `clients/${CLIENT_ID}/peso`), FB.orderBy('fecha','asc'));
+  const snap = await FB.getDocs(q);
+  const arr = snap.docs.map(d => ({...d.data(), _id: d.id}));
+  const log = [...arr].reverse();
   const container = document.getElementById('peso-log');
   if (!log.length) {
     container.innerHTML = '<div class="empty-state"><div class="empty-icon">⚖️</div>Sin registros aún.<br>Pésate mañana en ayunas.</div>';
     return;
   }
-  const arr = JSON.parse(localStorage.getItem('gabriel_peso') || '[]');
   container.innerHTML = log.map((e, i) => {
-    const idx = arr.findIndex(x => x.id === e.id);
-    const prev = idx > 0 ? arr[idx - 1].peso : null;
+    const idx = arr.findIndex(x => x._id === e._id);
+    const prev = idx > 0 ? arr[idx - 1].val : null;
     let diffHtml = '';
     if (prev !== null) {
-      const d = (e.peso - prev).toFixed(1);
+      const d = (e.val - prev).toFixed(1);
       const color = d < 0 ? '#43e97b' : d > 0 ? '#ff6b6b' : 'var(--text2)';
       const arrow = d < 0 ? '▼' : d > 0 ? '▲' : '→';
       diffHtml = `<span style="color:${color};font-size:12px">${arrow}${Math.abs(d)}</span>`;
@@ -1646,9 +1681,9 @@ function renderPesoLog() {
           ${e.nota ? `<div style="font-size:11px;color:var(--text2)">${e.nota}</div>` : ''}
         </div>
         <div style="display:flex;align-items:center;gap:10px">
-          <div class="peso-row-val">${e.peso.toFixed(1)} kg</div>
+          <div class="peso-row-val">${e.val.toFixed(1)} kg</div>
           ${diffHtml}
-          <button class="btn-danger" onclick="deletePeso(${e.id})">✕</button>
+          <button class="btn-danger" onclick="deletePeso('${e._id}')">✕</button>
         </div>
       </div>`;
   }).join('');
@@ -1657,22 +1692,23 @@ function renderPesoLog() {
 // ── FOTOS ──
 function saveFoto(event, tipo) {
   const file = event.target.files[0];
-  if (!file) return;
+  if (!file || !CLIENT_ID) return;
   const reader = new FileReader();
-  reader.onload = function(e) {
-    const fotos = JSON.parse(localStorage.getItem('gabriel_fotos') || '[]');
+  reader.onload = async function(e) {
     const semana = getCurrentWeekLabel();
-    fotos.push({ tipo, semana, src: e.target.result, fecha: new Date().toLocaleDateString('es-MX'), id: Date.now() });
-    localStorage.setItem('gabriel_fotos', JSON.stringify(fotos));
-    renderGallery();
+    try {
+      await FB.addDoc(FB.collection(DB, `clients/${CLIENT_ID}/fotos`), { tipo, semana, img: e.target.result, fecha: new Date().toLocaleDateString('es-MX'), ts: Date.now() });
+      renderGallery();
+    } catch(err) { alert('Error al guardar foto'); }
   };
   reader.readAsDataURL(file);
 }
-function deleteFoto(id) {
-  let fotos = JSON.parse(localStorage.getItem('gabriel_fotos') || '[]');
-  fotos = fotos.filter(f => f.id !== id);
-  localStorage.setItem('gabriel_fotos', JSON.stringify(fotos));
-  renderGallery();
+async function deleteFoto(id) {
+  if (!CLIENT_ID) return;
+  try {
+    await FB.deleteDoc(FB.doc(DB, `clients/${CLIENT_ID}/fotos`, id));
+    renderGallery();
+  } catch(e) {}
 }
 function getCurrentWeekLabel() {
   const start = new Date('2026-05-13');
@@ -1680,14 +1716,17 @@ function getCurrentWeekLabel() {
   const diff  = Math.floor((now - start) / (7 * 24 * 60 * 60 * 1000));
   return `Semana ${diff + 1}`;
 }
-function renderGallery() {
-  const fotos = JSON.parse(localStorage.getItem('gabriel_fotos') || '[]');
+async function renderGallery() {
+  if (!CLIENT_ID) return;
+  const q = FB.query(FB.collection(DB, `clients/${CLIENT_ID}/fotos`), FB.orderBy('ts','desc'));
+  const snap = await FB.getDocs(q);
+  const fotos = snap.docs.map(d => ({...d.data(), _id: d.id}));
   const container = document.getElementById('foto-gallery');
   if (!fotos.length) {
     container.innerHTML = '<div class="empty-state"><div class="empty-icon">📸</div>Sube tu primera foto de progreso.<br>¡En 8 semanas querrás comparar!</div>';
     return;
   }
-  const semanas = [...new Set(fotos.map(f => f.semana))].reverse();
+  const semanas = [...new Set(fotos.map(f => f.semana))];
   container.innerHTML = semanas.map(sem => `
     <div class="foto-week">
       <div class="foto-week-header">
@@ -1697,9 +1736,9 @@ function renderGallery() {
       <div class="foto-week-imgs">
         ${fotos.filter(f => f.semana === sem).map(f => `
           <div class="foto-item">
-            <img src="${f.src}" alt="${f.tipo}">
+            <img src="${f.img}" alt="${f.tipo}">
             <div class="foto-item-label">${f.tipo}</div>
-            <button class="foto-item-del" onclick="deleteFoto(${f.id})">✕</button>
+            <button class="foto-item-del" onclick="deleteFoto('${f._id}')">✕</button>
           </div>
         `).join('')}
       </div>
@@ -1712,9 +1751,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const today = new Date().toISOString().split('T')[0];
   document.getElementById('b-fecha').value = today;
   document.getElementById('p-fecha').value = today;
-  updatePesoDisplay();
-  renderPesoLog();
-  renderBit();
+  initFirebase();
 });
 </script>
 </body>
