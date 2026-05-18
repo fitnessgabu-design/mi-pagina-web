@@ -1,0 +1,1019 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>BASE 360 — Gabu Fitness</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700;800&family=Barlow:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --teal:#00C2A8;--teal2:#00E5C8;--teal3:#80F5E9;--teal-dim:#007A6B;
+  --dark:#070C0B;--dark2:#0D1614;--dark3:#141E1C;--dark4:#1C2826;
+  --border:#1E2E2B;--border2:#263633;
+  --text:#EDF5F4;--muted:#6A8E8A;--subtle:#3A5450;
+  --green:#22C55E;--blue:#3B82F6;--red:#EF4444;--amber:#F59E0B;
+  --r:8px;--rl:14px;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{font-family:'Barlow',sans-serif;background:var(--dark);color:var(--text);min-height:100vh;overflow-x:hidden}
+
+/* ── SPLASH ── */
+.splash{position:fixed;inset:0;background:var(--dark);z-index:1000;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity .5s,visibility .5s}
+.splash.hide{opacity:0;visibility:hidden;pointer-events:none}
+.splash-logo{font-family:'Bebas Neue';font-size:80px;background:linear-gradient(135deg,var(--teal-dim),var(--teal),var(--teal3));-webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:5px;line-height:1;text-align:center}
+.splash-sub{font-family:'Barlow Condensed';font-size:13px;font-weight:700;letter-spacing:5px;text-transform:uppercase;color:var(--muted);margin-top:6px}
+.splash-bar{width:160px;height:1.5px;background:var(--border);margin-top:36px;overflow:hidden}
+.splash-fill{height:100%;background:linear-gradient(90deg,var(--teal-dim),var(--teal),var(--teal3));width:0;animation:sload 1.5s ease forwards}
+@keyframes sload{to{width:100%}}
+
+/* ── PAGES ── */
+.page{display:none;min-height:100vh}
+.page.active{display:block}
+
+/* ── HOME ── */
+.home-wrap{min-height:100vh;display:flex;flex-direction:column}
+.home-hero{
+  position:relative;overflow:hidden;
+  background:var(--dark2);
+  padding:54px 22px 0;flex:1;
+  display:flex;flex-direction:column;
+}
+.hero-grid{
+  position:absolute;inset:0;
+  background-image:
+    linear-gradient(rgba(0,194,168,0.04) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(0,194,168,0.04) 1px,transparent 1px);
+  background-size:28px 28px;
+  pointer-events:none;
+}
+.hero-glow{
+  position:absolute;top:-80px;right:-80px;
+  width:260px;height:260px;border-radius:50%;
+  background:radial-gradient(circle,rgba(0,194,168,0.07) 0%,transparent 70%);
+  pointer-events:none;
+}
+.hero-bg-text{
+  position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  font-family:'Bebas Neue';font-size:180px;
+  background:linear-gradient(135deg,rgba(0,194,168,0.04),transparent);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  letter-spacing:8px;white-space:nowrap;user-select:none;pointer-events:none;
+}
+.hero-brand{display:flex;align-items:center;gap:10px;margin-bottom:40px;position:relative}
+.brand-dot{width:7px;height:7px;background:var(--teal);border-radius:50%}
+.brand-name{font-family:'Barlow Condensed';font-size:11px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:var(--muted)}
+.hero-main{flex:1;display:flex;flex-direction:column;justify-content:center;padding-bottom:40px;position:relative}
+.hero-eyebrow{
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(0,194,168,0.1);border:1px solid rgba(0,194,168,0.2);
+  color:var(--teal2);font-size:10px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;
+  padding:5px 13px;border-radius:20px;margin-bottom:18px;width:fit-content;
+}
+.ey-dot{width:5px;height:5px;background:var(--teal);border-radius:50%;animation:tp 2s infinite}
+@keyframes tp{0%,100%{opacity:1}50%{opacity:.2}}
+.hero-h1{font-family:'Bebas Neue';font-size:78px;line-height:.88;letter-spacing:2px;margin-bottom:12px}
+.hero-h1 .teal{background:linear-gradient(135deg,var(--teal-dim),var(--teal),var(--teal3));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hero-tagline{font-size:13px;color:var(--muted);line-height:1.75;max-width:320px;margin-bottom:28px;font-weight:300}
+.hero-chips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:36px}
+.chip{padding:5px 11px;border:1px solid var(--border2);border-radius:20px;font-size:10px;font-weight:700;color:var(--muted);letter-spacing:.5px;text-transform:uppercase}
+.chip-teal{border-color:rgba(0,194,168,0.3);color:var(--teal2);background:rgba(0,194,168,0.07)}
+.hero-kpis{display:flex;background:rgba(0,194,168,0.06);border:1px solid rgba(0,194,168,0.12);border-radius:var(--rl);overflow:hidden}
+.kp{flex:1;padding:13px 8px;text-align:center;border-right:1px solid rgba(0,194,168,0.1)}
+.kp:last-child{border-right:none}
+.kp-v{font-family:'Bebas Neue';font-size:26px;background:linear-gradient(135deg,var(--teal),var(--teal3));-webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1}
+.kp-l{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-top:3px}
+
+/* ── NAV ── */
+.nav-section{background:var(--dark);padding:28px 18px 40px}
+.nav-label{font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--subtle);margin-bottom:12px}
+.nav-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.nav-card{
+  background:var(--dark2);border:1px solid var(--border);
+  border-radius:var(--rl);padding:17px 14px;cursor:pointer;
+  transition:all .2s;position:relative;overflow:hidden;
+}
+.nav-card::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(0,194,168,0.07),transparent);opacity:0;transition:opacity .2s}
+.nav-card:hover::before,.nav-card:hover{opacity:1;border-color:rgba(0,194,168,0.35);transform:translateY(-2px)}
+.nav-card:active{transform:scale(.97)}
+.nav-icon{font-size:25px;margin-bottom:8px;display:block}
+.nav-name{font-family:'Barlow Condensed';font-size:14px;font-weight:800;letter-spacing:.5px;color:var(--text);text-transform:uppercase}
+.nav-desc{font-size:11px;color:var(--muted);margin-top:3px;line-height:1.5}
+.nav-arrow{position:absolute;top:14px;right:14px;color:var(--subtle);font-size:15px}
+.nav-full{grid-column:1/-1}
+
+/* ── PAGE HEADER ── */
+.pg-hd{
+  display:flex;align-items:center;gap:12px;padding:12px 16px;
+  background:var(--dark);border-bottom:1px solid var(--border);
+  position:sticky;top:0;z-index:100;
+}
+.back{width:33px;height:33px;border-radius:50%;background:var(--dark3);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:17px;color:var(--text);flex-shrink:0;transition:all .15s}
+.back:hover{border-color:var(--teal);color:var(--teal)}
+.pg-title{font-family:'Bebas Neue';font-size:20px;letter-spacing:1px}
+.pg-badge{margin-left:auto;background:rgba(0,194,168,0.1);border:1px solid rgba(0,194,168,0.25);color:var(--teal2);font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:4px 10px;border-radius:20px}
+
+/* ── TABS ── */
+.tbar{display:flex;overflow-x:auto;scrollbar-width:none;background:var(--dark2);border-bottom:1px solid var(--border);position:sticky;top:58px;z-index:99}
+.tbar::-webkit-scrollbar{display:none}
+.tbtn{flex-shrink:0;padding:12px 16px;font-family:'Barlow Condensed';font-size:12px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--muted);background:none;border:none;border-bottom:3px solid transparent;cursor:pointer;white-space:nowrap;transition:all .2s}
+.tbtn.on{color:var(--teal);border-bottom-color:var(--teal)}
+.tcnt{display:none;padding:16px 16px 80px;max-width:580px;margin:0 auto}
+.tcnt.on{display:block}
+
+/* ── DIVIDER ── */
+.div-teal{height:1px;background:linear-gradient(90deg,var(--teal),transparent);margin:20px 0}
+
+/* ── PILLS ── */
+.pills{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
+.pill{padding:4px 10px;border-radius:20px;font-size:10px;font-weight:700;letter-spacing:.5px;text-transform:uppercase}
+.pill-teal{background:rgba(0,194,168,0.1);border:1px solid rgba(0,194,168,0.25);color:var(--teal2)}
+.pill-green{background:rgba(34,197,94,0.1);border:1px solid rgba(34,197,94,0.25);color:var(--green)}
+.pill-amber{background:rgba(245,158,11,0.1);border:1px solid rgba(245,158,11,0.25);color:var(--amber)}
+.pill-gray{background:var(--dark3);border:1px solid var(--border);color:var(--muted)}
+
+/* ── SECTION TITLE ── */
+.stitle{font-family:'Bebas Neue';font-size:34px;letter-spacing:1.5px;line-height:1;margin-bottom:4px}
+.stitle .teal{background:linear-gradient(135deg,var(--teal-dim),var(--teal),var(--teal3));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.smeta{font-size:12px;color:var(--muted);margin-bottom:16px;letter-spacing:.5px}
+
+/* ── INFO BOX ── */
+.ibox{background:var(--dark2);border-radius:var(--rl);padding:13px 14px;margin-bottom:11px}
+.ibox-teal{border-left:3px solid var(--teal)}
+.ibox-green{border-left:3px solid var(--green)}
+.ibox-amber{border-left:3px solid var(--amber)}
+.ibox-red{border-left:3px solid var(--red)}
+.ibox-title{font-family:'Barlow Condensed';font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:5px}
+.ibox-title-teal{color:var(--teal)}
+.ibox-title-green{color:var(--green)}
+.ibox-title-amber{color:var(--amber)}
+.ibox-title-red{color:var(--red)}
+.ibox-text{font-size:12.5px;color:var(--muted);line-height:1.75}
+.ibox-text strong{color:var(--text)}
+
+/* ── SCHEDULE ── */
+.schedule{background:var(--dark2);border:1px solid var(--border);border-radius:var(--rl);overflow:hidden;margin-bottom:14px}
+.srow{display:flex;align-items:center;gap:12px;padding:12px 14px;border-bottom:1px solid var(--border)}
+.srow:last-child{border-bottom:none}
+.srow-day{font-family:'Bebas Neue';font-size:17px;color:var(--muted);width:38px;flex-shrink:0}
+.srow-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.srow-name{font-family:'Barlow Condensed';font-size:14px;font-weight:700;color:var(--text);text-transform:uppercase;letter-spacing:.3px}
+.srow-sub{font-size:11px;color:var(--muted)}
+.srow-rest .srow-name{color:var(--subtle)}
+
+/* ── PROG TABLE ── */
+.prog-table{background:var(--dark2);border:1px solid var(--border);border-radius:var(--rl);overflow:hidden;margin-bottom:14px}
+.pt-hd{display:grid;grid-template-columns:72px 1fr;background:rgba(0,194,168,0.07);border-bottom:1px solid var(--border);padding:8px 14px}
+.pt-hd-cell{font-family:'Barlow Condensed';font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--teal)}
+.pt-row{display:grid;grid-template-columns:72px 1fr;padding:10px 14px;border-bottom:1px solid var(--border);align-items:center}
+.pt-row:last-child{border-bottom:none}
+.pt-week{font-family:'Bebas Neue';font-size:22px;background:linear-gradient(135deg,var(--teal),var(--teal3));-webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1}
+.pt-action{font-size:13px;color:var(--text)}
+.pt-sub{font-size:11px;color:var(--muted);margin-top:2px}
+
+/* ── EX CARD ── */
+.ex-card{background:var(--dark2);border:1px solid var(--border);border-radius:var(--rl);margin-bottom:10px;overflow:hidden;transition:border-color .2s}
+.ex-card:hover{border-color:rgba(0,194,168,0.3)}
+.ex-top{display:flex;align-items:flex-start;gap:11px;padding:13px 13px 9px}
+.ex-n{background:linear-gradient(135deg,var(--teal-dim),var(--teal));color:var(--dark);width:28px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue';font-size:16px;flex-shrink:0;margin-top:2px}
+.ex-name{font-family:'Barlow Condensed';font-size:17px;font-weight:700;letter-spacing:.3px;color:var(--text);text-transform:uppercase}
+.ex-group{font-size:11px;color:var(--teal2);margin-top:2px;font-weight:500}
+.ex-specs{display:flex;gap:5px;flex-wrap:wrap;padding:0 13px 9px}
+.ex-tip{margin:0 13px 11px;padding:9px 11px;background:rgba(0,194,168,0.05);border-left:2px solid rgba(0,194,168,0.3);border-radius:0 6px 6px 0;font-size:12px;color:var(--muted);line-height:1.65}
+.vid-bar{display:flex;align-items:center;gap:7px;padding:8px 13px;background:#050808;font-size:10px;font-weight:700;color:var(--muted);letter-spacing:1px;text-transform:uppercase}
+.yt-r{color:#FF0000;font-size:13px}
+.vid-fr{position:relative;padding-bottom:56.25%;height:0;overflow:hidden;background:#000}
+.vid-fr iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:none}
+
+/* ── NUTRITION ── */
+.visual-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px}
+.visual-card{background:var(--dark2);border:1px solid var(--border);border-radius:var(--rl);padding:14px;text-align:center}
+.visual-emoji{font-size:30px;margin-bottom:7px;display:block}
+.visual-name{font-family:'Barlow Condensed';font-size:14px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--text);margin-bottom:4px}
+.visual-desc{font-size:12px;color:var(--muted);line-height:1.5}
+.visual-tip{font-size:11px;margin-top:5px;padding:4px 8px;border-radius:6px;font-weight:600}
+.vt-teal{background:rgba(0,194,168,0.1);color:var(--teal2)}
+.vt-blue{background:rgba(59,130,246,0.1);color:#93C5FD}
+.vt-amber{background:rgba(245,158,11,0.1);color:var(--amber)}
+.vt-green{background:rgba(34,197,94,0.1);color:var(--green)}
+
+.obj-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px}
+.obj-card{background:var(--dark2);border:1px solid var(--border);border-radius:var(--r);padding:13px 8px;text-align:center}
+.obj-icon{font-size:20px;margin-bottom:5px}
+.obj-name{font-family:'Barlow Condensed';font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.3px;color:var(--muted)}
+.obj-desc{font-size:10px;color:var(--subtle);margin-top:3px;line-height:1.4}
+
+.swap-list{background:var(--dark2);border:1px solid var(--border);border-radius:var(--rl);overflow:hidden;margin-bottom:14px}
+.swap-row{display:flex;align-items:center;gap:10px;padding:10px 14px;border-bottom:1px solid var(--border)}
+.swap-row:last-child{border-bottom:none}
+.swap-from{font-size:12px;color:var(--muted);width:80px;flex-shrink:0}
+.swap-arrow{font-size:14px;color:var(--teal);flex-shrink:0}
+.swap-to{font-size:12px;color:var(--text)}
+
+.rule-card{background:var(--dark2);border:1px solid var(--border);border-radius:var(--rl);padding:14px;margin-bottom:10px}
+.rule-icon{font-size:22px;margin-bottom:7px;display:block}
+.rule-title{font-family:'Barlow Condensed';font-size:14px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--text);margin-bottom:5px}
+.rule-text{font-size:12.5px;color:var(--muted);line-height:1.7}
+
+/* ── BITÁCORA ── */
+.bit-tabs{display:flex;gap:6px;margin-bottom:12px}
+.bit-tab{flex:1;padding:8px;background:var(--dark2);border:1px solid var(--border);border-radius:var(--r);font-family:'Barlow Condensed';font-size:12px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--muted);cursor:pointer;text-align:center;transition:all .15s}
+.bit-tab.on{background:rgba(0,194,168,0.08);border-color:rgba(0,194,168,0.3);color:var(--teal)}
+.bsec{display:none}
+.bsec.on{display:block}
+.wk-bar{display:flex;align-items:center;justify-content:space-between;background:var(--dark2);border:1px solid var(--border);border-radius:var(--r);padding:9px 12px;margin-bottom:12px}
+.wknav{width:28px;height:28px;border-radius:50%;background:var(--dark3);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:14px;color:var(--text);transition:all .15s}
+.wknav:hover{border-color:var(--teal);color:var(--teal)}
+.wk-num{font-family:'Bebas Neue';font-size:19px;background:linear-gradient(135deg,var(--teal),var(--teal3));-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-align:center;line-height:1}
+.wk-dates{font-size:10px;color:var(--muted);text-align:center;margin-top:2px}
+.sess-card{background:var(--dark2);border:1px solid var(--border);border-radius:var(--rl);margin-bottom:9px;overflow:hidden}
+.sess-hd{display:flex;align-items:center;justify-content:space-between;padding:12px 13px;cursor:pointer;transition:background .15s}
+.sess-hd:hover{background:rgba(0,194,168,0.04)}
+.sess-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.sess-lbl{font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted)}
+.sess-nm{font-family:'Barlow Condensed';font-size:15px;font-weight:700;color:var(--text);text-transform:uppercase;letter-spacing:.3px;margin-top:1px}
+.sess-tog{font-size:14px;color:var(--muted);transition:transform .2s;background:none;border:none;cursor:pointer;padding:4px}
+.sess-tog.open{transform:rotate(180deg)}
+.sess-bdy{display:none;padding:12px 13px;border-top:1px solid var(--border)}
+.sess-bdy.open{display:block}
+.f-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
+.f-col{display:flex;flex-direction:column;gap:3px}
+.f-lbl{font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--muted)}
+.f-inp{background:var(--dark3);border:1px solid var(--border);border-radius:var(--r);padding:8px 10px;font-family:'Barlow';font-size:13px;color:var(--text);width:100%;outline:none;transition:border-color .15s}
+.f-inp:focus{border-color:var(--teal)}
+select.f-inp{cursor:pointer}
+.feel-row{display:flex;gap:6px;margin-bottom:10px}
+.feel-btn{flex:1;padding:7px 4px;border-radius:var(--r);border:1.5px solid var(--border);background:var(--dark3);cursor:pointer;text-align:center;font-size:15px;transition:all .15s}
+.feel-btn.on{border-color:var(--teal);background:rgba(0,194,168,0.1);transform:scale(1.05)}
+.feel-lbl{font-size:9px;color:var(--muted);display:block;margin-top:2px;font-weight:600;letter-spacing:.5px;text-transform:uppercase}
+.erow{margin-bottom:8px}
+.ehd{display:flex;align-items:center;gap:7px;margin-bottom:5px}
+.enum{background:linear-gradient(135deg,var(--teal-dim),var(--teal));color:var(--dark);width:22px;height:22px;border-radius:5px;display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue';font-size:14px;flex-shrink:0}
+.ename{font-family:'Barlow Condensed';font-size:13px;font-weight:700;color:var(--text);text-transform:uppercase;letter-spacing:.3px}
+.etarget{font-size:10px;color:var(--muted)}
+.sgrid{display:grid;grid-template-columns:20px 1fr 1fr 1fr 24px;gap:3px;align-items:center;margin-bottom:2px}
+.shd{font-size:9px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;text-align:center;padding:2px 0;color:var(--subtle)}
+.snum{font-size:11px;color:var(--subtle);text-align:center;font-family:'Barlow Condensed';font-weight:600}
+.sinp{background:var(--dark3);border:1px solid var(--border);border-radius:4px;padding:6px 4px;font-size:12px;color:var(--text);text-align:center;width:100%;outline:none;transition:border-color .15s;font-family:'Barlow Condensed';font-weight:600}
+.sinp:focus{border-color:var(--teal)}
+.sinp::placeholder{color:var(--subtle);font-size:10px}
+.chk{width:22px;height:22px;border-radius:50%;border:1.5px solid var(--border);background:var(--dark3);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:11px;color:transparent;transition:all .15s}
+.chk.done{background:linear-gradient(135deg,var(--teal-dim),var(--teal));border-color:var(--teal);color:var(--dark)}
+.enotes{margin-top:4px}
+.enotes textarea{width:100%;background:var(--dark3);border:1px solid var(--border);border-radius:var(--r);padding:6px 9px;font-family:'Barlow';font-size:11px;color:var(--muted);resize:none;outline:none;min-height:30px;transition:border-color .15s}
+.enotes textarea:focus{border-color:var(--teal)}
+.ediv{height:1px;background:var(--border);margin:9px 0}
+.gnotes{background:rgba(0,194,168,0.04);border:1px solid rgba(0,194,168,0.14);border-radius:var(--r);padding:10px 12px;margin-top:9px}
+.gnotes-lbl{font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--teal2);margin-bottom:5px}
+.gnotes textarea{width:100%;background:rgba(0,0,0,.2);border:1px solid rgba(0,194,168,0.12);border-radius:var(--r);padding:7px 9px;font-family:'Barlow';font-size:12px;color:var(--muted);resize:none;outline:none;min-height:46px}
+.sv-btn{width:100%;padding:13px;background:linear-gradient(135deg,var(--teal-dim),var(--teal));color:var(--dark);border:none;border-radius:var(--r);cursor:pointer;font-family:'Bebas Neue';font-size:19px;letter-spacing:1.5px;margin-top:10px;font-weight:700}
+.sv-btn:active{opacity:.85}
+.hcard{background:var(--dark2);border:1px solid var(--border);border-radius:var(--rl);margin-bottom:9px;overflow:hidden}
+.hhd{display:flex;justify-content:space-between;align-items:center;padding:11px 13px;border-bottom:1px solid var(--border)}
+.htitle{font-family:'Barlow Condensed';font-size:14px;font-weight:700;color:var(--text);text-transform:uppercase;display:flex;align-items:center;gap:7px}
+.hdate{font-size:11px;color:var(--muted);margin-top:2px}
+.hbody{padding:9px 13px}
+.hex{margin-bottom:6px}
+.hex-name{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px;font-family:'Barlow Condensed'}
+.hpills{display:flex;gap:5px;flex-wrap:wrap}
+.hpill{background:rgba(0,194,168,0.1);border:1px solid rgba(0,194,168,0.18);color:var(--teal2);font-size:10px;font-weight:600;padding:2px 8px;border-radius:20px;font-family:'Barlow Condensed'}
+.hnote{font-size:11px;color:var(--subtle);font-style:italic;margin-top:4px;padding:5px 8px;background:var(--dark3);border-radius:6px}
+.empty{text-align:center;padding:38px 20px;color:var(--muted)}
+.empty-ico{font-size:36px;margin-bottom:10px;display:block}
+.big-stat{background:linear-gradient(135deg,rgba(0,194,168,0.1),rgba(0,194,168,0.03));border:1px solid rgba(0,194,168,0.2);border-radius:var(--rl);padding:16px;margin-bottom:11px;text-align:center}
+.big-stat-val{font-family:'Bebas Neue';font-size:66px;background:linear-gradient(135deg,var(--teal-dim),var(--teal),var(--teal3));-webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1}
+.big-stat-lbl{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted)}
+.kpi-pair{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:11px}
+.kpi2{background:var(--dark2);border:1px solid var(--border);border-radius:var(--r);padding:12px;text-align:center}
+.kpi2-val{font-family:'Bebas Neue';font-size:28px;background:linear-gradient(135deg,var(--teal),var(--teal3));-webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1}
+.kpi2-lbl{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;margin-top:3px}
+.pr-row{margin-bottom:8px}
+.pr-hd{display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-bottom:4px;font-family:'Barlow Condensed';font-weight:700;letter-spacing:.3px;text-transform:uppercase}
+.pr-track{height:5px;background:var(--dark3);border-radius:3px;overflow:hidden}
+.pr-fill{height:100%;background:linear-gradient(90deg,var(--teal-dim),var(--teal));border-radius:3px;transition:width .6s ease}
+
+/* PESO & FOTOS */
+.peso-form{background:var(--dark2);border:1px solid var(--border);border-radius:var(--rl);padding:14px;margin-bottom:11px}
+.peso-title{font-family:'Bebas Neue';font-size:18px;letter-spacing:1px;color:var(--text);margin-bottom:10px}
+.photo-tips{background:rgba(0,194,168,0.06);border:1px solid rgba(0,194,168,0.18);border-radius:var(--r);padding:11px 13px;margin-bottom:12px;font-size:12px;color:var(--teal2);line-height:1.7}
+
+footer{background:var(--dark2);border-top:1px solid var(--border);text-align:center;padding:20px;font-size:11px;color:var(--subtle);line-height:1.8}
+footer strong{background:linear-gradient(135deg,var(--teal),var(--teal3));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+</style>
+</head>
+<body>
+
+<!-- SPLASH -->
+<div class="splash" id="splash">
+  <div class="splash-logo">BASE<br>360</div>
+  <div class="splash-sub">Gabu Fitness · Principiante</div>
+  <div class="splash-bar"><div class="splash-fill"></div></div>
+</div>
+
+<!-- ══ HOME ══ -->
+<div class="page active" id="page-home">
+  <div class="home-wrap">
+    <div class="home-hero">
+      <div class="hero-grid"></div>
+      <div class="hero-glow"></div>
+      <div class="hero-bg-text">BASE 360</div>
+      <div class="hero-brand">
+        <div class="brand-dot"></div>
+        <div class="brand-name">Gabu Fitness</div>
+      </div>
+      <div class="hero-main">
+        <div class="hero-eyebrow"><span class="ey-dot"></span>Plan de inicio</div>
+        <div class="hero-h1">BASE<br><span class="teal">360</span></div>
+        <p class="hero-tagline">El punto de partida real. 3 días a la semana, Full Body, ejercicios que funcionan — sin complicaciones desde el día uno.</p>
+        <div class="hero-chips">
+          <span class="chip chip-teal">3 días/sem</span>
+          <span class="chip chip-teal">Full Body A·B·C</span>
+          <span class="chip">Sin experiencia necesaria</span>
+          <span class="chip">Progresión incluida</span>
+        </div>
+        <div class="hero-kpis">
+          <div class="kp"><div class="kp-v">3</div><div class="kp-l">Días/sem</div></div>
+          <div class="kp"><div class="kp-v">A·B·C</div><div class="kp-l">Full Body</div></div>
+          <div class="kp"><div class="kp-v">4sem</div><div class="kp-l">Por ciclo</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="nav-section">
+      <div class="nav-label">Módulos del programa</div>
+      <div class="nav-grid">
+        <div class="nav-card" onclick="goTo('page-plan')">
+          <span class="nav-icon">💪</span>
+          <div class="nav-name">Entrenamiento</div>
+          <div class="nav-desc">3 días · Full Body A, B, C · Videos</div>
+          <span class="nav-arrow">›</span>
+        </div>
+        <div class="nav-card" onclick="goTo('page-nut')">
+          <span class="nav-icon">🥗</span>
+          <div class="nav-name">Alimentación</div>
+          <div class="nav-desc">Método visual · Regla 80/20 · Sin prohibidos</div>
+          <span class="nav-arrow">›</span>
+        </div>
+        <div class="nav-card" onclick="goTo('page-bit')">
+          <span class="nav-icon">📓</span>
+          <div class="nav-name">Bitácora</div>
+          <div class="nav-desc">Registra · Historial · Stats</div>
+          <span class="nav-arrow">›</span>
+        </div>
+        <div class="nav-card" onclick="goTo('page-peso')">
+          <span class="nav-icon">⚖️</span>
+          <div class="nav-name">Peso Diario</div>
+          <div class="nav-desc">Gráfica · Tendencia semanal</div>
+          <span class="nav-arrow">›</span>
+        </div>
+        <div class="nav-card nav-full" onclick="goTo('page-fotos')">
+          <span class="nav-icon">📸</span>
+          <div class="nav-name">Fotos de Progreso</div>
+          <div class="nav-desc">Galería semanal · Comparativa visual</div>
+          <span class="nav-arrow">›</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ PLAN ══ -->
+<div class="page" id="page-plan">
+  <div class="pg-hd">
+    <button class="back" onclick="goTo('page-home')">‹</button>
+    <span class="pg-title">ENTRENAMIENTO</span>
+    <span class="pg-badge">BASE 360</span>
+  </div>
+  <div style="background:linear-gradient(150deg,#070C0B,#0D1614,#071410);padding:24px 18px 28px;text-align:center">
+    <div style="font-family:'Bebas Neue';font-size:34px;background:linear-gradient(135deg,var(--teal-dim),var(--teal),var(--teal3));-webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:.9;letter-spacing:2px;margin-bottom:6px">FULL BODY<br>A · B · C</div>
+    <p style="color:var(--muted);font-size:12px;margin-bottom:16px">3 días a la semana · Todo el cuerpo en cada sesión</p>
+    <div style="display:flex;justify-content:center;background:rgba(0,194,168,0.06);border:1px solid rgba(0,194,168,0.12);border-radius:12px;overflow:hidden;max-width:280px;margin:0 auto">
+      <div style="flex:1;padding:11px 8px;text-align:center;border-right:1px solid rgba(0,194,168,0.1)"><div style="font-family:'Bebas Neue';font-size:22px;background:linear-gradient(135deg,var(--teal),var(--teal3));-webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1">3</div><div style="font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-top:2px">Días</div></div>
+      <div style="flex:1;padding:11px 8px;text-align:center;border-right:1px solid rgba(0,194,168,0.1)"><div style="font-family:'Bebas Neue';font-size:22px;background:linear-gradient(135deg,var(--teal),var(--teal3));-webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1">3</div><div style="font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-top:2px">Rutinas</div></div>
+      <div style="flex:1;padding:11px 8px;text-align:center"><div style="font-family:'Bebas Neue';font-size:22px;background:linear-gradient(135deg,var(--teal),var(--teal3));-webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1">4</div><div style="font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-top:2px">Sem/ciclo</div></div>
+    </div>
+  </div>
+  <div class="tbar">
+    <button class="tbtn on" onclick="swPlan('p-res',this)">Resumen</button>
+    <button class="tbtn" onclick="swPlan('p-fa',this)">Full Body A</button>
+    <button class="tbtn" onclick="swPlan('p-fb',this)">Full Body B</button>
+    <button class="tbtn" onclick="swPlan('p-fc',this)">Full Body C</button>
+  </div>
+
+  <!-- RESUMEN -->
+  <div class="tcnt on" id="p-res">
+    <div class="stitle" style="margin-top:4px">SPLIT <span class="teal">SEMANAL</span></div>
+    <div class="smeta">3 días · Full Body · Todo el cuerpo en cada sesión</div>
+    <div class="schedule">
+      <div class="srow"><div class="srow-day">D1</div><div class="srow-dot" style="background:var(--teal)"></div><div><div class="srow-name">Full Body A</div><div class="srow-sub">Sentadilla · Pecho · Jalón · Hombro · Bíceps · Core</div></div></div>
+      <div class="srow srow-rest"><div class="srow-day">D2</div><div class="srow-dot" style="background:var(--border)"></div><div><div class="srow-name" style="color:var(--subtle)">Descanso</div><div class="srow-sub">Caminata opcional · Movilidad</div></div></div>
+      <div class="srow"><div class="srow-day">D3</div><div class="srow-dot" style="background:var(--teal)"></div><div><div class="srow-name">Full Body B</div><div class="srow-sub">Prensa · Remo Polea · Press Hombro · Curl Femoral · Tríceps · Plancha</div></div></div>
+      <div class="srow srow-rest"><div class="srow-day">D4</div><div class="srow-dot" style="background:var(--border)"></div><div><div class="srow-name" style="color:var(--subtle)">Descanso</div><div class="srow-sub">Recuperación activa</div></div></div>
+      <div class="srow"><div class="srow-day">D5</div><div class="srow-dot" style="background:var(--teal)"></div><div><div class="srow-name">Full Body C</div><div class="srow-sub">RDL · Press Inclinado · Remo Máquina · Abducción · Curl Martillo · Elevación Piernas</div></div></div>
+      <div class="srow srow-rest"><div class="srow-day">D6</div><div class="srow-dot" style="background:var(--border)"></div><div><div class="srow-name" style="color:var(--subtle)">Descanso</div></div></div>
+      <div class="srow srow-rest"><div class="srow-day">D7</div><div class="srow-dot" style="background:var(--border)"></div><div><div class="srow-name" style="color:var(--subtle)">Descanso</div><div class="srow-sub">Recuperación completa</div></div></div>
+    </div>
+
+    <div style="font-family:'Bebas Neue';font-size:19px;letter-spacing:1px;color:var(--text);margin-bottom:9px">PROGRESIÓN SEMANAL <span style="color:var(--teal)">— OBLIGATORIA</span></div>
+    <div class="prog-table">
+      <div class="pt-hd"><div class="pt-hd-cell">Semana</div><div class="pt-hd-cell">Qué hacer</div></div>
+      <div class="pt-row"><div class="pt-week">1</div><div><div class="pt-action">Aprende la técnica</div><div class="pt-sub">Elige pesos con los que llegues al rango de reps con buena forma. La técnica primero, siempre.</div></div></div>
+      <div class="pt-row"><div class="pt-week">2</div><div><div class="pt-action">+1–2 repeticiones</div><div class="pt-sub">Mismo peso que la semana 1. Intenta completar más reps en cada serie.</div></div></div>
+      <div class="pt-row"><div class="pt-week">3</div><div><div class="pt-action">+2–5% el peso</div><div class="pt-sub">Vuelve al rango de reps original con más carga. Aquí comienza el progreso real.</div></div></div>
+      <div class="pt-row"><div class="pt-week">4</div><div><div class="pt-action">Mantén o reduce volumen</div><div class="pt-sub">Semana de descarga. Mismo peso, menos series. El cuerpo se adapta y crece en el descanso.</div></div></div>
+    </div>
+
+    <div class="ibox ibox-teal">
+      <div class="ibox-title ibox-title-teal">💡 POR QUÉ FULL BODY PARA PRINCIPIANTES</div>
+      <div class="ibox-text">El Full Body 3 veces por semana es <strong>el split más eficiente para quien empieza</strong>. Cada grupo muscular se estimula 3 veces por semana — mucho más que un split por partes. Más frecuencia = más señal de crecimiento = mejores resultados más rápido.</div>
+    </div>
+    <div class="ibox ibox-green">
+      <div class="ibox-title ibox-title-green">⏱ PROTOCOLO GENERAL</div>
+      <div class="ibox-text"><strong>Descanso entre series:</strong> 90 seg en todos los ejercicios.<br><strong>Técnica:</strong> Baja siempre controlado (2 seg). Nunca uses impulso.<br><strong>Duración:</strong> La sesión completa debería tomarte 45–55 min.</div>
+    </div>
+  </div>
+
+  <!-- FULL BODY A -->
+  <div class="tcnt" id="p-fa">
+    <div class="stitle" style="margin-top:4px">FULL BODY <span class="teal">A</span></div>
+    <div class="smeta">Día 1 · Cuádriceps · Pecho · Dorsal · Hombro · Bíceps · Core</div>
+    <div class="ibox ibox-teal" style="margin-bottom:12px"><div class="ibox-title ibox-title-teal">⏱ PROTOCOLO</div><div class="ibox-text">Descanso 90 seg entre series. Sesión completa ~50 min.</div></div>
+
+    <div class="ex-card"><div class="ex-top"><div class="ex-n">1</div><div><div class="ex-name">Sentadilla Goblet</div><div class="ex-group">Cuádriceps · Glúteo · Core · Espalda baja</div></div></div><div class="ex-specs"><span class="pill pill-teal">3 series</span><span class="pill pill-teal">10–12 reps</span><span class="pill pill-gray">Mancuerna o kettlebell</span></div><div class="ex-tip">Pies a la anchura de los hombros, punteras ligeramente abiertas. Mancuerna a la altura del pecho. Baja hasta que tus muslos queden paralelos al suelo. El goblet es la mejor sentadilla para aprender — la carga al frente te obliga a mantener el torso recto.</div><div class="vid-bar"><span class="yt-r">▶</span>Tutorial YouTube</div><div class="vid-fr"><iframe src="https://www.youtube.com/embed/MxsFDhcyFyE" allowfullscreen loading="lazy"></iframe></div></div>
+
+    <div class="ex-card"><div class="ex-top"><div class="ex-n">2</div><div><div class="ex-name">Press de Pecho en Máquina</div><div class="ex-group">Pecho mayor · Tríceps · Hombro anterior</div></div></div><div class="ex-specs"><span class="pill pill-teal">3 series</span><span class="pill pill-teal">8–10 reps</span><span class="pill pill-gray">Máquina convergente</span></div><div class="ex-tip">La máquina es ideal para comenzar — te da estabilidad para enfocarte en sentir el pecho. Escápulas retraídas y pegadas al respaldo durante todo el movimiento. Codos a 75°, no a 90°.</div><div class="vid-bar"><span class="yt-r">▶</span>Tutorial YouTube</div><div class="vid-fr"><iframe src="https://www.youtube.com/embed/xUm0BiZCX2M" allowfullscreen loading="lazy"></iframe></div></div>
+
+    <div class="ex-card"><div class="ex-top"><div class="ex-n">3</div><div><div class="ex-name">Jalón al Pecho (Polea)</div><div class="ex-group">Dorsal ancho · Bíceps · Redondo mayor</div></div></div><div class="ex-specs"><span class="pill pill-teal">3 series</span><span class="pill pill-teal">10–12 reps</span></div><div class="ex-tip">Agarre un poco más ancho que los hombros. Inclínate 15° atrás. Lleva la barra al esternón mientras bajas los codos hacia las caderas. No uses impulso del torso.</div><div class="vid-bar"><span class="yt-r">▶</span>Tutorial YouTube</div><div class="vid-fr"><iframe src="https://www.youtube.com/embed/CAwf7n6Luuc" allowfullscreen loading="lazy"></iframe></div></div>
+
+    <div class="ex-card"><div class="ex-top"><div class="ex-n">4</div><div><div class="ex-name">Elevaciones Laterales con Mancuernas</div><div class="ex-group">Deltoides medial · Anchura de hombros</div></div></div><div class="ex-specs"><span class="pill pill-teal">3 series</span><span class="pill pill-teal">12–15 reps</span><span class="pill pill-gray">Peso ligero</span></div><div class="ex-tip">Codo ligeramente doblado. Sube hasta nivel de hombro. Baja lento en 3 seg. Empieza con muy poco peso — este ejercicio se hace con mucho más control del que parece.</div><div class="vid-bar"><span class="yt-r">▶</span>Tutorial YouTube</div><div class="vid-fr"><iframe src="https://www.youtube.com/embed/3VcKaXpzqRo" allowfullscreen loading="lazy"></iframe></div></div>
+
+    <div class="ex-card"><div class="ex-top"><div class="ex-n">5</div><div><div class="ex-name">Curl de Bíceps con Mancuernas</div><div class="ex-group">Bíceps braquial · Braquial anterior</div></div></div><div class="ex-specs"><span class="pill pill-teal">2 series</span><span class="pill pill-teal">10–12 reps</span></div><div class="ex-tip">Codos pegados a los costados. Baja en 3 seg (excéntrico lento). No osciles el torso para subir el peso — si lo haces, el peso está muy cargado. Solo 2 series porque el bíceps ya trabajó en el jalón.</div><div class="vid-bar"><span class="yt-r">▶</span>Tutorial YouTube</div><div class="vid-fr"><iframe src="https://www.youtube.com/embed/ykJmrZ5v0Oo" allowfullscreen loading="lazy"></iframe></div></div>
+
+    <div class="ex-card"><div class="ex-top"><div class="ex-n">6</div><div><div class="ex-name">Crunch en el Suelo</div><div class="ex-group">Recto abdominal · Oblicuos</div></div></div><div class="ex-specs"><span class="pill pill-teal">3 series</span><span class="pill pill-teal">15–20 reps</span></div><div class="ex-tip">Pies en el suelo, rodillas dobladas. Sube solo hasta que los hombros se despeguen del suelo — no necesitas subir más. Exhala al subir. Sin jalarte el cuello con las manos.</div><div class="vid-bar"><span class="yt-r">▶</span>Tutorial YouTube</div><div class="vid-fr"><iframe src="https://www.youtube.com/embed/Xyd_fa5zoEU" allowfullscreen loading="lazy"></iframe></div></div>
+  </div>
+
+  <!-- FULL BODY B -->
+  <div class="tcnt" id="p-fb">
+    <div class="stitle" style="margin-top:4px">FULL BODY <span class="teal">B</span></div>
+    <div class="smeta">Día 3 · Pierna · Espalda · Hombros · Femoral · Tríceps · Core</div>
+    <div class="ibox ibox-teal" style="margin-bottom:12px"><div class="ibox-title ibox-title-teal">⏱ PROTOCOLO</div><div class="ibox-text">Descanso 90 seg entre series. Sesión completa ~50 min.</div></div>
+
+    <div class="ex-card"><div class="ex-top"><div class="ex-n">1</div><div><div class="ex-name">Prensa de Pierna (Leg Press)</div><div class="ex-group">Cuádriceps · Glúteo · Femoral</div></div></div><div class="ex-specs"><span class="pill pill-teal">3 series</span><span class="pill pill-teal">10–12 reps</span></div><div class="ex-tip">Pies al ancho de la cadera, altura media en la plataforma. Baja hasta 90° en la rodilla. Nunca bloquees las rodillas al extender. La prensa es perfecta para pierna cuando aún no tienes confianza con la sentadilla con barra.</div><div class="vid-bar"><span class="yt-r">▶</span>Tutorial YouTube</div><div class="vid-fr"><iframe src="https://www.youtube.com/embed/IZxyjW7MPJQ" allowfullscreen loading="lazy"></iframe></div></div>
+
+    <div class="ex-card"><div class="ex-top"><div class="ex-n">2</div><div><div class="ex-name">Remo en Polea Baja</div><div class="ex-group">Dorsal ancho · Trapecio · Romboides</div></div></div><div class="ex-specs"><span class="pill pill-teal">3 series</span><span class="pill pill-teal">10–12 reps</span></div><div class="ex-tip">Siéntate erguido — no te recuestes al tirar. Tira los codos hacia atrás del torso. Aprieta escápulas 1 seg al final. Deja que el peso te abra los hombros en la fase de regreso.</div><div class="vid-bar"><span class="yt-r">▶</span>Tutorial YouTube</div><div class="vid-fr"><iframe src="https://www.youtube.com/embed/GZbfZ033f74" allowfullscreen loading="lazy"></iframe></div></div>
+
+    <div class="ex-card"><div class="ex-top"><div class="ex-n">3</div><div><div class="ex-name">Press de Hombro en Máquina</div><div class="ex-group">Deltoides anterior y medial · Tríceps</div></div></div><div class="ex-specs"><span class="pill pill-teal">3 series</span><span class="pill pill-teal">10–12 reps</span></div><div class="ex-tip">Respaldo completamente reclinado. No bloquees los codos arriba — deja un poco de flexión. La máquina permite cargar más que las mancuernas porque da estabilidad. Ideal para aprender el patrón de press overhead.</div><div class="vid-bar"><span class="yt-r">▶</span>Tutorial YouTube</div><div class="vid-fr"><iframe src="https://www.youtube.com/embed/qEwKCR5JCog" allowfullscreen loading="lazy"></iframe></div></div>
+
+    <div class="ex-card"><div class="ex-top"><div class="ex-n">4</div><div><div class="ex-name">Curl Femoral en Máquina</div><div class="ex-group">Bíceps femoral · Semitendinoso · Isquiotibiales</div></div></div><div class="ex-specs"><span class="pill pill-teal">3 series</span><span class="pill pill-teal">12–15 reps</span></div><div class="ex-tip">Caderas pegadas al banco. Baja en 3 seg. El femoral es uno de los músculos más descuidados — entrenarlo desde el inicio previene lesiones de rodilla y mejora la forma de las piernas.</div><div class="vid-bar"><span class="yt-r">▶</span>Tutorial YouTube</div><div class="vid-fr"><iframe src="https://www.youtube.com/embed/ELOCsoDSmrg" allowfullscreen loading="lazy"></iframe></div></div>
+
+    <div class="ex-card"><div class="ex-top"><div class="ex-n">5</div><div><div class="ex-name">Extensión de Tríceps en Polea</div><div class="ex-group">Tríceps braquial · Parte posterior del brazo</div></div></div><div class="ex-specs"><span class="pill pill-teal">2 series</span><span class="pill pill-teal">12–15 reps</span></div><div class="ex-tip">Cuerda o barra recta. Codos fijos pegados al torso todo el tiempo. Separa la cuerda al final de la extensión para máxima contracción. Solo 2 series — el tríceps trabajó en el press.</div><div class="vid-bar"><span class="yt-r">▶</span>Tutorial YouTube</div><div class="vid-fr"><iframe src="https://www.youtube.com/embed/vB5OHsJ3EME" allowfullscreen loading="lazy"></iframe></div></div>
+
+    <div class="ex-card"><div class="ex-top"><div class="ex-n">6</div><div><div class="ex-name">Plancha Frontal</div><div class="ex-group">Core completo · Estabilizadores · Columna</div></div></div><div class="ex-specs"><span class="pill pill-teal">3 series</span><span class="pill pill-teal">30–60 seg</span><span class="pill pill-gray">Progresa el tiempo</span></div><div class="ex-tip">Cuerpo en línea recta de cabeza a talones. No subas el trasero ni dejes caer las caderas. Core activo como si fueras a recibir un golpe en el estómago. Respira constantemente.</div><div class="vid-bar"><span class="yt-r">▶</span>Tutorial YouTube</div><div class="vid-fr"><iframe src="https://www.youtube.com/embed/pSHjTRCQxIw" allowfullscreen loading="lazy"></iframe></div></div>
+  </div>
+
+  <!-- FULL BODY C -->
+  <div class="tcnt" id="p-fc">
+    <div class="stitle" style="margin-top:4px">FULL BODY <span class="teal">C</span></div>
+    <div class="smeta">Día 5 · Femoral · Pecho superior · Espalda · Cadera · Bíceps · Core</div>
+    <div class="ibox ibox-teal" style="margin-bottom:12px"><div class="ibox-title ibox-title-teal">⏱ PROTOCOLO</div><div class="ibox-text">Descanso 90 seg entre series. Sesión completa ~50 min.</div></div>
+
+    <div class="ex-card"><div class="ex-top"><div class="ex-n">1</div><div><div class="ex-name">Peso Muerto Rumano (RDL)</div><div class="ex-group">Femoral · Glúteo mayor · Erector espinal</div></div></div><div class="ex-specs"><span class="pill pill-teal">3 series</span><span class="pill pill-teal">10–12 reps</span></div><div class="ex-tip">Espalda SIEMPRE plana — si la pierdes, el peso está muy cargado. Rodillas ligeramente dobladas. Baja hasta sentir el jalón en la parte trasera de los muslos. El RDL desarrolla el cuerpo posterior más que casi cualquier otro ejercicio.</div><div class="vid-bar"><span class="yt-r">▶</span>Tutorial YouTube</div><div class="vid-fr"><iframe src="https://www.youtube.com/embed/hCDzSR6bW10" allowfullscreen loading="lazy"></iframe></div></div>
+
+    <div class="ex-card"><div class="ex-top"><div class="ex-n">2</div><div><div class="ex-name">Press Inclinado con Mancuernas</div><div class="ex-group">Pecho superior · Hombro anterior · Tríceps</div></div></div><div class="ex-specs"><span class="pill pill-teal">3 series</span><span class="pill pill-teal">10–12 reps</span><span class="pill pill-gray">Inclinación 30–45°</span></div><div class="ex-tip">Codos a 75° del torso. Sube las mancuernas ligeramente hacia el centro al llegar arriba. Rango completo — estiramiento abajo, contracción arriba. Diferente al Full Body A porque trabaja el pecho desde otro ángulo.</div><div class="vid-bar"><span class="yt-r">▶</span>Tutorial YouTube</div><div class="vid-fr"><iframe src="https://www.youtube.com/embed/8iPEnn-ltC8" allowfullscreen loading="lazy"></iframe></div></div>
+
+    <div class="ex-card"><div class="ex-top"><div class="ex-n">3</div><div><div class="ex-name">Remo en Máquina</div><div class="ex-group">Dorsal ancho · Trapecio · Bíceps</div></div></div><div class="ex-specs"><span class="pill pill-teal">3 series</span><span class="pill pill-teal">10–12 reps</span></div><div class="ex-tip">Pecho apoyado en el pad. Tira hacia la cadera, no hacia los hombros. El apoyo elimina el uso del torso y aísla mejor el dorsal. Excelente para principiantes porque no requiere estabilización.</div><div class="vid-bar"><span class="yt-r">▶</span>Tutorial YouTube</div><div class="vid-fr"><iframe src="https://www.youtube.com/embed/GZbfZ033f74" allowfullscreen loading="lazy"></iframe></div></div>
+
+    <div class="ex-card"><div class="ex-top"><div class="ex-n">4</div><div><div class="ex-name">Abducción de Cadera (máquina)</div><div class="ex-group">Glúteo medio · Tensor de la fascia lata</div></div></div><div class="ex-specs"><span class="pill pill-teal">3 series</span><span class="pill pill-teal">12–15 reps</span></div><div class="ex-tip">Espalda bien apoyada. Abre hasta el rango cómodo máximo. El glúteo medio es clave para la forma y la estabilidad de cadera. Muchas personas lo ignoran y tienen desequilibrios. No lo ignores tú.</div><div class="vid-bar"><span class="yt-r">▶</span>Tutorial YouTube</div><div class="vid-fr"><iframe src="https://www.youtube.com/embed/UuMGm7VqQfU" allowfullscreen loading="lazy"></iframe></div></div>
+
+    <div class="ex-card"><div class="ex-top"><div class="ex-n">5</div><div><div class="ex-name">Curl Martillo con Mancuernas</div><div class="ex-group">Braquioradial · Bíceps · Grosor del antebrazo</div></div></div><div class="ex-specs"><span class="pill pill-teal">2 series</span><span class="pill pill-teal">12–15 reps</span></div><div class="ex-tip">Agarre neutro — pulgares apuntando arriba. Alterna brazos. Diferente al curl normal del Full Body A: trabaja el braquioradial que da grosor y definición al brazo cuando se ve de frente.</div><div class="vid-bar"><span class="yt-r">▶</span>Tutorial YouTube</div><div class="vid-fr"><iframe src="https://www.youtube.com/embed/zC3nLlEvin4" allowfullscreen loading="lazy"></iframe></div></div>
+
+    <div class="ex-card"><div class="ex-top"><div class="ex-n">6</div><div><div class="ex-name">Elevación de Piernas (banco o barra)</div><div class="ex-group">Recto abdominal · Psoas · Flexores de cadera</div></div></div><div class="ex-specs"><span class="pill pill-teal">3 series</span><span class="pill pill-teal">15–20 reps</span></div><div class="ex-tip">En banco: no apoyes los pies en el suelo entre reps. En barra colgado: sin balanceo, respiración constante. Diferente al crunch del Full Body A: trabaja la parte baja del abdomen.</div><div class="vid-bar"><span class="yt-r">▶</span>Tutorial YouTube</div><div class="vid-fr"><iframe src="https://www.youtube.com/embed/Pr1ieGZ5atk" allowfullscreen loading="lazy"></iframe></div></div>
+  </div>
+  <footer><strong>BASE 360</strong> · Gabu Fitness · Full Body A · B · C</footer>
+</div>
+
+<!-- ══ NUTRICIÓN ══ -->
+<div class="page" id="page-nut">
+  <div class="pg-hd">
+    <button class="back" onclick="goTo('page-home')">‹</button>
+    <span class="pg-title">ALIMENTACIÓN</span>
+    <span class="pg-badge">Simple · Sin restricciones</span>
+  </div>
+  <div class="tbar">
+    <button class="tbtn on" onclick="swNut('n-base',this)">Base</button>
+    <button class="tbtn" onclick="swNut('n-visual',this)">Método Visual</button>
+    <button class="tbtn" onclick="swNut('n-comidas',this)">Comidas</button>
+    <button class="tbtn" onclick="swNut('n-reglas',this)">Reglas</button>
+  </div>
+
+  <!-- BASE -->
+  <div class="tcnt on" id="n-base">
+    <div class="stitle" style="margin-top:4px">TU <span class="teal">OBJETIVO</span></div>
+    <div class="smeta">Elige uno y no lo cambies cada semana</div>
+    <div class="obj-grid">
+      <div class="obj-card"><div class="obj-icon">📉</div><div class="obj-name">Déficit</div><div class="obj-desc">Perder grasa · Comer menos que tu mantenimiento</div></div>
+      <div class="obj-card" style="border-color:rgba(0,194,168,0.3);background:rgba(0,194,168,0.06)"><div class="obj-icon">⚖️</div><div class="obj-name" style="color:var(--teal2)">Mantener</div><div class="obj-desc" style="color:var(--teal2)">Recomposición · Ideal para empezar</div></div>
+      <div class="obj-card"><div class="obj-icon">📈</div><div class="obj-name">Superávit</div><div class="obj-desc">Ganar músculo · Comer un poco más</div></div>
+    </div>
+    <div class="ibox ibox-teal">
+      <div class="ibox-title ibox-title-teal">🎯 RECOMENDACIÓN PARA PRINCIPIANTES</div>
+      <div class="ibox-text">Si estás empezando, lo mejor es <strong>mantenimiento o déficit suave</strong>. En los primeros 3–6 meses de entrenamiento, el cuerpo gana músculo Y pierde grasa al mismo tiempo con solo comer bien y entrenar. No necesitas calcular calorías exactas todavía — el método visual funciona perfectamente.</div>
+    </div>
+    <div class="ibox ibox-amber">
+      <div class="ibox-title ibox-title-amber">⚠️ LA REGLA MÁS IMPORTANTE</div>
+      <div class="ibox-text"><strong>No cambies de objetivo cada semana.</strong> El cuerpo necesita 4–8 semanas de consistencia para responder. Cambiar de déficit a superávit constantemente = cero resultados.<br><br>Elige un objetivo, comprométete 4 semanas, evalúa y ajusta.</div>
+    </div>
+  </div>
+
+  <!-- MÉTODO VISUAL -->
+  <div class="tcnt" id="n-visual">
+    <div class="stitle" style="margin-top:4px">MÉTODO <span class="teal">VISUAL</span></div>
+    <div class="smeta">Sin pesar comida · Sin contar calorías · Funciona</div>
+    <div class="ibox ibox-teal" style="margin-bottom:14px">
+      <div class="ibox-title ibox-title-teal">💡 POR QUÉ ESTE MÉTODO</div>
+      <div class="ibox-text">Contar calorías al inicio es innecesariamente complicado y lleva al abandono. El método de la mano te da una guía proporcional a <strong>tu cuerpo específico</strong> — alguien de 50 kg tiene una mano más chica que alguien de 90 kg. Perfecto para empezar.</div>
+    </div>
+    <div class="visual-grid">
+      <div class="visual-card">
+        <span class="visual-emoji">🤚</span>
+        <div class="visual-name">Proteína</div>
+        <div class="visual-desc">1 palma por comida</div>
+        <div class="visual-tip vt-teal">~25–35g proteína</div>
+      </div>
+      <div class="visual-card">
+        <span class="visual-emoji">✊</span>
+        <div class="visual-name">Carbohidratos</div>
+        <div class="visual-desc">1 puño por comida</div>
+        <div class="visual-tip vt-amber">Arroz · Papa · Avena</div>
+      </div>
+      <div class="visual-card">
+        <span class="visual-emoji">👍</span>
+        <div class="visual-name">Grasas</div>
+        <div class="visual-desc">1 pulgar por comida</div>
+        <div class="visual-tip vt-green">Aguacate · Aceite · Nueces</div>
+      </div>
+      <div class="visual-card">
+        <span class="visual-emoji">🥦</span>
+        <div class="visual-name">Verduras</div>
+        <div class="visual-desc">Cantidad libre</div>
+        <div class="visual-tip vt-blue">Come todo lo que quieras</div>
+      </div>
+    </div>
+    <div class="ibox ibox-green">
+      <div class="ibox-title ibox-title-green">📐 CÓMO AJUSTAR SEGÚN TU OBJETIVO</div>
+      <div class="ibox-text">
+        <strong>Déficit (perder grasa):</strong> Reduce a ¾ de puño de carbos<br>
+        <strong>Mantenimiento:</strong> Usa las medidas exactas arriba<br>
+        <strong>Superávit (ganar músculo):</strong> Agrega 1 puño extra de carbos<br><br>
+        Aplica esto en 3–4 comidas al día. <strong>La proteína nunca baja</strong> en ningún objetivo.
+      </div>
+    </div>
+  </div>
+
+  <!-- COMIDAS -->
+  <div class="tcnt" id="n-comidas">
+    <div class="stitle" style="margin-top:4px">ESTRUCTURA <span class="teal">DIARIA</span></div>
+    <div class="smeta">3–4 comidas · Simple · Sostenible</div>
+    <div class="ibox ibox-teal" style="margin-bottom:14px">
+      <div class="ibox-title ibox-title-teal">⚡ PRINCIPIO CLAVE</div>
+      <div class="ibox-text">No necesitas dieta perfecta. Necesitas <strong>consistencia suficiente</strong>. El 80% del tiempo comiendo bien supera al 100% durante 2 semanas y luego abandono.</div>
+    </div>
+
+    <div style="background:var(--dark2);border:1px solid var(--border);border-radius:var(--rl);margin-bottom:10px;overflow:hidden">
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:11px 13px;border-bottom:1px solid var(--border)"><div><div style="font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--teal2)">7–8 am</div><div style="font-family:'Barlow Condensed';font-size:14px;font-weight:700;color:var(--text);text-transform:uppercase;margin-top:2px">Desayuno</div></div><div style="background:rgba(0,194,168,0.1);border:1px solid rgba(0,194,168,0.18);color:var(--teal2);font-size:10px;font-weight:700;padding:5px 9px;border-radius:7px;text-align:center">1 palma<br>proteína</div></div>
+      <div style="padding:10px 13px">
+        <div class="opt-hd" style="font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--teal);margin:0 0 4px;display:flex;align-items:center;gap:6px"><span style="width:14px;height:1.5px;background:var(--teal);display:block"></span>Opción A</div><div style="font-size:12.5px;color:var(--muted);line-height:1.7;padding-left:9px;border-left:1.5px solid rgba(0,194,168,0.2);margin-bottom:4px">2–3 huevos revueltos + 1 tostada integral + fruta + café</div>
+        <div class="opt-hd" style="font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--teal);margin:7px 0 4px;display:flex;align-items:center;gap:6px"><span style="width:14px;height:1.5px;background:var(--teal);display:block"></span>Opción B</div><div style="font-size:12.5px;color:var(--muted);line-height:1.7;padding-left:9px;border-left:1.5px solid rgba(0,194,168,0.2);margin-bottom:4px">Avena 50g + yogur griego + fruta + proteína whey (si tienes)</div>
+        <div class="opt-hd" style="font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--teal);margin:7px 0 4px;display:flex;align-items:center;gap:6px"><span style="width:14px;height:1.5px;background:var(--teal);display:block"></span>Opción C</div><div style="font-size:12.5px;color:var(--muted);line-height:1.7;padding-left:9px;border-left:1.5px solid rgba(0,194,168,0.2)">Licuado: leche + plátano + avena + 2 huevos + miel. Rápido y completo.</div>
+      </div>
+    </div>
+
+    <div style="background:var(--dark2);border:1px solid var(--border);border-radius:var(--rl);margin-bottom:10px;overflow:hidden">
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:11px 13px;border-bottom:1px solid var(--border)"><div><div style="font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--teal2)">1–2 pm</div><div style="font-family:'Barlow Condensed';font-size:14px;font-weight:700;color:var(--text);text-transform:uppercase;margin-top:2px">Comida Principal</div></div><div style="background:rgba(0,194,168,0.1);border:1px solid rgba(0,194,168,0.18);color:var(--teal2);font-size:10px;font-weight:700;padding:5px 9px;border-radius:7px;text-align:center">La más<br>grande</div></div>
+      <div style="padding:10px 13px">
+        <div class="opt-hd" style="font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--teal);margin:0 0 4px;display:flex;align-items:center;gap:6px"><span style="width:14px;height:1.5px;background:var(--teal);display:block"></span>Opción A</div><div style="font-size:12.5px;color:var(--muted);line-height:1.7;padding-left:9px;border-left:1.5px solid rgba(0,194,168,0.2);margin-bottom:4px">Pechuga de pollo + arroz integral + frijoles + ensalada + limón</div>
+        <div class="opt-hd" style="font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--teal);margin:7px 0 4px;display:flex;align-items:center;gap:6px"><span style="width:14px;height:1.5px;background:var(--teal);display:block"></span>Opción B</div><div style="font-size:12.5px;color:var(--muted);line-height:1.7;padding-left:9px;border-left:1.5px solid rgba(0,194,168,0.2);margin-bottom:4px">Carne a la plancha + papa cocida + verduras salteadas + tortilla de maíz</div>
+        <div class="opt-hd" style="font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--teal);margin:7px 0 4px;display:flex;align-items:center;gap:6px"><span style="width:14px;height:1.5px;background:var(--teal);display:block"></span>Opción C</div><div style="font-size:12.5px;color:var(--muted);line-height:1.7;padding-left:9px;border-left:1.5px solid rgba(0,194,168,0.2)">Atún en agua + arroz + aguacate + limón · Económico y completo</div>
+      </div>
+    </div>
+
+    <div style="background:var(--dark2);border:1px solid var(--border);border-radius:var(--rl);margin-bottom:10px;overflow:hidden">
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:11px 13px;border-bottom:1px solid var(--border)"><div><div style="font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--teal2)">4–6 pm</div><div style="font-family:'Barlow Condensed';font-size:14px;font-weight:700;color:var(--text);text-transform:uppercase;margin-top:2px">Snack / Pre o Post entreno</div></div><div style="background:rgba(0,194,168,0.1);border:1px solid rgba(0,194,168,0.18);color:var(--teal2);font-size:10px;font-weight:700;padding:5px 9px;border-radius:7px;text-align:center">Prot +<br>carbos</div></div>
+      <div style="padding:10px 13px">
+        <div class="opt-hd" style="font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--teal);margin:0 0 4px;display:flex;align-items:center;gap:6px"><span style="width:14px;height:1.5px;background:var(--teal);display:block"></span>Opción A</div><div style="font-size:12.5px;color:var(--muted);line-height:1.7;padding-left:9px;border-left:1.5px solid rgba(0,194,168,0.2);margin-bottom:4px">Yogur griego + fruta + nueces</div>
+        <div class="opt-hd" style="font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--teal);margin:7px 0 4px;display:flex;align-items:center;gap:6px"><span style="width:14px;height:1.5px;background:var(--teal);display:block"></span>Opción B</div><div style="font-size:12.5px;color:var(--muted);line-height:1.7;padding-left:9px;border-left:1.5px solid rgba(0,194,168,0.2);margin-bottom:4px">2 huevos cocidos + 1 fruta + café</div>
+        <div class="opt-hd" style="font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--teal);margin:7px 0 4px;display:flex;align-items:center;gap:6px"><span style="width:14px;height:1.5px;background:var(--teal);display:block"></span>Opción C</div><div style="font-size:12.5px;color:var(--muted);line-height:1.7;padding-left:9px;border-left:1.5px solid rgba(0,194,168,0.2)">Licuado de proteína + plátano (si tienes whey)</div>
+      </div>
+    </div>
+
+    <div style="background:var(--dark2);border:1px solid var(--border);border-radius:var(--rl);margin-bottom:10px;overflow:hidden">
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:11px 13px;border-bottom:1px solid var(--border)"><div><div style="font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--teal2)">8–9 pm</div><div style="font-family:'Barlow Condensed';font-size:14px;font-weight:700;color:var(--text);text-transform:uppercase;margin-top:2px">Cena</div></div><div style="background:rgba(0,194,168,0.1);border:1px solid rgba(0,194,168,0.18);color:var(--teal2);font-size:10px;font-weight:700;padding:5px 9px;border-radius:7px;text-align:center">Prot +<br>carbos mod.</div></div>
+      <div style="padding:10px 13px">
+        <div class="opt-hd" style="font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--teal);margin:0 0 4px;display:flex;align-items:center;gap:6px"><span style="width:14px;height:1.5px;background:var(--teal);display:block"></span>Opción A</div><div style="font-size:12.5px;color:var(--muted);line-height:1.7;padding-left:9px;border-left:1.5px solid rgba(0,194,168,0.2);margin-bottom:4px">Pollo o carne + arroz/papa moderado + ensalada grande</div>
+        <div class="opt-hd" style="font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--teal);margin:7px 0 4px;display:flex;align-items:center;gap:6px"><span style="width:14px;height:1.5px;background:var(--teal);display:block"></span>Opción B</div><div style="font-size:12.5px;color:var(--muted);line-height:1.7;padding-left:9px;border-left:1.5px solid rgba(0,194,168,0.2);margin-bottom:4px">Omelette 3 huevos + espinacas + queso + 1–2 tortillas de maíz</div>
+        <div class="opt-hd" style="font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--teal);margin:7px 0 4px;display:flex;align-items:center;gap:6px"><span style="width:14px;height:1.5px;background:var(--teal);display:block"></span>Opción C</div><div style="font-size:12.5px;color:var(--muted);line-height:1.7;padding-left:9px;border-left:1.5px solid rgba(0,194,168,0.2)">Sopa de proteína: caldo de pollo + pasta + verduras + pechuga deshebrada</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- REGLAS -->
+  <div class="tcnt" id="n-reglas">
+    <div class="stitle" style="margin-top:4px">LAS <span class="teal">REGLAS</span></div>
+    <div class="smeta">Simple. Sin obsesiones. Sostenible.</div>
+
+    <div style="font-family:'Bebas Neue';font-size:18px;letter-spacing:1px;color:var(--text);margin-bottom:9px">SUSTITUCIONES FÁCILES</div>
+    <div class="swap-list">
+      <div class="swap-row"><div class="swap-from">Pollo</div><span class="swap-arrow">→</span><div class="swap-to">Atún · Huevo · Carne molida · Sardinas</div></div>
+      <div class="swap-row"><div class="swap-from">Arroz</div><span class="swap-arrow">→</span><div class="swap-to">Papa · Pasta · Tortilla de maíz · Avena</div></div>
+      <div class="swap-row"><div class="swap-from">Aceite</div><span class="swap-arrow">→</span><div class="swap-to">Aguacate · Nueces · Semillas · Mantequilla</div></div>
+      <div class="swap-row"><div class="swap-from">Leche entera</div><span class="swap-arrow">→</span><div class="swap-to">Leche descremada · Bebida de avena · Agua</div></div>
+    </div>
+
+    <div class="div-teal"></div>
+
+    <div class="rule-card ibox ibox-teal">
+      <span class="rule-icon">❌</span>
+      <div class="rule-title">No hay alimentos prohibidos</div>
+      <div class="rule-text">Ningún alimento te engorda por sí solo. El exceso de calorías engorda. Puedes comer de todo — la clave es la <strong>proporción y la consistencia</strong>, no la restricción perfecta.</div>
+    </div>
+
+    <div class="rule-card ibox ibox-amber">
+      <span class="rule-icon">⚠️</span>
+      <div class="rule-title">Si fallas la dieta — regla de la siguiente comida</div>
+      <div class="rule-text">No te castigues. No compenses con hambre extrema. No hagas cardio extra.<br><br><strong>Simplemente retoma en la siguiente comida.</strong><br><br>Un mal día no arruina el progreso de semanas. Lo que arruina el progreso es el abandono después del mal día.</div>
+    </div>
+
+    <div class="rule-card ibox ibox-green">
+      <span class="rule-icon">🔄</span>
+      <div class="rule-title">La regla 80/20</div>
+      <div class="rule-text">Come bien el <strong>80% del tiempo</strong>. El 20% restante puede ser flexible — salidas, antojos, celebraciones.<br><br>En 4 semanas eso son ~84 comidas. Con comer bien en 67 de ellas ya tienes resultados. No necesitas perfección.</div>
+    </div>
+
+    <div class="rule-card ibox ibox-teal">
+      <span class="rule-icon">💧</span>
+      <div class="rule-title">Lo que sí es importante</div>
+      <div class="rule-text">
+        · <strong>Agua:</strong> 2–2.5 litros diarios mínimo<br>
+        · <strong>Proteína:</strong> en cada comida, sin excepción<br>
+        · <strong>Sueño:</strong> 7–8 horas — el músculo se construye mientras duermes<br>
+        · <strong>Consistencia:</strong> 3 semanas mediocres superan 1 semana perfecta seguida de abandono
+      </div>
+    </div>
+  </div>
+  <footer><strong>BASE 360</strong> · Gabu Fitness · Alimentación simple y sostenible</footer>
+</div>
+
+<!-- ══ BITÁCORA ══ -->
+<div class="page" id="page-bit">
+  <div class="pg-hd">
+    <button class="back" onclick="goTo('page-home')">‹</button>
+    <span class="pg-title">BITÁCORA</span>
+    <span class="pg-badge">BASE 360</span>
+  </div>
+  <div style="padding:13px 16px 0">
+    <div class="wk-bar">
+      <button class="wknav" onclick="changeWeek(-1)">‹</button>
+      <div><div class="wk-num" id="weekLabel">SEMANA 1</div><div class="wk-dates" id="weekDates"></div></div>
+      <button class="wknav" onclick="changeWeek(1)">›</button>
+    </div>
+    <div class="bit-tabs">
+      <button class="bit-tab on" onclick="swBit('bt-reg',this)">📝 Registrar</button>
+      <button class="bit-tab" onclick="swBit('bt-hist',this)">📋 Historial</button>
+      <button class="bit-tab" onclick="swBit('bt-stats',this)">📊 Stats</button>
+    </div>
+  </div>
+
+  <div class="bsec on" id="bt-reg" style="padding:0 16px 80px">
+
+    <!-- FULL BODY A -->
+    <div class="sess-card">
+      <div class="sess-hd" onclick="togSess('s1')"><div style="display:flex;align-items:center;gap:10px"><div class="sess-dot" style="background:var(--teal)"></div><div><div class="sess-lbl">Día 1</div><div class="sess-nm">Full Body A</div></div></div><button class="sess-tog" id="tg-s1">▾</button></div>
+      <div class="sess-bdy" id="bd-s1">
+        <div class="f-row"><div class="f-col"><div class="f-lbl">Fecha</div><input type="date" class="f-inp" id="d1-date"></div><div class="f-col"><div class="f-lbl">Energía</div><select class="f-inp" id="d1-modo"><option>💪 Alta</option><option>😐 Normal</option><option>😴 Baja</option></select></div></div>
+        <div class="f-lbl" style="margin-bottom:7px">¿Cómo te sentiste?</div>
+        <div class="feel-row" id="feel-d1"><button class="feel-btn" onclick="setFeel('d1',1)">😫<span class="feel-lbl">Pesado</span></button><button class="feel-btn" onclick="setFeel('d1',2)">😐<span class="feel-lbl">Regular</span></button><button class="feel-btn" onclick="setFeel('d1',3)">💪<span class="feel-lbl">Bien</span></button><button class="feel-btn" onclick="setFeel('d1',4)">🔥<span class="feel-lbl">Brutal</span></button></div>
+        <div class="erow"><div class="ehd"><div class="enum">1</div><div><div class="ename">Sentadilla Goblet</div><div class="etarget">3 × 10–12 reps</div></div></div><div class="sgrid"><div class="shd">S</div><div class="shd">Kg</div><div class="shd">Reps</div><div class="shd">RPE</div><div></div></div><div class="sgrid"><div class="snum">1</div><input class="sinp" placeholder="—" type="number" inputmode="decimal"><input class="sinp" placeholder="—" type="number" inputmode="numeric"><input class="sinp" placeholder="1–10" type="number" inputmode="numeric"><button class="chk" onclick="togChk(this)">✓</button></div><div class="sgrid"><div class="snum">2</div><input class="sinp" placeholder="—" type="number" inputmode="decimal"><input class="sinp" placeholder="—" type="number" inputmode="numeric"><input class="sinp" placeholder="1–10" type="number" inputmode="numeric"><button class="chk" onclick="togChk(this)">✓</button></div><div class="sgrid"><div class="snum">3</div><input class="sinp" placeholder="—" type="number" inputmode="decimal"><input class="sinp" placeholder="—" type="number" inputmode="numeric"><input class="sinp" placeholder="1–10" type="number" inputmode="numeric"><button class="chk" onclick="togChk(this)">✓</button></div><div class="enotes"><textarea placeholder="Notas..."></textarea></div></div>
+        <div class="ediv"></div>
+        <div class="erow"><div class="ehd"><div class="enum">2</div><div><div class="ename">Press Pecho Máquina</div><div class="etarget">3 × 8–10 reps</div></div></div><div class="sgrid"><div class="shd">S</div><div class="shd">Kg</div><div class="shd">Reps</div><div class="shd">RPE</div><div></div></div><div class="sgrid"><div class="snum">1</div><input class="sinp" placeholder="—" type="number" inputmode="decimal"><input class="sinp" placeholder="—" type="number" inputmode="numeric"><input class="sinp" placeholder="1–10" type="number" inputmode="numeric"><button class="chk" onclick="togChk(this)">✓</button></div><div class="sgrid"><div class="snum">2</div><input class="sinp" placeholder="—" type="number" inputmode="decimal"><input class="sinp" placeholder="—" type="number" inputmode="numeric"><input class="sinp" placeholder="1–10" type="number" inputmode="numeric"><button class="chk" onclick="togChk(this)">✓</button></div><div class="sgrid"><div class="snum">3</div><input class="sinp" placeholder="—" type="number" inputmode="decimal"><input class="sinp" placeholder="—" type="number" inputmode="numeric"><input class="sinp" placeholder="1–10" type="number" inputmode="numeric"><button class="chk" onclick="togChk(this)">✓</button></div><div class="enotes"><textarea placeholder="Notas..."></textarea></div></div>
+        <div class="ediv"></div>
+        <div class="erow"><div class="ehd"><div class="enum">3</div><div><div class="ename">Jalón al Pecho</div><div class="etarget">3 × 10–12 reps</div></div></div><div class="sgrid"><div class="shd">S</div><div class="shd">Kg</div><div class="shd">Reps</div><div class="shd">RPE</div><div></div></div><div class="sgrid"><div class="snum">1</div><input class="sinp" placeholder="—" type="number" inputmode="decimal"><input class="sinp" placeholder="—" type="number" inputmode="numeric"><input class="sinp" placeholder="1–10" type="number" inputmode="numeric"><button class="chk" onclick="togChk(this)">✓</button></div><div class="sgrid"><div class="snum">2</div><input class="sinp" placeholder="—" type="number" inputmode="decimal"><input class="sinp" placeholder="—" type="number" inputmode="numeric"><input class="sinp" placeholder="1–10" type="number" inputmode="numeric"><button class="chk" onclick="togChk(this)">✓</button></div><div class="sgrid"><div class="snum">3</div><input class="sinp" placeholder="—" type="number" inputmode="decimal"><input class="sinp" placeholder="—" type="number" inputmode="numeric"><input class="sinp" placeholder="1–10" type="number" inputmode="numeric"><button class="chk" onclick="togChk(this)">✓</button></div><div class="enotes"><textarea placeholder="Notas..."></textarea></div></div>
+        <div class="ediv"></div>
+        <div class="erow"><div class="ehd"><div class="enum">4</div><div><div class="ename">Elevación Lateral</div><div class="etarget">3 × 12–15 reps</div></div></div><div class="sgrid"><div class="shd">S</div><div class="shd">Kg</div><div class="shd">Reps</div><div class="shd">RPE</div><div></div></div><div class="sgrid"><div class="snum">1</div><input class="sinp" placeholder="—" type="number" inputmode="decimal"><input class="sinp" placeholder="—" type="number" inputmode="numeric"><input class="sinp" placeholder="1–10" type="number" inputmode="numeric"><button class="chk" onclick="togChk(this)">✓</button></div><div class="sgrid"><div class="snum">2</div><input class="sinp" placeholder="—" type="number" inputmode="decimal"><input class="sinp" placeholder="—" type="number" inputmode="numeric"><input class="sinp" placeholder="1–10" type="number" inputmode="numeric"><button class="chk" onclick="togChk(this)">✓</button></div><div class="sgrid"><div class="snum">3</div><input class="sinp" placeholder="—" type="number" inputmode="decimal"><input class="sinp" placeholder="—" type="number" inputmode="numeric"><input class="sinp" placeholder="1–10" type="number" inputmode="numeric"><button class="chk" onclick="togChk(this)">✓</button></div><div class="enotes"><textarea placeholder="Notas..."></textarea></div></div>
+        <div class="ediv"></div>
+        <div class="erow"><div class="ehd"><div class="enum">5</div><div><div class="ename">Curl Bíceps Mancuernas</div><div class="etarget">2 × 10–12 reps</div></div></div><div class="sgrid"><div class="shd">S</div><div class="shd">Kg</div><div class="shd">Reps</div><div class="shd">RPE</div><div></div></div><div class="sgrid"><div class="snum">1</div><input class="sinp" placeholder="—" type="number" inputmode="decimal"><input class="sinp" placeholder="—" type="number" inputmode="numeric"><input class="sinp" placeholder="1–10" type="number" inputmode="numeric"><button class="chk" onclick="togChk(this)">✓</button></div><div class="sgrid"><div class="snum">2</div><input class="sinp" placeholder="—" type="number" inputmode="decimal"><input class="sinp" placeholder="—" type="number" inputmode="numeric"><input class="sinp" placeholder="1–10" type="number" inputmode="numeric"><button class="chk" onclick="togChk(this)">✓</button></div><div class="enotes"><textarea placeholder="Notas..."></textarea></div></div>
+        <div class="ediv"></div>
+        <div class="erow"><div class="ehd"><div class="enum">6</div><div><div class="ename">Crunch en el Suelo</div><div class="etarget">3 × 15–20 reps</div></div></div><div class="sgrid"><div class="shd">S</div><div class="shd">Reps</div><div class="shd">—</div><div class="shd">RPE</div><div></div></div><div class="sgrid"><div class="snum">1</div><input class="sinp" placeholder="—" type="number" inputmode="numeric"><input class="sinp" disabled style="opacity:.2"><input class="sinp" placeholder="1–10" type="number" inputmode="numeric"><button class="chk" onclick="togChk(this)">✓</button></div><div class="sgrid"><div class="snum">2</div><input class="sinp" placeholder="—" type="number" inputmode="numeric"><input class="sinp" disabled style="opacity:.2"><input class="sinp" placeholder="1–10" type="number" inputmode="numeric"><button class="chk" onclick="togChk(this)">✓</button></div><div class="sgrid"><div class="snum">3</div><input class="sinp" placeholder="—" type="number" inputmode="numeric"><input class="sinp" disabled style="opacity:.2"><input class="sinp" placeholder="1–10" type="number" inputmode="numeric"><button class="chk" onclick="togChk(this)">✓</button></div><div class="enotes"><textarea placeholder="Notas..."></textarea></div></div>
+        <div class="gnotes"><div class="gnotes-lbl">📝 Notas generales</div><textarea id="gn-d1" placeholder="¿Cómo fue tu primera sesión? ¿Qué fue fácil, qué fue difícil?..."></textarea></div>
+        <button class="sv-btn" onclick="saveSess('d1','Full Body A')">GUARDAR SESIÓN</button>
+      </div>
+    </div>
+
+    <!-- FULL BODY B -->
+    <div class="sess-card">
+      <div class="sess-hd" onclick="togSess('s2')"><div style="display:flex;align-items:center;gap:10px"><div class="sess-dot" style="background:var(--teal)"></div><div><div class="sess-lbl">Día 3</div><div class="sess-nm">Full Body B</div></div></div><button class="sess-tog" id="tg-s2">▾</button></div>
+      <div class="sess-bdy" id="bd-s2">
+        <div class="f-row"><div class="f-col"><div class="f-lbl">Fecha</div><input type="date" class="f-inp" id="d2-date"></div><div class="f-col"><div class="f-lbl">Energía</div><select class="f-inp" id="d2-modo"><option>💪 Alta</option><option>😐 Normal</option><option>😴 Baja</option></select></div></div>
+        <div class="f-lbl" style="margin-bottom:7px">¿Cómo te sentiste?</div>
+        <div class="feel-row" id="feel-d2"><button class="feel-btn" onclick="setFeel('d2',1)">😫<span class="feel-lbl">Pesado</span></button><button class="feel-btn" onclick="setFeel('d2',2)">😐<span class="feel-lbl">Regular</span></button><button class="feel-btn" onclick="setFeel('d2',3)">💪<span class="feel-lbl">Bien</span></button><button class="feel-btn" onclick="setFeel('d2',4)">🔥<span class="feel-lbl">Brutal</span></button></div>
+        <div class="erow"><div class="ehd"><div class="enum">1</div><div><div class="ename">Prensa de Pierna</div><div class="etarget">3 × 10–12 reps</div></div></div><div class="sgrid"><div class="shd">S</div><div class="shd">Kg</div><div class="shd">Reps</div><div class="shd">RPE</div><div></div></div><div class="sgrid"><div class="snum">1</div><input class="sinp" placeholder="—" type="number" inputmode="decimal"><input class="sinp" placeholder="—" type="number" inputmode="numeric"><input class="sinp" placeholder="1–10" type="number" inputmode="numeric"><button class="chk" onclick="togChk(this)">✓</button></div><div class="sgrid"><div class="snum">2</div><input class="sinp" placeholder="—" type="number" inputmode="decimal"><input class="sinp" placeholder="—" type="number" inputmode="numeric"><input class="sinp" placeholder="1–10" type="number" inputmode="numeric"><button class="chk" onclick="togChk(this)">✓</button></div><div class="sgrid"><div class="snum">3</div><input class="sinp" placeholder="—" type="number" inputmode="decimal"><input class="sinp" placeholder="—" type="number" inputmode="numeric"><input class="sinp" placeholder="1–10" type="number" inputmode="numeric"><button class="chk" onclick="togChk(this)">✓</button></div><div class="enotes"><textarea placeholder="Notas..."></textarea></div></div>
+        <div class="ediv"></div>
+        <div class="erow"><div class="ehd"><div class="enum">2</div><div><div class="ename">Remo en Polea</div><div class="etarget">3 × 10–12 reps</div></div></div><div class="sgrid"><div class="shd">S</div><div class="shd">Kg</div><div class="shd">Reps</div><div class="shd">RPE</div><div></div></div><div class="sgrid"><div class="snum">1</div><input class="sinp" placeholder="—" type="number" inputmode="decimal"><input class="sinp" placeholder="—" type="number" inputmode="numeric"><input class="sinp" placeholder="1–10" type="number" inputmode="numeric"><button class="chk" onclick="togChk(this)">✓</button></div><div class="sgrid"><div class="snum">2</div><input class="sinp" placeholder="—" type="number" inputmode="decimal"><input class="sinp" placeholder="—" type="number" inputmode="numeric"><input class="sinp" placeholder="1–10" type="number" inputmode="numeric"><button class="chk" onclick="togChk(this)">✓</button></div><div class="sgrid"><div class="snum">3</div><input class="sinp" placeholder="—" type="number" inputmode="decimal"><input class="sinp" placeholder="—" type="number" inputmode="numeric"><input class="sinp" placeholder="1–10" type="number" inputmode="numeric"><button class="chk" onclick="togChk(this)">✓</button></div><div class="enotes"><textarea placeholder="Notas..."></textarea></div></div>
+        <div class="ediv"></div>
+        <div class="erow"><div class="ehd"><div class="enum">3</div><div><div class="ename">Press de Hombro Máquina</div><div class="etarget">3 × 10–12 reps</div></div></div><div class="sgrid"><div class="shd">S</div><div class="shd">Kg</div><div class="shd">Reps</div><div class="shd">RPE</div><div></div></div><div class="sgrid"><div class="snum">1</div><input class="sinp" placeholder="—" type="number" inputmode="decimal"><input class="sinp" placeholder="—" type="number" inputmode="numeric"><input class="sinp" placeholder="1–10" type="number" inputmode="numeric"><button class="chk" onclick="togChk(this)">✓</button></div><div class="sgrid"><div class="snum">2</div><input class="sinp" placeholder="—" type="number" inputmode="decimal"><input class="sinp" placeholder="—" type="number" inputmode="numeric"><input class="sinp" placeholder="1–10" type="number" inputmode="numeric"><button class="chk" onclick="togChk(this)">✓</button></div><div class="sgrid"><div class="snum">3</div><input class="sinp" placeholder="—" type="number" inputmode="decimal"><input class="sinp" placeholder="—" type="number" inputmode="numeric"><input class="sinp" placeholder="1–10" type="number" inputmode="numeric"><button class="chk" onclick="togChk(this)">✓</button></div><div class="enotes"><textarea placeholder="Notas..."></textarea></div></div>
+        <div class="ediv"></div>
+        <div class="erow"><div class="ehd"><div class="enum">4</div><div><div class="ename">Curl Femoral</div><div class="etarget">3 × 12–15 reps</div></div></div><div class="sgrid"><div class="shd">S</div><div class="shd">Kg</div><div class="shd">Reps</div><div class="shd">RPE</div><div></div></div><div class="sgrid"><div class="snum">1</div><input class="sinp" placeholder="—" type="number" inputmode="decimal"><input class="sinp" placeholder="—" type="number" inputmode="numeric"><input class="sinp" placeholder="1–10" type="number" inputmode="numeric"><button class="chk" onclick="togChk(this)">✓</button></div><div class="sgrid"><div class="snum">2</div><input class="sinp" placeholder="—" type="number" inputmode="decimal"><input class="sinp" placeholder="—" type="number" inputmode="numeric"><input class="sinp" placeholder="1–10" type="number" inputmode="numeric"><button class="chk" onclick="togChk(this)">✓</button></div><div class="sgrid"><div class="snum">3</div><input class="sinp" placeholder="—" type="number" inputmode="decimal"><input class="sinp" placeholder="—" type="number" inputmode="numeric"><input class="sinp" placeholder="1–10" type="number" inputmode="numeric"><button class="chk" onclick="togChk(this)">✓</button></div><div class="enotes"><textarea placeholder="Notas..."></textarea></div></div>
+        <div class="ediv"></div>
+        <div class="erow"><div class="ehd"><div class="enum">5</div><div><div class="ename">Extensión de Tríceps</div><div class="etarget">2 × 12–15 reps</div></div></div><div class="sgrid"><div class="shd">S</div><div class="shd">Kg</div><div class="shd">Reps</div><div class="shd">RPE</div><div></div></div><div class="sgrid"><div class="snum">1</div><input class="sinp" placeholder="—" type="number" inputmode="decimal"><input class="sinp" placeholder="—" type="number" inputmode="numeric"><input class="sinp" placeholder="1–10" type="number" inputmode="numeric"><button class="chk" onclick="togChk(this)">✓</button></div><div class="sgrid"><div class="snum">2</div><input class="sinp" placeholder="—" type="number" inputmode="decimal"><input class="sinp" placeholder="—" type="number" inputmode="numeric"><input class="sinp" placeholder="1–10" type="number" inputmode="numeric"><button class="chk" onclick="togChk(this)">✓</button></div><div class="enotes"><textarea placeholder="Notas..."></textarea></div></div>
+        <div class="ediv"></div>
+        <div class="erow"><div class="ehd"><div class="enum">6</div><div><div class="ename">Plancha Frontal</div><div class="etarget">3 × 30–60 seg</div></div></div><div class="sgrid"><div class="shd">S</div><div class="shd">Seg</div><div class="shd">—</div><div class="shd">RPE</div><div></div></div><div class="sgrid"><div class="snum">1</div><input class="sinp" placeholder="—" type="number" inputmode="numeric"><input class="sinp" disabled style="opacity:.2"><input class="sinp" placeholder="1–10" type="number" inputmode="numeric"><button class="chk" onclick="togChk(this)">✓</button></div><div class="sgrid"><div class="snum">2</div><input class="sinp" placeholder="—" type="number" inputmode="numeric"><input class="sinp" disabled style="opacity:.2"><input class="sinp" placeholder="1–10" type="number" inputmode="numeric"><button class="chk" onclick="togChk(this)">✓</button></div><div class="sgrid"><div class="snum">3</div><input class="sinp" placeholder="—" type="number" inputmode="numeric"><input class="sinp" disabled style="opacity:.2"><input class="sinp" placeholder="1–10" type="number" inputmode="numeric"><button class="chk" onclick="togChk(this)">✓</button></div><div class="enotes"><textarea placeholder="Notas..."></textarea></div></div>
+        <div class="gnotes"><div class="gnotes-lbl">📝 Notas generales</div><textarea id="gn-d2" placeholder="¿Cómo fue la sesión?..."></textarea></div>
+        <button class="sv-btn" onclick="saveSess('d2','Full Body B')">GUARDAR SESIÓN</button>
+      </div>
+    </div>
+
+    <!-- FULL BODY C -->
+    <div class="sess-card">
+      <div class="sess-hd" onclick="togSess('s3')"><div style="display:flex;align-items:center;gap:10px"><div class="sess-dot" style="background:var(--teal)"></div><div><div class="sess-lbl">Día 5</div><div class="sess-nm">Full Body C</div></div></div><button class="sess-tog" id="tg-s3">▾</button></div>
+      <div class="sess-bdy" id="bd-s3">
+        <div class="f-row"><div class="f-col"><div class="f-lbl">Fecha</div><input type="date" class="f-inp" id="d3-date"></div><div class="f-col"><div class="f-lbl">Energía</div><select class="f-inp" id="d3-modo"><option>💪 Alta</option><option>😐 Normal</option><option>😴 Baja</option></select></div></div>
+        <div class="f-lbl" style="margin-bottom:7px">¿Cómo te sentiste?</div>
+        <div class="feel-row" id="feel-d3"><button class="feel-btn" onclick="setFeel('d3',1)">😫<span class="feel-lbl">Pesado</span></button><button class="feel-btn" onclick="setFeel('d3',2)">😐<span class="feel-lbl">Regular</span></button><button class="feel-btn" onclick="setFeel('d3',3)">💪<span class="feel-lbl">Bien</span></button><button class="feel-btn" onclick="setFeel('d3',4)">🔥<span class="feel-lbl">Brutal</span></button></div>
+        <div class="erow"><div class="ehd"><div class="enum">1</div><div><div class="ename">Peso Muerto Rumano</div><div class="etarget">3 × 10–12 reps</div></div></div><div class="sgrid"><div class="shd">S</div><div class="shd">Kg</div><div class="shd">Reps</div><div class="shd">RPE</div><div></div></div><div class="sgrid"><div class="snum">1</div><input class="sinp" placeholder="—" type="number" inputmode="decimal"><input class="sinp" placeholder="—" type="number" inputmode="numeric"><input class="sinp" placeholder="1–10" type="number" inputmode="numeric"><button class="chk" onclick="togChk(this)">✓</button></div><div class="sgrid"><div class="snum">2</div><input class="sinp" placeholder="—" type="number" inputmode="decimal"><input class="sinp" placeholder="—" type="number" inputmode="numeric"><input class="sinp" placeholder="1–10" type="number" inputmode="numeric"><button class="chk" onclick="togChk(this)">✓</button></div><div class="sgrid"><div class="snum">3</div><input class="sinp" placeholder="—" type="number" inputmode="decimal"><input class="sinp" placeholder="—" type="number" inputmode="numeric"><input class="sinp" placeholder="1–10" type="number" inputmode="numeric"><button class="chk" onclick="togChk(this)">✓</button></div><div class="enotes"><textarea placeholder="Notas..."></textarea></div></div>
+        <div class="ediv"></div>
+        <div class="erow"><div class="ehd"><div class="enum">2</div><div><div class="ename">Press Inclinado Mancuernas</div><div class="etarget">3 × 10–12 reps</div></div></div><div class="sgrid"><div class="shd">S</div><div class="shd">Kg</div><div class="shd">Reps</div><div class="shd">RPE</div><div></div></div><div class="sgrid"><div class="snum">1</div><input class="sinp" placeholder="—" type="number" inputmode="decimal"><input class="sinp" placeholder="—" type="number" inputmode="numeric"><input class="sinp" placeholder="1–10" type="number" inputmode="numeric"><button class="chk" onclick="togChk(this)">✓</button></div><div class="sgrid"><div class="snum">2</div><input class="sinp" placeholder="—" type="number" inputmode="decimal"><input class="sinp" placeholder="—" type="number" inputmode="numeric"><input class="sinp" placeholder="1–10" type="number" inputmode="numeric"><button class="chk" onclick="togChk(this)">✓</button></div><div class="sgrid"><div class="snum">3</div><input class="sinp" placeholder="—" type="number" inputmode="decimal"><input class="sinp" placeholder="—" type="number" inputmode="numeric"><input class="sinp" placeholder="1–10" type="number" inputmode="numeric"><button class="chk" onclick="togChk(this)">✓</button></div><div class="enotes"><textarea placeholder="Notas..."></textarea></div></div>
+        <div class="ediv"></div>
+        <div class="erow"><div class="ehd"><div class="enum">3</div><div><div class="ename">Remo en Máquina</div><div class="etarget">3 × 10–12 reps</div></div></div><div class="sgrid"><div class="shd">S</div><div class="shd">Kg</div><div class="shd">Reps</div><div class="shd">RPE</div><div></div></div><div class="sgrid"><div class="snum">1</div><input class="sinp" placeholder="—" type="number" inputmode="decimal"><input class="sinp" placeholder="—" type="number" inputmode="numeric"><input class="sinp" placeholder="1–10" type="number" inputmode="numeric"><button class="chk" onclick="togChk(this)">✓</button></div><div class="sgrid"><div class="snum">2</div><input class="sinp" placeholder="—" type="number" inputmode="decimal"><input class="sinp" placeholder="—" type="number" inputmode="numeric"><input class="sinp" placeholder="1–10" type="number" inputmode="numeric"><button class="chk" onclick="togChk(this)">✓</button></div><div class="sgrid"><div class="snum">3</div><input class="sinp" placeholder="—" type="number" inputmode="decimal"><input class="sinp" placeholder="—" type="number" inputmode="numeric"><input class="sinp" placeholder="1–10" type="number" inputmode="numeric"><button class="chk" onclick="togChk(this)">✓</button></div><div class="enotes"><textarea placeholder="Notas..."></textarea></div></div>
+        <div class="ediv"></div>
+        <div class="erow"><div class="ehd"><div class="enum">4</div><div><div class="ename">Abducción Cadera</div><div class="etarget">3 × 12–15 reps</div></div></div><div class="sgrid"><div class="shd">S</div><div class="shd">Kg</div><div class="shd">Reps</div><div class="shd">RPE</div><div></div></div><div class="sgrid"><div class="snum">1</div><input class="sinp" placeholder="—" type="number" inputmode="decimal"><input class="sinp" placeholder="—" type="number" inputmode="numeric"><input class="sinp" placeholder="1–10" type="number" inputmode="numeric"><button class="chk" onclick="togChk(this)">✓</button></div><div class="sgrid"><div class="snum">2</div><input class="sinp" placeholder="—" type="number" inputmode="decimal"><input class="sinp" placeholder="—" type="number" inputmode="numeric"><input class="sinp" placeholder="1–10" type="number" inputmode="numeric"><button class="chk" onclick="togChk(this)">✓</button></div><div class="sgrid"><div class="snum">3</div><input class="sinp" placeholder="—" type="number" inputmode="decimal"><input class="sinp" placeholder="—" type="number" inputmode="numeric"><input class="sinp" placeholder="1–10" type="number" inputmode="numeric"><button class="chk" onclick="togChk(this)">✓</button></div><div class="enotes"><textarea placeholder="Notas..."></textarea></div></div>
+        <div class="ediv"></div>
+        <div class="erow"><div class="ehd"><div class="enum">5</div><div><div class="ename">Curl Martillo</div><div class="etarget">2 × 12–15 reps</div></div></div><div class="sgrid"><div class="shd">S</div><div class="shd">Kg</div><div class="shd">Reps</div><div class="shd">RPE</div><div></div></div><div class="sgrid"><div class="snum">1</div><input class="sinp" placeholder="—" type="number" inputmode="decimal"><input class="sinp" placeholder="—" type="number" inputmode="numeric"><input class="sinp" placeholder="1–10" type="number" inputmode="numeric"><button class="chk" onclick="togChk(this)">✓</button></div><div class="sgrid"><div class="snum">2</div><input class="sinp" placeholder="—" type="number" inputmode="decimal"><input class="sinp" placeholder="—" type="number" inputmode="numeric"><input class="sinp" placeholder="1–10" type="number" inputmode="numeric"><button class="chk" onclick="togChk(this)">✓</button></div><div class="enotes"><textarea placeholder="Notas..."></textarea></div></div>
+        <div class="ediv"></div>
+        <div class="erow"><div class="ehd"><div class="enum">6</div><div><div class="ename">Elevación de Piernas</div><div class="etarget">3 × 15–20 reps</div></div></div><div class="sgrid"><div class="shd">S</div><div class="shd">Reps</div><div class="shd">—</div><div class="shd">RPE</div><div></div></div><div class="sgrid"><div class="snum">1</div><input class="sinp" placeholder="—" type="number" inputmode="numeric"><input class="sinp" disabled style="opacity:.2"><input class="sinp" placeholder="1–10" type="number" inputmode="numeric"><button class="chk" onclick="togChk(this)">✓</button></div><div class="sgrid"><div class="snum">2</div><input class="sinp" placeholder="—" type="number" inputmode="numeric"><input class="sinp" disabled style="opacity:.2"><input class="sinp" placeholder="1–10" type="number" inputmode="numeric"><button class="chk" onclick="togChk(this)">✓</button></div><div class="sgrid"><div class="snum">3</div><input class="sinp" placeholder="—" type="number" inputmode="numeric"><input class="sinp" disabled style="opacity:.2"><input class="sinp" placeholder="1–10" type="number" inputmode="numeric"><button class="chk" onclick="togChk(this)">✓</button></div><div class="enotes"><textarea placeholder="Notas..."></textarea></div></div>
+        <div class="gnotes"><div class="gnotes-lbl">📝 Notas generales</div><textarea id="gn-d3" placeholder="¿Cómo cerró la semana?..."></textarea></div>
+        <button class="sv-btn" onclick="saveSess('d3','Full Body C')">GUARDAR SESIÓN</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="bsec" id="bt-hist" style="padding:4px 16px 80px">
+    <div id="hist-list"><div class="empty"><span class="empty-ico">📋</span>Sin sesiones aún.<br>¡Registra tu primer entrenamiento!</div></div>
+  </div>
+
+  <div class="bsec" id="bt-stats" style="padding:4px 16px 80px">
+    <div class="big-stat"><div class="big-stat-val" id="stat-total">0</div><div class="big-stat-lbl">sesiones completadas en total</div></div>
+    <div class="kpi-pair">
+      <div class="kpi2"><div class="kpi2-val" id="stat-weeks">0</div><div class="kpi2-lbl">Semanas activas</div></div>
+      <div class="kpi2"><div class="kpi2-val" id="stat-thisweek">0/3</div><div class="kpi2-lbl">Esta semana</div></div>
+    </div>
+    <div style="font-family:'Bebas Neue';font-size:15px;letter-spacing:1px;color:var(--text);margin-bottom:8px">SESIONES POR TIPO</div>
+    <div class="pr-row"><div class="pr-hd"><span>Full Body A</span><span id="pc-d1">0</span></div><div class="pr-track"><div class="pr-fill" id="pf-d1" style="width:0%"></div></div></div>
+    <div class="pr-row"><div class="pr-hd"><span>Full Body B</span><span id="pc-d2">0</span></div><div class="pr-track"><div class="pr-fill" id="pf-d2" style="width:0%"></div></div></div>
+    <div class="pr-row"><div class="pr-hd"><span>Full Body C</span><span id="pc-d3">0</span></div><div class="pr-track"><div class="pr-fill" id="pf-d3" style="width:0%"></div></div></div>
+  </div>
+  <footer><strong>BASE 360</strong> · Gabu Fitness</footer>
+</div>
+
+<!-- ══ PESO ══ -->
+<div class="page" id="page-peso">
+  <div class="pg-hd"><button class="back" onclick="goTo('page-home')">‹</button><span class="pg-title">PESO DIARIO</span></div>
+  <div style="padding:16px 16px 80px;max-width:580px;margin:0 auto">
+    <div class="wk-bar" style="margin-bottom:12px">
+      <button class="wknav" onclick="changeWeek(-1)">‹</button>
+      <div><div class="wk-num" id="weekLabel2">SEMANA 1</div><div class="wk-dates" id="weekDates2"></div></div>
+      <button class="wknav" onclick="changeWeek(1)">›</button>
+    </div>
+    <div class="peso-form">
+      <div class="peso-title">NUEVO REGISTRO</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:9px">
+        <div><div class="f-lbl" style="margin-bottom:3px">Fecha</div><input type="date" id="w-date" class="f-inp"></div>
+        <div><div class="f-lbl" style="margin-bottom:3px">Peso (kg)</div><input type="number" id="w-input" inputmode="decimal" step="0.1" placeholder="ej. 74.2" class="f-inp" style="font-family:'Barlow Condensed';font-size:18px;font-weight:700;color:var(--teal)"></div>
+      </div>
+      <div><div class="f-lbl" style="margin-bottom:3px">Nota (opcional)</div><input type="text" id="w-note" placeholder="ej. en ayunas, antes del gym..." class="f-inp" style="margin-bottom:9px"></div>
+      <button onclick="saveWeight()" style="width:100%;padding:12px;background:linear-gradient(135deg,var(--teal-dim),var(--teal));color:var(--dark);border:none;border-radius:var(--r);cursor:pointer;font-family:'Bebas Neue';font-size:19px;letter-spacing:1.5px">GUARDAR PESO</button>
+    </div>
+    <div class="peso-form">
+      <div class="peso-title">GRÁFICA</div>
+      <canvas id="weight-chart" style="width:100%;height:190px;display:block"></canvas>
+    </div>
+    <div style="font-family:'Bebas Neue';font-size:16px;letter-spacing:1px;color:var(--text);margin-bottom:8px">HISTORIAL</div>
+    <div id="weight-list"></div>
+  </div>
+  <footer><strong>BASE 360</strong> · Gabu Fitness</footer>
+</div>
+
+<!-- ══ FOTOS ══ -->
+<div class="page" id="page-fotos">
+  <div class="pg-hd"><button class="back" onclick="goTo('page-home')">‹</button><span class="pg-title">FOTOS PROGRESO</span></div>
+  <div style="padding:16px 16px 80px;max-width:580px;margin:0 auto">
+    <div class="photo-tips">📌 <strong>Tips:</strong> Misma hora · Misma luz · Misma ropa · Mismo lugar<br>Ángulos: Frente · Perfil · Espalda</div>
+    <div class="peso-form">
+      <div class="peso-title">SUBIR FOTO</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:9px">
+        <div><div class="f-lbl" style="margin-bottom:3px">Semana #</div><input type="number" id="ph-week" min="1" placeholder="1" class="f-inp" style="font-family:'Barlow Condensed';font-size:18px;font-weight:700;color:var(--teal)"></div>
+        <div><div class="f-lbl" style="margin-bottom:3px">Fecha</div><input type="date" id="ph-date" class="f-inp"></div>
+      </div>
+      <div style="margin-bottom:9px"><div class="f-lbl" style="margin-bottom:3px">Tipo</div><select id="ph-tipo" class="f-inp"><option>Frente</option><option>Perfil derecho</option><option>Perfil izquierdo</option><option>Espalda</option></select></div>
+      <div style="margin-bottom:10px"><div class="f-lbl" style="margin-bottom:3px">Nota</div><input type="text" id="ph-note" placeholder="ej. semana 1 completada!" class="f-inp"></div>
+      <label style="display:flex;flex-direction:column;align-items:center;background:rgba(0,194,168,0.05);border:2px dashed rgba(0,194,168,0.22);border-radius:11px;padding:18px;cursor:pointer;margin-bottom:10px">
+        <span style="font-size:24px;margin-bottom:5px">📷</span>
+        <span style="font-family:'Barlow Condensed';font-size:13px;font-weight:700;color:var(--teal2);text-transform:uppercase;letter-spacing:.5px">Toca para elegir foto</span>
+        <span style="font-size:11px;color:var(--muted);margin-top:2px">Desde galería o cámara</span>
+        <input type="file" id="ph-file" accept="image/*" capture="environment" style="display:none" onchange="previewPhoto(this)">
+      </label>
+      <img id="ph-preview" style="display:none;width:100%;border-radius:11px;margin-bottom:10px;aspect-ratio:3/4;object-fit:cover">
+      <button id="ph-save-btn" onclick="savePhoto()" style="width:100%;padding:12px;background:linear-gradient(135deg,var(--teal-dim),var(--teal));color:var(--dark);border:none;border-radius:var(--r);cursor:pointer;font-family:'Bebas Neue';font-size:19px;letter-spacing:1.5px">GUARDAR FOTO</button>
+    </div>
+    <div style="font-family:'Bebas Neue';font-size:16px;letter-spacing:1px;color:var(--text);margin-bottom:8px">GALERÍA</div>
+    <div id="photo-grid"></div>
+  </div>
+  <footer><strong>BASE 360</strong> · Gabu Fitness</footer>
+</div>
+
+<script>
+var feels={},currentWeek=1;
+var sessions=JSON.parse(localStorage.getItem('base360_sessions')||'[]');
+var weightLog=JSON.parse(localStorage.getItem('base360_weight')||'[]');
+var photoLog=JSON.parse(localStorage.getItem('base360_photos')||'[]');
+
+setTimeout(()=>document.getElementById('splash').classList.add('hide'),1800);
+
+function goTo(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+  if(id==='page-peso')setTimeout(()=>{renderWeightChart();renderWeightList();},60);
+  if(id==='page-fotos')setTimeout(renderPhotos,60);
+}
+function swPlan(id,btn){
+  document.querySelectorAll('#page-plan .tcnt').forEach(c=>c.classList.remove('on'));
+  document.querySelectorAll('#page-plan .tbtn').forEach(b=>b.classList.remove('on'));
+  document.getElementById(id).classList.add('on');btn.classList.add('on');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function swNut(id,btn){
+  document.querySelectorAll('#page-nut .tcnt').forEach(c=>c.classList.remove('on'));
+  document.querySelectorAll('#page-nut .tbtn').forEach(b=>b.classList.remove('on'));
+  document.getElementById(id).classList.add('on');btn.classList.add('on');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function swBit(id,btn){
+  document.querySelectorAll('.bsec').forEach(c=>c.classList.remove('on'));
+  document.querySelectorAll('.bit-tab').forEach(b=>b.classList.remove('on'));
+  document.getElementById(id).classList.add('on');btn.classList.add('on');
+  if(id==='bt-hist')renderHist();
+  if(id==='bt-stats')renderStats();
+}
+function togSess(id){
+  var bd=document.getElementById('bd-'+id);var tg=document.getElementById('tg-'+id);
+  var open=bd.classList.contains('open');
+  bd.classList.toggle('open',!open);tg.classList.toggle('open',!open);
+}
+function togChk(btn){btn.classList.toggle('done')}
+function setFeel(day,val){
+  feels[day]=val;
+  document.getElementById('feel-'+day).querySelectorAll('.feel-btn').forEach((b,i)=>b.classList.toggle('on',i+1===val));
+}
+function changeWeek(dir){
+  currentWeek=Math.max(1,currentWeek+dir);
+  ['weekLabel','weekLabel2'].forEach(id=>{var el=document.getElementById(id);if(el)el.textContent='SEMANA '+currentWeek;});
+  ['weekDates','weekDates2'].forEach(id=>{
+    var el=document.getElementById(id);if(!el)return;
+    var base=new Date();base.setDate(base.getDate()-base.getDay()+1+(currentWeek-1)*7);
+    var end=new Date(base);end.setDate(base.getDate()+6);
+    var fmt=d=>d.getDate()+'/'+(d.getMonth()+1);
+    el.textContent=fmt(base)+' — '+fmt(end);
+  });
+}
+function saveSess(dayId,dayName){
+  var date=document.getElementById(dayId+'-date').value;
+  var notes=document.getElementById('gn-'+dayId).value;
+  var feel=feels[dayId]||0;
+  var fmap={1:'😫',2:'😐',3:'💪',4:'🔥'};
+  var num=dayId==='d1'?1:dayId==='d2'?2:3;
+  var bd=document.getElementById('bd-s'+num);
+  var exHds=bd.querySelectorAll('.ehd');
+  var exData=[];
+  exHds.forEach(hd=>{
+    var nm=hd.querySelector('.ename');var tgt=hd.querySelector('.etarget');
+    var parent=hd.parentElement;
+    var rows=parent.querySelectorAll('.sgrid:not(:first-of-type)');
+    var series=[];
+    rows.forEach(row=>{var inps=row.querySelectorAll('.sinp');if(inps.length>=2)series.push({kg:inps[0].value,reps:inps[1].value,rpe:inps[2]?inps[2].value:''});});
+    var noteEl=parent.querySelector('.enotes textarea');
+    if(nm)exData.push({name:nm.textContent,target:tgt?tgt.textContent:'',series,note:noteEl?noteEl.value:''});
+  });
+  sessions.unshift({id:Date.now(),week:currentWeek,day:dayName,dayId,date:date||new Date().toISOString().split('T')[0],feel,feelEmoji:fmap[feel]||'',notes,exercises:exData});
+  localStorage.setItem('base360_sessions',JSON.stringify(sessions));
+  var btn=event.target;var orig=btn.textContent;
+  btn.textContent='✓ GUARDADA';btn.style.opacity='.7';
+  setTimeout(()=>{btn.textContent=orig;btn.style.opacity='';},2000);
+}
+function renderHist(){
+  var list=document.getElementById('hist-list');
+  if(!sessions.length){list.innerHTML='<div class="empty"><span class="empty-ico">📋</span>Sin sesiones aún.</div>';return;}
+  list.innerHTML=sessions.map(s=>{
+    var exH=s.exercises?s.exercises.map(ex=>{
+      var pills=ex.series.filter(sr=>sr.kg||sr.reps).map((sr,i)=>`<span class="hpill">S${i+1}: ${sr.kg||'—'}kg×${sr.reps||'—'}</span>`).join('');
+      return pills?`<div class="hex"><div class="hex-name">${ex.name}</div><div class="hpills">${pills}</div>${ex.note?`<div class="hnote">${ex.note}</div>`:''}</div>`:'';
+    }).join(''):'';
+    return `<div class="hcard"><div class="hhd"><div><div class="htitle"><span style="width:7px;height:7px;border-radius:50%;background:var(--teal);display:inline-block;flex-shrink:0"></span>${s.day}</div><div class="hdate">Sem ${s.week} · ${s.date}</div></div><div style="font-size:20px">${s.feelEmoji}</div></div><div class="hbody">${exH}${s.notes?`<div class="hnote">${s.notes}</div>`:''}</div></div>`;
+  }).join('');
+}
+function renderStats(){
+  var t=sessions.length;
+  document.getElementById('stat-total').textContent=t;
+  document.getElementById('stat-weeks').textContent=new Set(sessions.map(s=>s.week)).size;
+  var tw=sessions.filter(s=>s.week===currentWeek).length;
+  document.getElementById('stat-thisweek').textContent=Math.min(tw,3)+'/3';
+  ['d1','d2','d3'].forEach(d=>{
+    var cnt=sessions.filter(s=>s.dayId===d).length;
+    var mx=Math.max(...['d1','d2','d3'].map(x=>sessions.filter(s=>s.dayId===x).length),1);
+    document.getElementById('pc-'+d).textContent=cnt+' sesiones';
+    document.getElementById('pf-'+d).style.width=Math.round(cnt/mx*100)+'%';
+  });
+}
+function saveWeight(){
+  var val=parseFloat(document.getElementById('w-input').value);
+  var date=document.getElementById('w-date').value||new Date().toISOString().split('T')[0];
+  var note=document.getElementById('w-note').value;
+  if(!val||isNaN(val)){alert('Ingresa un peso válido');return;}
+  weightLog.unshift({id:Date.now(),date,peso:val,note});
+  localStorage.setItem('base360_weight',JSON.stringify(weightLog));
+  document.getElementById('w-input').value='';document.getElementById('w-note').value='';
+  renderWeightChart();renderWeightList();
+  var btn=event.target;btn.textContent='✓ GUARDADO';btn.style.opacity='.7';
+  setTimeout(()=>{btn.textContent='GUARDAR PESO';btn.style.opacity='';},2000);
+}
+function deleteWeight(id){
+  weightLog=weightLog.filter(w=>w.id!==id);
+  localStorage.setItem('base360_weight',JSON.stringify(weightLog));
+  renderWeightChart();renderWeightList();
+}
+function renderWeightChart(){
+  var canvas=document.getElementById('weight-chart');if(!canvas)return;
+  var ctx=canvas.getContext('2d');
+  var dpr=window.devicePixelRatio||1;
+  var W=canvas.offsetWidth,H=canvas.offsetHeight;
+  canvas.width=W*dpr;canvas.height=H*dpr;ctx.scale(dpr,dpr);ctx.clearRect(0,0,W,H);
+  var data=[...weightLog].reverse();
+  if(!data.length){ctx.fillStyle='#6A8E8A';ctx.font='13px Barlow';ctx.textAlign='center';ctx.fillText('Agrega tu primer registro',W/2,H/2);return;}
+  var pesos=data.map(d=>d.peso);
+  var minP=Math.min(...pesos)-1,maxP=Math.max(...pesos)+1;
+  var pad={t:20,r:14,b:38,l:46};
+  var cW=W-pad.l-pad.r,cH=H-pad.t-pad.b;
+  var toX=i=>pad.l+(data.length>1?i*(cW/(data.length-1)):cW/2);
+  var toY=v=>pad.t+cH-(((v-minP)/(maxP-minP))*cH);
+  ctx.strokeStyle='#1C2826';ctx.lineWidth=1;
+  for(var g=0;g<=4;g++){var gy=pad.t+(cH/4)*g;ctx.beginPath();ctx.moveTo(pad.l,gy);ctx.lineTo(pad.l+cW,gy);ctx.stroke();ctx.fillStyle='#6A8E8A';ctx.font='10px Barlow';ctx.textAlign='right';ctx.fillText((maxP-((maxP-minP)/4)*g).toFixed(1)+'kg',pad.l-4,gy+4);}
+  var grad=ctx.createLinearGradient(0,pad.t,0,pad.t+cH);grad.addColorStop(0,'rgba(0,194,168,0.18)');grad.addColorStop(1,'rgba(0,194,168,0)');
+  ctx.beginPath();ctx.moveTo(toX(0),toY(data[0].peso));data.forEach((d,i)=>{if(i>0)ctx.lineTo(toX(i),toY(d.peso));});ctx.lineTo(toX(data.length-1),pad.t+cH);ctx.lineTo(toX(0),pad.t+cH);ctx.closePath();ctx.fillStyle=grad;ctx.fill();
+  ctx.beginPath();ctx.strokeStyle='#00C2A8';ctx.lineWidth=2.5;ctx.lineJoin='round';data.forEach((d,i)=>{i===0?ctx.moveTo(toX(i),toY(d.peso)):ctx.lineTo(toX(i),toY(d.peso));});ctx.stroke();
+  data.forEach((d,i)=>{var x=toX(i),y=toY(d.peso);ctx.beginPath();ctx.arc(x,y,4,0,Math.PI*2);ctx.fillStyle='#00C2A8';ctx.fill();ctx.strokeStyle='#070C0B';ctx.lineWidth=1.5;ctx.stroke();if(data.length<=8||(i===0||i===data.length-1||i%Math.ceil(data.length/6)===0)){ctx.fillStyle='#EDF5F4';ctx.font='bold 10px Barlow';ctx.textAlign='center';ctx.fillText(d.peso+'kg',x,y-9);}if(data.length<=10){ctx.fillStyle='#6A8E8A';ctx.font='9px Barlow';ctx.textAlign='center';ctx.fillText(d.date.slice(5).replace('-','/'),x,pad.t+cH+15);}});
+  if(data.length>=2){var diff=(data[data.length-1].peso-data[0].peso).toFixed(1);ctx.fillStyle=diff>0?'#00C2A8':'#EF4444';ctx.font='bold 11px Barlow';ctx.textAlign='right';ctx.fillText((diff>0?'▲ +':'▼ ')+diff+' kg',W-pad.r,pad.t-4);}
+}
+function renderWeightList(){
+  var el=document.getElementById('weight-list');if(!el)return;
+  if(!weightLog.length){el.innerHTML='<div class="empty"><span class="empty-ico">⚖️</span>Sin registros.</div>';return;}
+  el.innerHTML=weightLog.map(w=>`<div style="display:flex;align-items:center;justify-content:space-between;padding:10px 12px;background:var(--dark2);border:1px solid var(--border);border-radius:9px;margin-bottom:7px"><div><div style="font-family:'Barlow Condensed';font-size:20px;font-weight:700;color:var(--teal)">${w.peso} <span style="font-size:13px;color:var(--muted)">kg</span></div><div style="font-size:11px;color:var(--muted);margin-top:2px">${w.date}${w.note?' · '+w.note:''}</div></div><button onclick="deleteWeight(${w.id})" style="background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.25);border-radius:7px;padding:5px 9px;font-size:12px;color:#EF4444;cursor:pointer">✕</button></div>`).join('');
+}
+function savePhoto(){
+  var week=parseInt(document.getElementById('ph-week').value)||1;
+  var date=document.getElementById('ph-date').value||new Date().toISOString().split('T')[0];
+  var note=document.getElementById('ph-note').value;
+  var tipo=document.getElementById('ph-tipo').value;
+  var file=document.getElementById('ph-file').files[0];
+  if(!file){alert('Selecciona una foto primero');return;}
+  var r=new FileReader();
+  r.onload=e=>{
+    photoLog.unshift({id:Date.now(),week,date,note,tipo,img:e.target.result});
+    localStorage.setItem('base360_photos',JSON.stringify(photoLog));
+    document.getElementById('ph-file').value='';document.getElementById('ph-note').value='';document.getElementById('ph-preview').style.display='none';
+    renderPhotos();
+    var btn=document.getElementById('ph-save-btn');btn.textContent='✓ FOTO GUARDADA';btn.style.opacity='.7';
+    setTimeout(()=>{btn.textContent='GUARDAR FOTO';btn.style.opacity='';},2000);
+  };
+  r.readAsDataURL(file);
+}
+function previewPhoto(input){
+  var prev=document.getElementById('ph-preview');
+  if(input.files&&input.files[0]){var rd=new FileReader();rd.onload=e=>{prev.src=e.target.result;prev.style.display='block';};rd.readAsDataURL(input.files[0]);}
+}
+function deletePhoto(id){
+  photoLog=photoLog.filter(p=>p.id!==id);
+  localStorage.setItem('base360_photos',JSON.stringify(photoLog));renderPhotos();
+}
+function renderPhotos(){
+  var el=document.getElementById('photo-grid');if(!el)return;
+  if(!photoLog.length){el.innerHTML='<div class="empty"><span class="empty-ico">📸</span>Sin fotos aún.</div>';return;}
+  var byWeek={};photoLog.forEach(p=>{if(!byWeek[p.week])byWeek[p.week]=[];byWeek[p.week].push(p);});
+  el.innerHTML=Object.keys(byWeek).sort((a,b)=>b-a).map(w=>`
+    <div style="margin-bottom:16px">
+      <div style="font-family:'Bebas Neue';font-size:15px;background:linear-gradient(135deg,var(--teal),var(--teal3));-webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:1px;margin-bottom:7px">SEMANA ${w}</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:7px">
+        ${byWeek[w].map(p=>`<div style="background:var(--dark2);border:1px solid var(--border);border-radius:11px;overflow:hidden"><img src="${p.img}" style="width:100%;aspect-ratio:3/4;object-fit:cover;display:block" loading="lazy"><div style="padding:7px 9px"><div style="font-family:'Barlow Condensed';font-size:11px;font-weight:700;color:var(--teal2);text-transform:uppercase;letter-spacing:.5px">${p.tipo}</div><div style="font-size:10px;color:var(--muted);margin-top:1px">${p.date}</div>${p.note?`<div style="font-size:11px;color:var(--subtle);margin-top:3px;font-style:italic">${p.note}</div>`:''}<button onclick="deletePhoto(${p.id})" style="margin-top:5px;background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.25);border-radius:6px;padding:3px 7px;font-size:10px;color:#EF4444;cursor:pointer;width:100%">✕ Eliminar</button></div></div>`).join('')}
+      </div>
+    </div>`).join('');
+}
+window.addEventListener('resize',()=>{if(document.getElementById('page-peso').classList.contains('active'))renderWeightChart();});
+changeWeek(0);
+</script>
+</body>
+</html>
