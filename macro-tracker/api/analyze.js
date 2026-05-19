@@ -1,14 +1,18 @@
-export default async function handler(req, res) {
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-  if (req.method === 'OPTIONS') return res.status(200).end();
-  if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
+exports.handler = async function(event) {
+  const headers = {
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Headers': 'Content-Type',
+    'Content-Type': 'application/json'
+  };
 
-  const { description } = req.body;
-  if (!description) return res.status(400).json({ error: 'Falta la descripción' });
+  if (event.httpMethod === 'OPTIONS') {
+    return { statusCode: 200, headers, body: '' };
+  }
 
   try {
+    const { description } = JSON.parse(event.body);
+    if (!description) return { statusCode: 400, headers, body: JSON.stringify({ error: 'Falta descripción' }) };
+
     const response = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
       headers: {
@@ -24,18 +28,12 @@ export default async function handler(req, res) {
       }),
     });
 
-    if (!response.ok) {
-      const err = await response.json();
-      return res.status(500).json({ error: err.error?.message || 'Error de API' });
-    }
-
     const data = await response.json();
     const text = data.content?.find(b => b.type === 'text')?.text || '';
-    const clean = text.replace(/```json|```/g, '').trim();
-    const parsed = JSON.parse(clean);
-    return res.status(200).json(parsed);
+    const parsed = JSON.parse(text.replace(/```json|```/g, '').trim());
+    return { statusCode: 200, headers, body: JSON.stringify(parsed) };
 
-  } catch (e) {
-    return res.status(500).json({ error: e.message });
+  } catch(e) {
+    return { statusCode: 500, headers, body: JSON.stringify({ error: e.message }) };
   }
-}
+};
