@@ -1,0 +1,1757 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<title>Plan Kuper · PPL 6 Días</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;700;800;900&family=Barlow:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0a0a0c;
+  --card:#141418;
+  --card2:#1b1b20;
+  --border:#272730;
+  --green:#39d98a;
+  --green2:#22c76e;
+  --green3:#0d9e52;
+  --accent:#39d98a;
+  --muted:#6b7280;
+  --subtle:#9ca3af;
+  --text:#f0f0f0;
+  --push:#ff6b35;
+  --pull:#47c8ff;
+  --legs:#c084fc;
+  --rest:#444;
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{background:var(--bg);color:var(--text);font-family:'Barlow',sans-serif;font-size:14px;max-width:480px;margin:0 auto;min-height:100vh;overflow-x:hidden}
+
+/* ── PAGES ── */
+.page{display:none;min-height:100vh;padding-bottom:80px}
+.page.active{display:block}
+
+/* ── TOP BAR ── */
+.pg-hd{display:flex;align-items:center;gap:12px;padding:14px 16px 10px;position:sticky;top:0;background:var(--bg);z-index:90;border-bottom:1px solid var(--border)}
+.back{background:var(--card2);border:1px solid var(--border);border-radius:8px;width:34px;height:34px;font-size:18px;color:var(--text);cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.pg-title{font-family:'Barlow Condensed';font-weight:800;font-size:18px;letter-spacing:.5px;text-transform:uppercase;flex:1}
+.pg-badge{font-size:10px;color:var(--muted);font-family:'Barlow Condensed';letter-spacing:1px;text-transform:uppercase}
+
+/* ── HOME ── */
+.home-hero{padding:28px 16px 20px;background:linear-gradient(160deg,rgba(57,217,138,0.08) 0%,transparent 60%);border-bottom:1px solid var(--border)}
+.home-label{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--green);font-family:'Barlow Condensed';margin-bottom:6px}
+.home-name{font-family:'Barlow Condensed';font-weight:900;font-size:44px;line-height:.95;text-transform:uppercase}
+.home-name em{color:var(--green);font-style:normal}
+.home-sub{font-size:12px;color:var(--muted);margin-top:10px;line-height:1.5}
+.home-pills{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap}
+.pill{background:var(--card2);border:1px solid var(--border);border-radius:20px;padding:5px 13px;font-size:11px;color:var(--subtle);font-family:'Barlow Condensed';letter-spacing:.5px}
+.pill em{color:var(--green);font-style:normal}
+
+.menu-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:16px}
+.menu-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:18px 14px;cursor:pointer;transition:transform .15s,border-color .15s;position:relative;overflow:hidden}
+.menu-card:active{transform:scale(.97)}
+.menu-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;border-radius:14px 14px 0 0}
+.menu-card.push::before{background:var(--push)}
+.menu-card.pull::before{background:var(--pull)}
+.menu-card.legs::before{background:var(--legs)}
+.menu-card.nutr::before{background:var(--green)}
+.menu-card.build::before{background:var(--green)}
+.menu-card.log::before{background:#fbbf24}
+.menu-card.prog::before{background:var(--pull)}
+.menu-card.tracker::before{background:#f472b6}
+.menu-emo{font-size:28px;margin-bottom:8px}
+.menu-ttl{font-family:'Barlow Condensed';font-weight:800;font-size:16px;text-transform:uppercase;letter-spacing:.3px}
+.menu-sub{font-size:10px;color:var(--muted);margin-top:3px;line-height:1.4}
+.menu-card.full{grid-column:1/-1}
+
+/* ── NAV BOTTOM ── */
+.nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;background:rgba(10,10,12,.95);backdrop-filter:blur(16px);border-top:1px solid var(--border);display:flex;z-index:100;padding:6px 0 10px}
+.nav-btn{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;cursor:pointer;padding:4px 0;background:none;border:none;color:var(--muted);font-family:'Barlow';font-size:9px;letter-spacing:.5px;text-transform:uppercase;transition:color .15s}
+.nav-btn.active{color:var(--green)}
+.nav-ico{font-size:20px;line-height:1}
+
+/* ── WEEK STRIP ── */
+.wk-strip{display:flex;gap:6px;padding:14px 16px;overflow-x:auto;scrollbar-width:none}
+.wk-strip::-webkit-scrollbar{display:none}
+.wk-day{flex-shrink:0;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:10px 10px 8px;text-align:center;min-width:62px;cursor:pointer;transition:border-color .15s}
+.wk-day.push{border-top:3px solid var(--push)}
+.wk-day.pull{border-top:3px solid var(--pull)}
+.wk-day.legs{border-top:3px solid var(--legs)}
+.wk-day.rest{opacity:.5}
+.wk-day-name{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;font-family:'Barlow Condensed'}
+.wk-day-type{font-family:'Barlow Condensed';font-weight:800;font-size:16px;margin-top:3px}
+.wk-day.push .wk-day-type{color:var(--push)}
+.wk-day.pull .wk-day-type{color:var(--pull)}
+.wk-day.legs .wk-day-type{color:var(--legs)}
+
+/* ── SECTION TITLE ── */
+.stitle{font-family:'Barlow Condensed';font-weight:900;font-size:26px;letter-spacing:.3px;text-transform:uppercase;padding:14px 16px 2px}
+.stitle span{color:var(--green)}
+.smeta{font-size:11px;color:var(--muted);padding:0 16px 12px;letter-spacing:.3px;font-family:'Barlow Condensed'}
+
+/* ── DAY HEADER ── */
+.day-hdr{display:flex;align-items:center;gap:12px;padding:14px 16px;border-bottom:1px solid var(--border)}
+.day-num{font-family:'Barlow Condensed';font-weight:900;font-size:52px;line-height:1;color:var(--border);min-width:54px}
+.day-hdr-info h3{font-family:'Barlow Condensed';font-weight:800;font-size:22px;text-transform:uppercase;letter-spacing:.3px}
+.day-hdr-info p{font-size:11px;color:var(--muted);font-family:'Barlow Condensed';letter-spacing:.5px;text-transform:uppercase}
+.push-h h3{color:var(--push)}
+.pull-h h3{color:var(--pull)}
+.legs-h h3{color:var(--legs)}
+
+/* ── WARMUP BAR ── */
+.warmup{display:flex;gap:6px;padding:10px 14px;background:rgba(71,200,255,0.05);border-bottom:1px solid rgba(71,200,255,0.1);flex-wrap:wrap}
+.wm-chip{background:rgba(71,200,255,0.1);border:1px solid rgba(71,200,255,0.2);border-radius:4px;padding:3px 9px;font-size:10px;color:var(--pull);font-family:'Barlow Condensed';letter-spacing:.5px}
+
+/* ── EXERCISE CARD ── */
+.ex-card{background:var(--card);border-bottom:1px solid var(--border);padding:14px 16px}
+.ex-top{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+.ex-id{font-family:'Barlow Condensed';font-weight:800;font-size:30px;color:var(--border);line-height:1;min-width:28px}
+.ex-info{flex:1}
+.ex-name{font-family:'Barlow Condensed';font-weight:700;font-size:16px;letter-spacing:.3px;text-transform:uppercase}
+.ex-sub{font-size:11px;color:var(--muted);margin-top:2px}
+.ex-tag{display:inline-block;font-size:9px;padding:2px 7px;border-radius:3px;letter-spacing:1px;font-family:'Barlow Condensed';text-transform:uppercase;margin-top:4px}
+.tag-comp{background:rgba(255,107,53,0.12);color:var(--push);border:1px solid rgba(255,107,53,0.2)}
+.tag-iso{background:rgba(192,132,252,0.12);color:var(--legs);border:1px solid rgba(192,132,252,0.2)}
+.tag-ss{background:rgba(71,200,255,0.12);color:var(--pull);border:1px solid rgba(71,200,255,0.2)}
+.tag-amrap{background:rgba(57,217,138,0.12);color:var(--green);border:1px solid rgba(57,217,138,0.2)}
+.tag-core{background:rgba(251,191,36,0.12);color:#fbbf24;border:1px solid rgba(251,191,36,0.2)}
+.ex-sets{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap}
+.set-box{background:var(--card2);border:1px solid var(--border);border-radius:6px;padding:5px 10px;text-align:center;min-width:44px}
+.set-wk{font-size:8px;color:var(--muted);font-family:'Barlow Condensed';letter-spacing:1px;text-transform:uppercase}
+.set-val{font-family:'Barlow Condensed';font-weight:700;font-size:16px;color:var(--green)}
+.ex-stats{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
+.stat-chip{background:var(--card2);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:11px;font-family:'Barlow Condensed';color:var(--subtle)}
+.stat-chip b{color:var(--text)}
+.ex-note{margin-top:10px;background:rgba(57,217,138,0.04);border-left:2px solid rgba(57,217,138,0.3);padding:7px 10px;border-radius:0 6px 6px 0;font-size:11px;color:var(--subtle);line-height:1.5}
+.ex-rir{font-size:11px;padding:3px 8px;border-radius:4px;font-family:'Barlow Condensed';font-weight:700;letter-spacing:.5px}
+.rir-1{background:rgba(255,107,53,0.15);color:var(--push)}
+.rir-2{background:rgba(251,191,36,0.15);color:#fbbf24}
+.rir-3{background:rgba(57,217,138,0.15);color:var(--green)}
+
+/* ── CARDIO STRIP ── */
+.cardio-bar{display:flex;align-items:center;gap:10px;padding:12px 16px;background:rgba(57,217,138,0.04);border-top:1px solid rgba(57,217,138,0.1)}
+.cardio-bar span{font-size:11px;color:var(--muted)}
+.cardio-bar b{color:var(--green)}
+
+/* ── INFO BOX ── */
+.ibox{border-radius:10px;padding:12px 14px;margin:0 16px 14px;font-size:12px;line-height:1.6}
+.ibox-green{background:rgba(57,217,138,0.06);border:1px solid rgba(57,217,138,0.2)}
+.ibox-blue{background:rgba(71,200,255,0.06);border:1px solid rgba(71,200,255,0.2)}
+.ibox-red{background:rgba(239,68,68,0.06);border:1px solid rgba(239,68,68,0.2)}
+.ibox-gold{background:rgba(251,191,36,0.06);border:1px solid rgba(251,191,36,0.2)}
+.ibox-title{font-family:'Barlow Condensed';font-weight:700;font-size:13px;letter-spacing:.5px;text-transform:uppercase;margin-bottom:6px}
+.ibox-title-green{color:var(--green)}
+.ibox-title-blue{color:var(--pull)}
+.ibox-title-red{color:#ef4444}
+.ibox-title-gold{color:#fbbf24}
+.ibox-text{color:var(--subtle)}
+.ibox-text b,.ibox-text strong{color:var(--text)}
+
+/* ── TABS ── */
+.tbar{display:flex;border-bottom:1px solid var(--border);overflow-x:auto;scrollbar-width:none;background:var(--bg);position:sticky;top:57px;z-index:80}
+.tbar::-webkit-scrollbar{display:none}
+.tbtn{flex:0 0 auto;padding:11px 16px;background:none;border:none;border-bottom:2px solid transparent;color:var(--muted);font-family:'Barlow Condensed';font-size:14px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;cursor:pointer;white-space:nowrap;transition:all .15s}
+.tbtn.on{color:var(--green);border-bottom-color:var(--green)}
+.tcnt{display:none;padding:14px 16px 0}
+.tcnt.on{display:block}
+
+/* ── NUTRICIÓN CARDS ── */
+.meal-card{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:12px}
+.meal-hdr{display:flex;justify-content:space-between;align-items:center;padding:12px 14px;border-bottom:1px solid var(--border)}
+.meal-ttl{font-family:'Barlow Condensed';font-weight:800;font-size:18px;text-transform:uppercase;letter-spacing:.3px}
+.meal-kcal{font-family:'Barlow Condensed';font-weight:700;font-size:16px;color:var(--green)}
+.macro-row{display:flex;gap:0;border-bottom:1px solid var(--border)}
+.macro-cell{flex:1;padding:8px 6px;text-align:center;border-right:1px solid var(--border)}
+.macro-cell:last-child{border-right:none}
+.macro-lbl{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;font-family:'Barlow Condensed'}
+.macro-val{font-family:'Barlow Condensed';font-weight:800;font-size:18px}
+.mp{color:#4ade80}.mc{color:var(--pull)}.mf{color:#fbbf24}
+.meal-body{padding:12px 14px}
+.meal-item{display:flex;gap:8px;align-items:flex-start;margin-bottom:8px;font-size:12px;color:var(--subtle);line-height:1.4}
+.meal-item::before{content:'→';color:var(--green);opacity:.6;flex-shrink:0;font-size:11px;margin-top:1px}
+.meal-item b{color:var(--text)}
+.meal-note{background:rgba(57,217,138,0.06);border-left:2px solid var(--green);padding:7px 10px;border-radius:0 6px 6px 0;font-size:11px;color:var(--subtle);margin-top:8px;line-height:1.5}
+.meal-note b{color:var(--green)}
+
+/* ── TOTALS ── */
+.total-hero{background:linear-gradient(135deg,rgba(57,217,138,0.1),rgba(57,217,138,0.04));border:1px solid rgba(57,217,138,0.25);border-radius:12px;padding:18px;margin-bottom:14px}
+.total-ttl{font-family:'Barlow Condensed';font-weight:800;font-size:20px;color:var(--green);text-transform:uppercase;margin-bottom:12px}
+.total-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.total-item{text-align:center}
+.total-num{font-family:'Barlow Condensed';font-weight:900;font-size:30px;line-height:1}
+.total-lbl{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;font-family:'Barlow Condensed';margin-top:2px}
+
+/* ── SUPERÁVIT HERO ── */
+.sup-hero{background:linear-gradient(135deg,rgba(57,217,138,0.1),rgba(57,217,138,0.03));border:1px solid rgba(57,217,138,0.25);border-radius:12px;padding:20px;text-align:center;margin-bottom:14px}
+.sup-number{font-family:'Barlow Condensed';font-weight:900;font-size:64px;color:var(--green);line-height:1}
+.sup-label{font-size:12px;color:var(--muted);margin-top:4px;font-family:'Barlow Condensed';letter-spacing:1px;text-transform:uppercase}
+.sup-range{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:14px}
+.srange{background:var(--card2);border:1px solid var(--border);border-radius:8px;padding:8px;text-align:center}
+.srange-v{font-family:'Barlow Condensed';font-weight:800;font-size:20px}
+.srange-l{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;font-family:'Barlow Condensed'}
+
+/* ── CALCULADORA ── */
+.calc-wrap{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px}
+.calc-section-label{font-family:'Barlow Condensed';font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;margin-top:14px}
+.calc-section-label:first-child{margin-top:0}
+.calc-inp{width:100%;background:var(--card2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--text);font-family:'Barlow';font-size:14px;outline:none;transition:border-color .2s}
+.calc-inp:focus{border-color:var(--green)}
+.calc-2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.calc-field{display:flex;flex-direction:column;gap:4px}
+.calc-lbl{font-size:11px;color:var(--muted);font-family:'Barlow Condensed';letter-spacing:.5px}
+.activity-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:6px}
+.act-btn{background:var(--card2);border:1px solid var(--border);border-radius:8px;padding:8px 10px;cursor:pointer;text-align:left;transition:all .15s}
+.act-btn.on{border-color:var(--green);background:rgba(57,217,138,0.08)}
+.act-name{font-family:'Barlow Condensed';font-weight:700;font-size:13px;text-transform:uppercase}
+.act-desc{font-size:10px;color:var(--muted);margin-top:1px;line-height:1.3}
+.calc-btn{width:100%;background:linear-gradient(135deg,var(--green),var(--green3));border:none;border-radius:8px;padding:13px;font-family:'Barlow Condensed';font-weight:800;font-size:16px;color:#0a0a0c;cursor:pointer;letter-spacing:1px;text-transform:uppercase;margin-top:12px}
+.results-box{background:var(--card);border:1px solid rgba(57,217,138,0.3);border-radius:12px;padding:16px;margin-top:14px;display:none}
+.results-box.visible{display:block}
+.res-kcal{text-align:center;margin-bottom:14px}
+.res-main{font-family:'Barlow Condensed';font-weight:900;font-size:56px;color:var(--green);line-height:1}
+.res-lbl{font-size:11px;color:var(--muted);font-family:'Barlow Condensed';letter-spacing:1px;text-transform:uppercase}
+.res-macros{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}
+.res-mac{background:var(--card2);border:1px solid var(--border);border-radius:8px;padding:10px;text-align:center}
+.res-mac-v{font-family:'Barlow Condensed';font-weight:800;font-size:24px}
+.res-mac-l{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;font-family:'Barlow Condensed'}
+.res-note{font-size:11px;color:var(--muted);margin-top:12px;background:rgba(57,217,138,0.05);border-left:2px solid rgba(57,217,138,0.3);padding:8px 10px;border-radius:0 6px 6px 0;line-height:1.5}
+.res-note b{color:var(--text)}
+
+/* ── BITÁCORA ── */
+.log-day{background:var(--card);border:1px solid var(--border);border-radius:10px;margin-bottom:10px;overflow:hidden}
+.log-day-hdr{display:flex;justify-content:space-between;align-items:center;padding:12px 14px;cursor:pointer;background:var(--card)}
+.log-day-ttl{font-family:'Barlow Condensed';font-weight:700;font-size:16px;text-transform:uppercase;letter-spacing:.5px}
+.log-day-ttl.push{color:var(--push)}.log-day-ttl.pull{color:var(--pull)}.log-day-ttl.legs{color:var(--legs)}
+.log-day-meta{font-size:10px;color:var(--muted);font-family:'Barlow Condensed';letter-spacing:.5px}
+.log-arrow{color:var(--muted);transition:transform .2s;font-size:14px}
+.log-body{display:none;padding:0 14px 14px;border-top:1px solid var(--border)}
+.log-body.open{display:block}
+.log-ex{margin-top:10px}
+.log-ex-name{font-size:12px;font-weight:600;color:var(--subtle);margin-bottom:6px;font-family:'Barlow Condensed';letter-spacing:.3px;text-transform:uppercase}
+.log-sets-row{display:flex;gap:6px;flex-wrap:wrap}
+.log-set{background:var(--card2);border:1px solid var(--border);border-radius:6px;padding:4px 8px;text-align:center}
+.log-set-n{font-size:9px;color:var(--muted);font-family:'Barlow Condensed';letter-spacing:.5px}
+.log-inp-row{display:flex;gap:4px;margin-top:3px}
+.log-inp{width:44px;background:var(--bg);border:1px solid var(--border);border-radius:4px;padding:4px;font-size:11px;color:var(--text);text-align:center;outline:none;font-family:'Barlow';transition:border-color .15s}
+.log-inp:focus{border-color:var(--green)}
+.log-inp::placeholder{color:var(--border)}
+.log-inp-lbl{font-size:8px;color:var(--muted);text-align:center;font-family:'Barlow Condensed';letter-spacing:.5px}
+.log-save-btn{width:100%;background:rgba(57,217,138,0.1);border:1px solid rgba(57,217,138,0.3);border-radius:7px;padding:8px;font-family:'Barlow Condensed';font-size:12px;font-weight:700;color:var(--green);cursor:pointer;letter-spacing:.5px;text-transform:uppercase;margin-top:12px}
+.log-saved{background:var(--card2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;margin-top:10px;font-size:11px;color:var(--muted);display:none}
+.log-entry{display:flex;justify-content:space-between;align-items:center;padding:4px 0;border-bottom:1px solid var(--border)}
+.log-entry:last-child{border-bottom:none}
+.log-entry-name{font-size:11px;color:var(--subtle);font-family:'Barlow Condensed';letter-spacing:.3px}
+.log-entry-val{font-family:'Barlow Condensed';font-weight:700;font-size:13px;color:var(--green)}
+
+/* ── PROGRESIÓN TABLE ── */
+.prog-table{width:100%;border-collapse:collapse;background:var(--card);border-radius:10px;overflow:hidden;border:1px solid var(--border);margin-bottom:14px}
+.prog-table th{font-family:'Barlow Condensed';font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);padding:10px 12px;text-align:left;background:var(--card2);border-bottom:1px solid var(--border)}
+.prog-table td{padding:10px 12px;border-bottom:1px solid rgba(255,255,255,0.04);font-size:12px}
+.prog-table tr:last-child td{border-bottom:none}
+.s1c{color:#4ade80;font-family:'Barlow Condensed';font-weight:700}
+.s2c{color:var(--pull);font-family:'Barlow Condensed';font-weight:700}
+.s3c{color:#fbbf24;font-family:'Barlow Condensed';font-weight:700}
+.s4c{color:var(--push);font-family:'Barlow Condensed';font-weight:700}
+.s5c{color:var(--muted);font-family:'Barlow Condensed';font-weight:700}
+
+/* ── TRACKER PESO ── */
+.weight-hero{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:12px;text-align:center}
+.weight-num{font-family:'Barlow Condensed';font-weight:900;font-size:56px;color:var(--green);line-height:1}
+.weight-lbl{font-size:11px;color:var(--muted);font-family:'Barlow Condensed';letter-spacing:1px;text-transform:uppercase;margin-top:2px}
+.weight-form{display:flex;gap:8px;margin-bottom:12px}
+.weight-inp{flex:1;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:11px 12px;color:var(--text);font-family:'Barlow';font-size:16px;outline:none;transition:border-color .2s}
+.weight-inp:focus{border-color:var(--green)}
+.weight-btn{background:linear-gradient(135deg,var(--green),var(--green3));border:none;border-radius:8px;padding:11px 18px;font-family:'Barlow Condensed';font-weight:800;font-size:14px;color:#0a0a0c;cursor:pointer;letter-spacing:.5px;text-transform:uppercase;white-space:nowrap}
+.weight-list{background:var(--card);border:1px solid var(--border);border-radius:10px;overflow:hidden}
+.weight-item{display:flex;justify-content:space-between;align-items:center;padding:10px 14px;border-bottom:1px solid var(--border)}
+.weight-item:last-child{border-bottom:none}
+.wi-date{font-size:11px;color:var(--muted);font-family:'Barlow Condensed';letter-spacing:.5px}
+.wi-val{font-family:'Barlow Condensed';font-weight:800;font-size:18px;color:var(--text)}
+.wi-diff{font-size:11px;font-family:'Barlow Condensed';font-weight:700}
+.wi-diff.up{color:#ef4444}.wi-diff.down{color:var(--green)}.wi-diff.same{color:var(--muted)}
+.wi-del{background:none;border:none;color:var(--muted);cursor:pointer;font-size:14px;padding:2px 6px}
+
+/* ── CANVAS ── */
+#weight-chart{width:100%;height:160px;margin-bottom:12px}
+
+/* ── RULES ── */
+.rule-row{display:flex;gap:10px;align-items:flex-start;padding:10px 0;border-bottom:1px solid var(--border)}
+.rule-row:last-child{border-bottom:none}
+.rule-ico{font-size:20px;flex-shrink:0;margin-top:1px}
+.rule-txt{font-size:12px;color:var(--subtle);line-height:1.5}
+.rule-txt b{color:var(--text)}
+
+/* SUPP TABLE */
+.supp-table{width:100%;border-collapse:collapse;background:var(--card);border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:14px}
+.supp-table th{font-family:'Barlow Condensed';font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);padding:9px 12px;text-align:left;background:var(--card2);border-bottom:1px solid var(--border)}
+.supp-table td{padding:9px 12px;border-bottom:1px solid rgba(255,255,255,0.04);font-size:12px;color:var(--subtle)}
+.supp-table td b{color:var(--text)}
+.supp-table tr:last-child td{border-bottom:none}
+
+hr.div{border:none;border-top:1px solid var(--border);margin:18px 16px}
+footer{text-align:center;padding:16px;font-size:10px;color:var(--muted);font-family:'Barlow Condensed';letter-spacing:1px;text-transform:uppercase;border-top:1px solid var(--border)}
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════
+     HOME
+══════════════════════════════════════ -->
+<div class="page active" id="page-home">
+  <div class="home-hero">
+    <div class="home-label">▸ Plan Personalizado · PPL 6 Días</div>
+    <div class="home-name">Eduardo<br><em>Kuper</em></div>
+    <div class="home-sub">Programa de hipertrofia con sobrecarga progresiva sistematizada. 6 días de entrenamiento estructurado Push / Pull / Legs × 2.</div>
+    <div class="home-pills">
+      <span class="pill">Objetivo: <em>Ganar Músculo</em></span>
+      <span class="pill">Duración: <em>5 semanas</em></span>
+      <span class="pill">Frecuencia: <em>6 días</em></span>
+    </div>
+  </div>
+
+  <!-- Week overview -->
+  <div class="wk-strip">
+    <div class="wk-day push" onclick="goTo('page-push');swPush('d-push-a')">
+      <div class="wk-day-name">Lun</div>
+      <div class="wk-day-type">PUSH</div>
+      <div style="font-size:9px;color:var(--muted);margin-top:2px">A</div>
+    </div>
+    <div class="wk-day pull" onclick="goTo('page-pull');swPull('d-pull-a')">
+      <div class="wk-day-name">Mar</div>
+      <div class="wk-day-type">PULL</div>
+      <div style="font-size:9px;color:var(--muted);margin-top:2px">A</div>
+    </div>
+    <div class="wk-day legs" onclick="goTo('page-legs');swLegs('d-legs-a')">
+      <div class="wk-day-name">Mié</div>
+      <div class="wk-day-type">LEGS</div>
+      <div style="font-size:9px;color:var(--muted);margin-top:2px">A</div>
+    </div>
+    <div class="wk-day push" onclick="goTo('page-push');swPush('d-push-b')">
+      <div class="wk-day-name">Jue</div>
+      <div class="wk-day-type">PUSH</div>
+      <div style="font-size:9px;color:var(--muted);margin-top:2px">B</div>
+    </div>
+    <div class="wk-day pull" onclick="goTo('page-pull');swPull('d-pull-b')">
+      <div class="wk-day-name">Vie</div>
+      <div class="wk-day-type">PULL</div>
+      <div style="font-size:9px;color:var(--muted);margin-top:2px">B</div>
+    </div>
+    <div class="wk-day legs" onclick="goTo('page-legs');swLegs('d-legs-b')">
+      <div class="wk-day-name">Sáb</div>
+      <div class="wk-day-type">LEGS</div>
+      <div style="font-size:9px;color:var(--muted);margin-top:2px">B</div>
+    </div>
+    <div class="wk-day rest">
+      <div class="wk-day-name">Dom</div>
+      <div class="wk-day-type" style="color:var(--muted)">REST</div>
+      <div style="font-size:9px;color:var(--muted);margin-top:2px">–</div>
+    </div>
+  </div>
+
+  <div style="padding:0 16px;display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:4px">
+    <div class="menu-card push" onclick="goTo('page-push')">
+      <div class="menu-emo">🔥</div>
+      <div class="menu-ttl">Push A/B</div>
+      <div class="menu-sub">Pecho · Hombros · Tríceps</div>
+    </div>
+    <div class="menu-card pull" onclick="goTo('page-pull')">
+      <div class="menu-emo">💪</div>
+      <div class="menu-ttl">Pull A/B</div>
+      <div class="menu-sub">Espalda · Bíceps · Trapecios</div>
+    </div>
+    <div class="menu-card legs" onclick="goTo('page-legs')">
+      <div class="menu-emo">🦵</div>
+      <div class="menu-ttl">Legs A/B</div>
+      <div class="menu-sub">Cuádriceps · Glúteos · Isquios</div>
+    </div>
+    <div class="menu-card nutr" onclick="goTo('page-nutr')">
+      <div class="menu-emo">🥗</div>
+      <div class="menu-ttl">Nutrición</div>
+      <div class="menu-sub">Menús · Macros · Suplementos</div>
+    </div>
+    <div class="menu-card build" onclick="goTo('page-build')">
+      <div class="menu-emo">📈</div>
+      <div class="menu-ttl">Guía Build</div>
+      <div class="menu-sub">Superávit · Estrategia · Progresión</div>
+    </div>
+    <div class="menu-card prog" onclick="goTo('page-calc')">
+      <div class="menu-emo">🔢</div>
+      <div class="menu-ttl">Calculadora</div>
+      <div class="menu-sub">Calorías y macros exactos</div>
+    </div>
+    <div class="menu-card log" onclick="goTo('page-log')">
+      <div class="menu-emo">📓</div>
+      <div class="menu-ttl">Bitácora</div>
+      <div class="menu-sub">Registra pesos y series</div>
+    </div>
+    <div class="menu-card tracker" onclick="goTo('page-tracker')">
+      <div class="menu-emo">⚖️</div>
+      <div class="menu-ttl">Tracker Peso</div>
+      <div class="menu-sub">Sigue tu evolución</div>
+    </div>
+  </div>
+  <footer>Eduardo Kuper · Push Pull Legs · Gabu Fitness</footer>
+</div>
+
+<!-- ══════════════════════════════════════
+     PUSH A/B
+══════════════════════════════════════ -->
+<div class="page" id="page-push">
+  <div class="pg-hd">
+    <button class="back" onclick="goTo('page-home')">‹</button>
+    <span class="pg-title">Push</span>
+    <span class="pg-badge">Pecho · Hombros · Tríceps</span>
+  </div>
+  <div class="tbar">
+    <button class="tbtn on" onclick="swPush('d-push-a',this)">Lunes — Push A</button>
+    <button class="tbtn" onclick="swPush('d-push-b',this)">Jueves — Push B</button>
+  </div>
+
+  <!-- PUSH A -->
+  <div class="tcnt on" id="d-push-a">
+    <div style="padding:12px 0 0"></div>
+    <div class="day-hdr push-h">
+      <div class="day-num">A</div>
+      <div class="day-hdr-info">
+        <h3>Push A — Lunes</h3>
+        <p>Pecho Primario</p>
+      </div>
+    </div>
+    <div class="warmup">
+      <span class="wm-chip">🚴 5-10 min cardio</span>
+      <span class="wm-chip">Extensión tríceps liga ×2</span>
+      <span class="wm-chip">Elevaciones laterales liga ×2</span>
+    </div>
+
+    <!-- A -->
+    <div class="ex-card">
+      <div class="ex-top">
+        <div class="ex-id">A</div>
+        <div class="ex-info">
+          <div class="ex-name">Press Banca Inclinado Mancuerna</div>
+          <div class="ex-sub">Empuje Vertical Inclinado</div>
+          <span class="ex-tag tag-comp">Compuesto</span>
+        </div>
+        <span class="ex-rir rir-2">RIR 2</span>
+      </div>
+      <div class="ex-sets">
+        <div class="set-box"><div class="set-wk">S1</div><div class="set-val">3</div></div>
+        <div class="set-box"><div class="set-wk">S2</div><div class="set-val">3</div></div>
+        <div class="set-box"><div class="set-wk">S3</div><div class="set-val">4</div></div>
+        <div class="set-box"><div class="set-wk">S4</div><div class="set-val">4</div></div>
+        <div class="set-box"><div class="set-wk">S5</div><div class="set-val">2</div></div>
+      </div>
+      <div class="ex-stats">
+        <span class="stat-chip"><b>6–8</b> reps</span>
+        <span class="stat-chip"><b>2–3 min</b> descanso</span>
+        <span class="stat-chip">Pecho Alto · Tríceps</span>
+      </div>
+      <div class="ex-note">Al bajar aplica retracción escapular. Al subir busca apretar el pectoral con el bíceps.</div>
+    </div>
+
+    <!-- B -->
+    <div class="ex-card">
+      <div class="ex-top">
+        <div class="ex-id">B</div>
+        <div class="ex-info">
+          <div class="ex-name">Empuje Vertical Declinado</div>
+          <div class="ex-sub">Máquina Declinado / Paralelas / Crossover Vertical</div>
+          <span class="ex-tag tag-comp">Compuesto</span>
+        </div>
+        <span class="ex-rir rir-1">RIR 1</span>
+      </div>
+      <div class="ex-sets">
+        <div class="set-box"><div class="set-wk">S1</div><div class="set-val">3</div></div>
+        <div class="set-box"><div class="set-wk">S2</div><div class="set-val">3</div></div>
+        <div class="set-box"><div class="set-wk">S3</div><div class="set-val">3</div></div>
+        <div class="set-box"><div class="set-wk">S4</div><div class="set-val">3</div></div>
+        <div class="set-box"><div class="set-wk">S5</div><div class="set-val">2</div></div>
+      </div>
+      <div class="ex-stats">
+        <span class="stat-chip"><b>10–12</b> reps</span>
+        <span class="stat-chip"><b>1–2 min</b> descanso</span>
+        <span class="stat-chip">Pecho Bajo · Tríceps</span>
+      </div>
+      <div class="ex-note">Inclinación anterior, pecho al frente. Codos ligeramente abiertos. Baja profundamente.</div>
+    </div>
+
+    <!-- C -->
+    <div class="ex-card">
+      <div class="ex-top">
+        <div class="ex-id">C</div>
+        <div class="ex-info">
+          <div class="ex-name">Aperturas Pectoral Zona Media</div>
+          <div class="ex-sub">Crossover / Peck Deck</div>
+          <span class="ex-tag tag-iso">Aislamiento</span>
+        </div>
+        <span class="ex-rir rir-1">RIR 1</span>
+      </div>
+      <div class="ex-sets">
+        <div class="set-box"><div class="set-wk">S1</div><div class="set-val">3</div></div>
+        <div class="set-box"><div class="set-wk">S2</div><div class="set-val">3</div></div>
+        <div class="set-box"><div class="set-wk">S3</div><div class="set-val">3</div></div>
+        <div class="set-box"><div class="set-wk">S4</div><div class="set-val">3</div></div>
+        <div class="set-box"><div class="set-wk">S5</div><div class="set-val">2</div></div>
+      </div>
+      <div class="ex-stats">
+        <span class="stat-chip"><b>10–12</b> reps</span>
+        <span class="stat-chip"><b>1–2 min</b> descanso</span>
+      </div>
+      <div class="ex-note">Al abrir retracción escapular. Al cerrar aprieta el pectoral con el bíceps.</div>
+    </div>
+
+    <!-- D -->
+    <div class="ex-card">
+      <div class="ex-top">
+        <div class="ex-id">D</div>
+        <div class="ex-info">
+          <div class="ex-name">Fondos Tríceps</div>
+          <div class="ex-sub">Máquina / Paralelas</div>
+          <span class="ex-tag tag-comp">Compuesto</span>
+        </div>
+        <span class="ex-rir rir-1">RIR 1</span>
+      </div>
+      <div class="ex-sets">
+        <div class="set-box"><div class="set-wk">S1</div><div class="set-val">2</div></div>
+        <div class="set-box"><div class="set-wk">S2</div><div class="set-val">2</div></div>
+        <div class="set-box"><div class="set-wk">S3</div><div class="set-val">3</div></div>
+        <div class="set-box"><div class="set-wk">S4</div><div class="set-val">3</div></div>
+        <div class="set-box"><div class="set-wk">S5</div><div class="set-val">2</div></div>
+      </div>
+      <div class="ex-stats">
+        <span class="stat-chip"><b>10–12</b> reps</span>
+        <span class="stat-chip"><b>2–3 min</b> descanso</span>
+        <span class="stat-chip">Tríceps · Pecho Bajo</span>
+      </div>
+      <div class="ex-note">Codos cerrados. Baja hasta que los codos formen 90°.</div>
+    </div>
+
+    <!-- E -->
+    <div class="ex-card">
+      <div class="ex-top">
+        <div class="ex-id">E</div>
+        <div class="ex-info">
+          <div class="ex-name">Copa Tríceps Cuerda Transnuca 1 Mano</div>
+          <div class="ex-sub">Polea Media</div>
+          <span class="ex-tag tag-iso">Aislamiento</span>
+        </div>
+        <span class="ex-rir rir-1">RIR 1</span>
+      </div>
+      <div class="ex-sets">
+        <div class="set-box"><div class="set-wk">S1</div><div class="set-val">2</div></div>
+        <div class="set-box"><div class="set-wk">S2</div><div class="set-val">2</div></div>
+        <div class="set-box"><div class="set-wk">S3</div><div class="set-val">3</div></div>
+        <div class="set-box"><div class="set-wk">S4</div><div class="set-val">3</div></div>
+        <div class="set-box"><div class="set-wk">S5</div><div class="set-val">2</div></div>
+      </div>
+      <div class="ex-stats">
+        <span class="stat-chip"><b>10–12</b> reps</span>
+        <span class="stat-chip"><b>1–2 min</b> descanso</span>
+      </div>
+      <div class="ex-note">Extiende codo completamente. Mantén 2 seg arriba en contracción. Movimientos controlados.</div>
+    </div>
+
+    <!-- F -->
+    <div class="ex-card">
+      <div class="ex-top">
+        <div class="ex-id">F</div>
+        <div class="ex-info">
+          <div class="ex-name">Elevación Lateral Polea Baja 1 Mano</div>
+          <div class="ex-sub">AMRAP por cada brazo</div>
+          <span class="ex-tag tag-amrap">AMRAP</span>
+        </div>
+      </div>
+      <div class="ex-sets">
+        <div class="set-box"><div class="set-wk">S1</div><div class="set-val">2</div></div>
+        <div class="set-box"><div class="set-wk">S2</div><div class="set-val">2</div></div>
+        <div class="set-box"><div class="set-wk">S3</div><div class="set-val">2</div></div>
+        <div class="set-box"><div class="set-wk">S4</div><div class="set-val">3</div></div>
+        <div class="set-box"><div class="set-wk">S5</div><div class="set-val">2</div></div>
+      </div>
+      <div class="ex-stats">
+        <span class="stat-chip"><b>1 min</b> AMRAP</span>
+        <span class="stat-chip"><b>1–2 min</b> descanso</span>
+        <span class="stat-chip">Deltoides Lateral</span>
+      </div>
+      <div class="ex-note">Brazo extendido. Eleva con el codo, NO con la mano. Cuerpo ligeramente inclinado hacia el lado contrario.</div>
+    </div>
+
+    <!-- G PANTORRILLA -->
+    <div class="ex-card">
+      <div class="ex-top">
+        <div class="ex-id">G</div>
+        <div class="ex-info">
+          <div class="ex-name">Elevación de Talón — Gemelos de Pie</div>
+          <div class="ex-sub">Piernas extendidas / Prensa / Máquina</div>
+          <span class="ex-tag tag-iso">Pantorrilla</span>
+        </div>
+        <span class="ex-rir rir-1">RIR 1</span>
+      </div>
+      <div class="ex-sets">
+        <div class="set-box"><div class="set-wk">S1</div><div class="set-val">2</div></div>
+        <div class="set-box"><div class="set-wk">S2</div><div class="set-val">2</div></div>
+        <div class="set-box"><div class="set-wk">S3</div><div class="set-val">3</div></div>
+        <div class="set-box"><div class="set-wk">S4</div><div class="set-val">4</div></div>
+        <div class="set-box"><div class="set-wk">S5</div><div class="set-val">2</div></div>
+      </div>
+      <div class="ex-stats">
+        <span class="stat-chip"><b>8–10</b> reps</span>
+        <span class="stat-chip"><b>1–2 min</b> descanso</span>
+      </div>
+      <div class="ex-note">Rango completo de movimiento y contracción arriba.</div>
+    </div>
+
+    <div class="cardio-bar">🚶 <span><b>Cardio:</b> Caminadora 30 min · Inclinación 4–5 / 30% · Velocidad 4–5 km/h</span>
+    </div>
+  </div>
+
+  <!-- PUSH B -->
+  <div class="tcnt" id="d-push-b">
+    <div style="padding:12px 0 0"></div>
+    <div class="day-hdr push-h">
+      <div class="day-num">B</div>
+      <div class="day-hdr-info">
+        <h3>Push B — Jueves</h3>
+        <p>Hombros Primario</p>
+      </div>
+    </div>
+    <div class="warmup">
+      <span class="wm-chip">🚴 5-10 min cardio</span>
+      <span class="wm-chip">Movimiento 4 puntos hombro ×1</span>
+      <span class="wm-chip">Elevaciones laterales liga ×2</span>
+    </div>
+
+    <div class="ex-card">
+      <div class="ex-top"><div class="ex-id">A</div><div class="ex-info"><div class="ex-name">Press Hombro Sentado Smith</div><div class="ex-sub">Codos al frente</div><span class="ex-tag tag-comp">Compuesto</span></div><span class="ex-rir rir-2">RIR 2</span></div>
+      <div class="ex-sets"><div class="set-box"><div class="set-wk">S1</div><div class="set-val">2</div></div><div class="set-box"><div class="set-wk">S2</div><div class="set-val">2</div></div><div class="set-box"><div class="set-wk">S3</div><div class="set-val">3</div></div><div class="set-box"><div class="set-wk">S4</div><div class="set-val">4</div></div><div class="set-box"><div class="set-wk">S5</div><div class="set-val">2</div></div></div>
+      <div class="ex-stats"><span class="stat-chip"><b>6–8</b> reps</span><span class="stat-chip"><b>2–3 min</b> descanso</span><span class="stat-chip">Deltoides · Tríceps</span></div>
+      <div class="ex-note">Codos al frente. Postura recta en todo momento.</div>
+    </div>
+
+    <div class="ex-card">
+      <div class="ex-top"><div class="ex-id">B</div><div class="ex-info"><div class="ex-name">Elevación Lateral 2 Manos Mancuerna</div><div class="ex-sub">Recargado en Banco Vertical — AMRAP</div><span class="ex-tag tag-amrap">AMRAP</span></div><span class="ex-rir rir-2">RIR 2</span></div>
+      <div class="ex-sets"><div class="set-box"><div class="set-wk">S1</div><div class="set-val">2</div></div><div class="set-box"><div class="set-wk">S2</div><div class="set-val">2</div></div><div class="set-box"><div class="set-wk">S3</div><div class="set-val">2</div></div><div class="set-box"><div class="set-wk">S4</div><div class="set-val">3</div></div><div class="set-box"><div class="set-wk">S5</div><div class="set-val">2</div></div></div>
+      <div class="ex-stats"><span class="stat-chip"><b>1 min</b> AMRAP</span><span class="stat-chip"><b>1–2 min</b> descanso</span></div>
+      <div class="ex-note">Brazos extendidos. Eleva con los codos, NO con las manos. Torso recargado en banco vertical.</div>
+    </div>
+
+    <div class="ex-card">
+      <div class="ex-top"><div class="ex-id">C1</div><div class="ex-info"><div class="ex-name">Curl Bíceps Barra Polea Baja</div><div class="ex-sub">Agarre Supino — Superserie con C2</div><span class="ex-tag tag-ss">Superserie</span></div><span class="ex-rir rir-2">RIR 2</span></div>
+      <div class="ex-sets"><div class="set-box"><div class="set-wk">S1</div><div class="set-val">2</div></div><div class="set-box"><div class="set-wk">S2</div><div class="set-val">2</div></div><div class="set-box"><div class="set-wk">S3</div><div class="set-val">3</div></div><div class="set-box"><div class="set-wk">S4</div><div class="set-val">3</div></div><div class="set-box"><div class="set-wk">S5</div><div class="set-val">2</div></div></div>
+      <div class="ex-stats"><span class="stat-chip"><b>10–12</b> reps</span><span class="stat-chip">Sin descanso → pasar a C2</span></div>
+      <div class="ex-note">Palma arriba. Codos al frente. Movimientos controlados. Al terminar, sin descanso pasar a C2.</div>
+    </div>
+
+    <div class="ex-card">
+      <div class="ex-top"><div class="ex-id">C2</div><div class="ex-info"><div class="ex-name">Extensión Tríceps Cruzado Poleas Altas</div><div class="ex-sub">SS con C1 — descansar 90 seg tras ronda</div><span class="ex-tag tag-ss">Superserie</span></div><span class="ex-rir rir-2">RIR 2</span></div>
+      <div class="ex-sets"><div class="set-box"><div class="set-wk">S1</div><div class="set-val">2</div></div><div class="set-box"><div class="set-wk">S2</div><div class="set-val">2</div></div><div class="set-box"><div class="set-wk">S3</div><div class="set-val">3</div></div><div class="set-box"><div class="set-wk">S4</div><div class="set-val">3</div></div><div class="set-box"><div class="set-wk">S5</div><div class="set-val">2</div></div></div>
+      <div class="ex-stats"><span class="stat-chip"><b>10–12</b> reps</span><span class="stat-chip"><b>90 seg</b> entre rondas</span></div>
+      <div class="ex-note">Codos a los costados. Mantén 2 seg abajo en contracción. Movimientos controlados.</div>
+    </div>
+
+    <div class="ex-card">
+      <div class="ex-top"><div class="ex-id">D1</div><div class="ex-info"><div class="ex-name">Curl Predicador Máquina / Banco Barra Z</div><div class="ex-sub">SS con D2</div><span class="ex-tag tag-ss">Superserie</span></div><span class="ex-rir rir-2">RIR 2</span></div>
+      <div class="ex-sets"><div class="set-box"><div class="set-wk">S1</div><div class="set-val">2</div></div><div class="set-box"><div class="set-wk">S2</div><div class="set-val">2</div></div><div class="set-box"><div class="set-wk">S3</div><div class="set-val">3</div></div><div class="set-box"><div class="set-wk">S4</div><div class="set-val">3</div></div><div class="set-box"><div class="set-wk">S5</div><div class="set-val">2</div></div></div>
+      <div class="ex-stats"><span class="stat-chip"><b>10–12</b> reps</span><span class="stat-chip">Sin descanso → D2</span></div>
+      <div class="ex-note">Peso moderado. Movimientos controlados. Al terminar, sin descanso pasar a D2.</div>
+    </div>
+
+    <div class="ex-card">
+      <div class="ex-top"><div class="ex-id">D2</div><div class="ex-info"><div class="ex-name">Extensión Tríceps Cuerda / Barra Polea Alta</div><div class="ex-sub">SS con D1</div><span class="ex-tag tag-ss">Superserie</span></div><span class="ex-rir rir-2">RIR 2</span></div>
+      <div class="ex-sets"><div class="set-box"><div class="set-wk">S1</div><div class="set-val">2</div></div><div class="set-box"><div class="set-wk">S2</div><div class="set-val">2</div></div><div class="set-box"><div class="set-wk">S3</div><div class="set-val">3</div></div><div class="set-box"><div class="set-wk">S4</div><div class="set-val">3</div></div><div class="set-box"><div class="set-wk">S5</div><div class="set-val">2</div></div></div>
+      <div class="ex-stats"><span class="stat-chip"><b>10–12</b> reps</span><span class="stat-chip"><b>90 seg</b> entre rondas</span></div>
+      <div class="ex-note">Codos a los costados. Mantén 2 seg abajo.</div>
+    </div>
+
+    <div class="ex-card">
+      <div class="ex-top"><div class="ex-id">E</div><div class="ex-info"><div class="ex-name">Fly Posterior Poleas Altas</div><div class="ex-sub">Peck Deck Invertido — AMRAP</div><span class="ex-tag tag-amrap">AMRAP</span></div></div>
+      <div class="ex-sets"><div class="set-box"><div class="set-wk">S1</div><div class="set-val">2</div></div><div class="set-box"><div class="set-wk">S2</div><div class="set-val">2</div></div><div class="set-box"><div class="set-wk">S3</div><div class="set-val">2</div></div><div class="set-box"><div class="set-wk">S4</div><div class="set-val">3</div></div><div class="set-box"><div class="set-wk">S5</div><div class="set-val">2</div></div></div>
+      <div class="ex-stats"><span class="stat-chip"><b>10–12</b> reps</span><span class="stat-chip"><b>1–2 min</b> descanso</span><span class="stat-chip">Deltoides Post.</span></div>
+      <div class="ex-note">Jala con los codos.</div>
+    </div>
+
+    <div class="ex-card">
+      <div class="ex-top"><div class="ex-id">F</div><div class="ex-info"><div class="ex-name">Elevación de Talón 90° — Sóleo</div><div class="ex-sub">Máquina Costurera</div><span class="ex-tag tag-iso">Pantorrilla</span></div><span class="ex-rir rir-2">RIR 2</span></div>
+      <div class="ex-sets"><div class="set-box"><div class="set-wk">S1</div><div class="set-val">2</div></div><div class="set-box"><div class="set-wk">S2</div><div class="set-val">2</div></div><div class="set-box"><div class="set-wk">S3</div><div class="set-val">3</div></div><div class="set-box"><div class="set-wk">S4</div><div class="set-val">4</div></div><div class="set-box"><div class="set-wk">S5</div><div class="set-val">2</div></div></div>
+      <div class="ex-stats"><span class="stat-chip"><b>8–10</b> reps</span><span class="stat-chip"><b>1–2 min</b> descanso</span></div>
+      <div class="ex-note">Rango completo. Contracción arriba.</div>
+    </div>
+    <div class="cardio-bar">🚶 <span><b>Cardio:</b> Caminadora 30 min · Inclinación 4–5 / 30% · Velocidad 4–5 km/h</span></div>
+  </div>
+  <footer>Push · Gabu Fitness</footer>
+</div>
+
+<!-- ══════════════════════════════════════
+     PULL A/B
+══════════════════════════════════════ -->
+<div class="page" id="page-pull">
+  <div class="pg-hd">
+    <button class="back" onclick="goTo('page-home')">‹</button>
+    <span class="pg-title">Pull</span>
+    <span class="pg-badge">Espalda · Bíceps · Trapecios</span>
+  </div>
+  <div class="tbar">
+    <button class="tbtn on" onclick="swPull('d-pull-a',this)">Martes — Pull A</button>
+    <button class="tbtn" onclick="swPull('d-pull-b',this)">Viernes — Pull B</button>
+  </div>
+
+  <!-- PULL A -->
+  <div class="tcnt on" id="d-pull-a">
+    <div style="padding:12px 0 0"></div>
+    <div class="day-hdr pull-h">
+      <div class="day-num">A</div>
+      <div class="day-hdr-info"><h3>Pull A — Martes</h3><p>Espalda Superior</p></div>
+    </div>
+    <div class="warmup">
+      <span class="wm-chip">🚴 5-10 min cardio</span>
+      <span class="wm-chip">Pull down liga ×2</span>
+      <span class="wm-chip">Curl bíceps liga ×2</span>
+      <span class="wm-chip">Crossover 1 mano ×2</span>
+    </div>
+
+    <div class="ex-card">
+      <div class="ex-top"><div class="ex-id">A</div><div class="ex-info"><div class="ex-name">Remo Abierto Barra T / Máquina</div><div class="ex-sub">Agarre Prono o Remo Polea Agarre Neutro</div><span class="ex-tag tag-comp">Compuesto</span></div><span class="ex-rir rir-2">RIR 2</span></div>
+      <div class="ex-sets"><div class="set-box"><div class="set-wk">S1</div><div class="set-val">2</div></div><div class="set-box"><div class="set-wk">S2</div><div class="set-val">2</div></div><div class="set-box"><div class="set-wk">S3</div><div class="set-val">3</div></div><div class="set-box"><div class="set-wk">S4</div><div class="set-val">4</div></div><div class="set-box"><div class="set-wk">S5</div><div class="set-val">2</div></div></div>
+      <div class="ex-stats"><span class="stat-chip"><b>6–8</b> reps</span><span class="stat-chip"><b>2–3 min</b> descanso</span><span class="stat-chip">Dorsal · Bíceps</span></div>
+      <div class="ex-note">Prono palma abajo. Al jalar aplica retracción escapular y aprieta fuerte.</div>
+    </div>
+
+    <div class="ex-card">
+      <div class="ex-top"><div class="ex-id">B</div><div class="ex-info"><div class="ex-name">Jalón / Pull Down Barra Agarre Supino</div><div class="ex-sub">Palma arriba</div><span class="ex-tag tag-comp">Compuesto</span></div><span class="ex-rir rir-1">RIR 1</span></div>
+      <div class="ex-sets"><div class="set-box"><div class="set-wk">S1</div><div class="set-val">2</div></div><div class="set-box"><div class="set-wk">S2</div><div class="set-val">2</div></div><div class="set-box"><div class="set-wk">S3</div><div class="set-val">3</div></div><div class="set-box"><div class="set-wk">S4</div><div class="set-val">3</div></div><div class="set-box"><div class="set-wk">S5</div><div class="set-val">2</div></div></div>
+      <div class="ex-stats"><span class="stat-chip"><b>10–12</b> reps</span><span class="stat-chip"><b>1–2 min</b> descanso</span></div>
+      <div class="ex-note">Palma arriba. Al jalar retracción escapular y aprieta fuerte el dorsal.</div>
+    </div>
+
+    <div class="ex-card">
+      <div class="ex-top"><div class="ex-id">C</div><div class="ex-info"><div class="ex-name">Pull Over Polea Alta 1 Mano</div><div class="ex-sub">Agarre Neutro</div><span class="ex-tag tag-iso">Aislamiento</span></div><span class="ex-rir rir-1">RIR 1</span></div>
+      <div class="ex-sets"><div class="set-box"><div class="set-wk">S1</div><div class="set-val">2</div></div><div class="set-box"><div class="set-wk">S2</div><div class="set-val">2</div></div><div class="set-box"><div class="set-wk">S3</div><div class="set-val">3</div></div><div class="set-box"><div class="set-wk">S4</div><div class="set-val">3</div></div><div class="set-box"><div class="set-wk">S5</div><div class="set-val">2</div></div></div>
+      <div class="ex-stats"><span class="stat-chip"><b>12–15</b> reps</span><span class="stat-chip"><b>1–2 min</b> descanso</span></div>
+      <div class="ex-note">Mete pelvis y curva columna (conchita). Jala en dirección al muslo.</div>
+    </div>
+
+    <div class="ex-card">
+      <div class="ex-top"><div class="ex-id">D</div><div class="ex-info"><div class="ex-name">Curl Bíceps Bayesian 1 Mano</div><div class="ex-sub">Agarre Neutro — Codo atrás del torso</div><span class="ex-tag tag-iso">Aislamiento</span></div><span class="ex-rir rir-1">RIR 1</span></div>
+      <div class="ex-sets"><div class="set-box"><div class="set-wk">S1</div><div class="set-val">2</div></div><div class="set-box"><div class="set-wk">S2</div><div class="set-val">2</div></div><div class="set-box"><div class="set-wk">S3</div><div class="set-val">3</div></div><div class="set-box"><div class="set-wk">S4</div><div class="set-val">3</div></div><div class="set-box"><div class="set-wk">S5</div><div class="set-val">2</div></div></div>
+      <div class="ex-stats"><span class="stat-chip"><b>10–12</b> reps</span><span class="stat-chip"><b>1–2 min</b> descanso</span></div>
+      <div class="ex-note">Codo atrás del torso para máximo estiramiento del bíceps. Movimientos controlados.</div>
+    </div>
+
+    <div class="ex-card">
+      <div class="ex-top"><div class="ex-id">E</div><div class="ex-info"><div class="ex-name">Fly Posterior Poleas Altas</div><div class="ex-sub">Peck Deck Invertido — AMRAP</div><span class="ex-tag tag-amrap">AMRAP</span></div></div>
+      <div class="ex-sets"><div class="set-box"><div class="set-wk">S1</div><div class="set-val">2</div></div><div class="set-box"><div class="set-wk">S2</div><div class="set-val">2</div></div><div class="set-box"><div class="set-wk">S3</div><div class="set-val">3</div></div><div class="set-box"><div class="set-wk">S4</div><div class="set-val">4</div></div><div class="set-box"><div class="set-wk">S5</div><div class="set-val">2</div></div></div>
+      <div class="ex-stats"><span class="stat-chip"><b>1 min</b> AMRAP</span><span class="stat-chip"><b>1–2 min</b> descanso</span></div>
+      <div class="ex-note">Jala con los codos. Deltoides posterior.</div>
+    </div>
+
+    <div class="ex-card">
+      <div class="ex-top"><div class="ex-id">F</div><div class="ex-info"><div class="ex-name">Trapecios — Encogimientos Banco Inclinado</div><div class="ex-sub">Banco 45–60°</div><span class="ex-tag tag-iso">Aislamiento</span></div><span class="ex-rir rir-1">RIR 1</span></div>
+      <div class="ex-sets"><div class="set-box"><div class="set-wk">S1</div><div class="set-val">3</div></div><div class="set-box"><div class="set-wk">S2</div><div class="set-val">3</div></div><div class="set-box"><div class="set-wk">S3</div><div class="set-val">3</div></div><div class="set-box"><div class="set-wk">S4</div><div class="set-val">3</div></div><div class="set-box"><div class="set-wk">S5</div><div class="set-val">2</div></div></div>
+      <div class="ex-stats"><span class="stat-chip"><b>8–10</b> reps</span><span class="stat-chip"><b>1–2 min</b> descanso</span></div>
+      <div class="ex-note">Mantén 2 seg arriba en contracción. Banco inclinado 45–60°.</div>
+    </div>
+
+    <div class="ex-card">
+      <div class="ex-top"><div class="ex-id">G</div><div class="ex-info"><div class="ex-name">Abs Crunch Hincado Polea Alta</div><span class="ex-tag tag-core">Abdomen</span></div><span class="ex-rir rir-1">RIR 1</span></div>
+      <div class="ex-sets"><div class="set-box"><div class="set-wk">S1</div><div class="set-val">2</div></div><div class="set-box"><div class="set-wk">S2</div><div class="set-val">2</div></div><div class="set-box"><div class="set-wk">S3</div><div class="set-val">3</div></div><div class="set-box"><div class="set-wk">S4</div><div class="set-val">4</div></div><div class="set-box"><div class="set-wk">S5</div><div class="set-val">2</div></div></div>
+      <div class="ex-stats"><span class="stat-chip"><b>15–20</b> reps</span><span class="stat-chip"><b>1–2 min</b> descanso</span></div>
+      <div class="ex-note">Barbilla al esternón (conchita). Exhala al contraer.</div>
+    </div>
+    <div class="cardio-bar">🚶 <span><b>Cardio:</b> Caminadora 30 min · Inclinación 4–5 / 30% · Velocidad 4–5 km/h</span></div>
+  </div>
+
+  <!-- PULL B -->
+  <div class="tcnt" id="d-pull-b">
+    <div style="padding:12px 0 0"></div>
+    <div class="day-hdr pull-h">
+      <div class="day-num">B</div>
+      <div class="day-hdr-info"><h3>Pull B — Viernes</h3><p>Espalda Baja + Remo Variante</p></div>
+    </div>
+    <div class="warmup">
+      <span class="wm-chip">🚴 5-10 min cardio</span>
+      <span class="wm-chip">Rotación externa hombro ×2</span>
+      <span class="wm-chip">Pull down liga ×2</span>
+    </div>
+
+    <div class="ex-card">
+      <div class="ex-top"><div class="ex-id">A</div><div class="ex-info"><div class="ex-name">Remo Abierto Barra T — Agarre Prono</div><div class="ex-sub">Variante de agarre respecto al Pull A</div><span class="ex-tag tag-comp">Compuesto</span></div><span class="ex-rir rir-2">RIR 2</span></div>
+      <div class="ex-sets"><div class="set-box"><div class="set-wk">S1</div><div class="set-val">2</div></div><div class="set-box"><div class="set-wk">S2</div><div class="set-val">2</div></div><div class="set-box"><div class="set-wk">S3</div><div class="set-val">3</div></div><div class="set-box"><div class="set-wk">S4</div><div class="set-val">4</div></div><div class="set-box"><div class="set-wk">S5</div><div class="set-val">2</div></div></div>
+      <div class="ex-stats"><span class="stat-chip"><b>6–8</b> reps</span><span class="stat-chip"><b>2–3 min</b> descanso</span></div>
+      <div class="ex-note">Prono palma abajo. Retracción escapular al jalar.</div>
+    </div>
+
+    <div class="ex-card">
+      <div class="ex-top"><div class="ex-id">B</div><div class="ex-info"><div class="ex-name">Curl Bíceps Barra Z Agarre Prono</div><div class="ex-sub">Palma abajo — énfasis braquiorradial</div><span class="ex-tag tag-iso">Aislamiento</span></div><span class="ex-rir rir-1">RIR 1</span></div>
+      <div class="ex-sets"><div class="set-box"><div class="set-wk">S1</div><div class="set-val">2</div></div><div class="set-box"><div class="set-wk">S2</div><div class="set-val">2</div></div><div class="set-box"><div class="set-wk">S3</div><div class="set-val">3</div></div><div class="set-box"><div class="set-wk">S4</div><div class="set-val">3</div></div><div class="set-box"><div class="set-wk">S5</div><div class="set-val">2</div></div></div>
+      <div class="ex-stats"><span class="stat-chip"><b>10–12</b> reps</span><span class="stat-chip"><b>1–2 min</b> descanso</span></div>
+      <div class="ex-note">Palma abajo. Movimientos controlados.</div>
+    </div>
+
+    <div class="ex-card">
+      <div class="ex-top"><div class="ex-id">C1</div><div class="ex-info"><div class="ex-name">Curl Martillo Mancuerna 1 Mano Alternado</div><div class="ex-sub">SS con C2 — Agarre Neutro</div><span class="ex-tag tag-ss">Superserie</span></div><span class="ex-rir rir-2">RIR 2</span></div>
+      <div class="ex-sets"><div class="set-box"><div class="set-wk">S1</div><div class="set-val">2</div></div><div class="set-box"><div class="set-wk">S2</div><div class="set-val">2</div></div><div class="set-box"><div class="set-wk">S3</div><div class="set-val">3</div></div><div class="set-box"><div class="set-wk">S4</div><div class="set-val">3</div></div><div class="set-box"><div class="set-wk">S5</div><div class="set-val">2</div></div></div>
+      <div class="ex-stats"><span class="stat-chip"><b>10–12</b> reps</span><span class="stat-chip">Sin descanso → C2</span></div>
+      <div class="ex-note">Agarre neutro. Alternando brazos. Codos al frente.</div>
+    </div>
+
+    <div class="ex-card">
+      <div class="ex-top"><div class="ex-id">C2</div><div class="ex-info"><div class="ex-name">Fly Posterior Poleas Altas</div><div class="ex-sub">SS con C1</div><span class="ex-tag tag-ss">Superserie</span></div><span class="ex-rir rir-2">RIR 2</span></div>
+      <div class="ex-sets"><div class="set-box"><div class="set-wk">S1</div><div class="set-val">2</div></div><div class="set-box"><div class="set-wk">S2</div><div class="set-val">2</div></div><div class="set-box"><div class="set-wk">S3</div><div class="set-val">2</div></div><div class="set-box"><div class="set-wk">S4</div><div class="set-val">3</div></div><div class="set-box"><div class="set-wk">S5</div><div class="set-val">2</div></div></div>
+      <div class="ex-stats"><span class="stat-chip"><b>10–12</b> reps</span><span class="stat-chip"><b>90 seg</b> entre rondas</span></div>
+      <div class="ex-note">Jala con los codos.</div>
+    </div>
+
+    <div class="ex-card">
+      <div class="ex-top"><div class="ex-id">D</div><div class="ex-info"><div class="ex-name">Pull Over Polea Alta 1 Mano</div><div class="ex-sub">Variante agarre prono</div><span class="ex-tag tag-iso">Aislamiento</span></div><span class="ex-rir rir-1">RIR 1</span></div>
+      <div class="ex-sets"><div class="set-box"><div class="set-wk">S1</div><div class="set-val">2</div></div><div class="set-box"><div class="set-wk">S2</div><div class="set-val">2</div></div><div class="set-box"><div class="set-wk">S3</div><div class="set-val">3</div></div><div class="set-box"><div class="set-wk">S4</div><div class="set-val">3</div></div><div class="set-box"><div class="set-wk">S5</div><div class="set-val">2</div></div></div>
+      <div class="ex-stats"><span class="stat-chip"><b>12–15</b> reps</span><span class="stat-chip"><b>1–2 min</b> descanso</span></div>
+      <div class="ex-note">Mete pelvis y curva columna. Jala hacia el muslo.</div>
+    </div>
+
+    <div class="ex-card">
+      <div class="ex-top"><div class="ex-id">E</div><div class="ex-info"><div class="ex-name">Plancha Frontal</div><span class="ex-tag tag-core">Core</span></div></div>
+      <div class="ex-sets"><div class="set-box"><div class="set-wk">S1</div><div class="set-val">3</div></div><div class="set-box"><div class="set-wk">S2</div><div class="set-val">3</div></div><div class="set-box"><div class="set-wk">S3</div><div class="set-val">3</div></div><div class="set-box"><div class="set-wk">S4</div><div class="set-val">3</div></div><div class="set-box"><div class="set-wk">S5</div><div class="set-val">2</div></div></div>
+      <div class="ex-stats"><span class="stat-chip"><b>1 min</b></span><span class="stat-chip"><b>1 min</b> descanso</span></div>
+      <div class="ex-note">Espalda baja recta (NO curva). Tensión abdominal todo el tiempo. Exhala continuamente.</div>
+    </div>
+
+    <div class="ex-card">
+      <div class="ex-top"><div class="ex-id">F</div><div class="ex-info"><div class="ex-name">Planchas Laterales</div><span class="ex-tag tag-core">Core</span></div></div>
+      <div class="ex-sets"><div class="set-box"><div class="set-wk">S1</div><div class="set-val">3</div></div><div class="set-box"><div class="set-wk">S2</div><div class="set-val">3</div></div><div class="set-box"><div class="set-wk">S3</div><div class="set-val">3</div></div><div class="set-box"><div class="set-wk">S4</div><div class="set-val">3</div></div><div class="set-box"><div class="set-wk">S5</div><div class="set-val">2</div></div></div>
+      <div class="ex-stats"><span class="stat-chip"><b>30–35 seg</b> por lado</span><span class="stat-chip"><b>1 min</b> descanso</span></div>
+      <div class="ex-note">Tiempo a realizar por cada lado. Exhala todo el tiempo.</div>
+    </div>
+    <div class="cardio-bar">🚶 <span><b>Cardio:</b> Caminadora 30 min · Inclinación 4–5 / 30% · Velocidad 4–5 km/h</span></div>
+  </div>
+  <footer>Pull · Gabu Fitness</footer>
+</div>
+
+<!-- ══════════════════════════════════════
+     LEGS A/B
+══════════════════════════════════════ -->
+<div class="page" id="page-legs">
+  <div class="pg-hd">
+    <button class="back" onclick="goTo('page-home')">‹</button>
+    <span class="pg-title">Legs</span>
+    <span class="pg-badge">Cuádriceps · Glúteos · Isquios</span>
+  </div>
+  <div class="tbar">
+    <button class="tbtn on" onclick="swLegs('d-legs-a',this)">Miércoles — Legs A</button>
+    <button class="tbtn" onclick="swLegs('d-legs-b',this)">Sábado — Legs B</button>
+  </div>
+
+  <!-- LEGS A -->
+  <div class="tcnt on" id="d-legs-a">
+    <div style="padding:12px 0 0"></div>
+    <div class="day-hdr legs-h">
+      <div class="day-num">A</div>
+      <div class="day-hdr-info"><h3>Legs A — Miércoles</h3><p>Cuádriceps + Glúteos</p></div>
+    </div>
+    <div class="warmup">
+      <span class="wm-chip">🚴 5-10 min cardio</span>
+      <span class="wm-chip">Plancha frontal ×2 30 seg</span>
+      <span class="wm-chip">Extensión cuádriceps ×2</span>
+      <span class="wm-chip">Curl isquios ×2</span>
+    </div>
+
+    <div class="ex-card">
+      <div class="ex-top"><div class="ex-id">A</div><div class="ex-info"><div class="ex-name">Hip Thrust Máquina / Smith</div><span class="ex-tag tag-comp">Compuesto</span></div><span class="ex-rir rir-2">RIR 2</span></div>
+      <div class="ex-sets"><div class="set-box"><div class="set-wk">S1</div><div class="set-val">2</div></div><div class="set-box"><div class="set-wk">S2</div><div class="set-val">2</div></div><div class="set-box"><div class="set-wk">S3</div><div class="set-val">3</div></div><div class="set-box"><div class="set-wk">S4</div><div class="set-val">4</div></div><div class="set-box"><div class="set-wk">S5</div><div class="set-val">2</div></div></div>
+      <div class="ex-stats"><span class="stat-chip"><b>6–8</b> reps</span><span class="stat-chip"><b>2–3 min</b> descanso</span><span class="stat-chip">Glúteos · Isquios</span></div>
+      <div class="ex-note">Mantén 2 seg arriba en contracción máxima.</div>
+    </div>
+
+    <div class="ex-card">
+      <div class="ex-top"><div class="ex-id">B</div><div class="ex-info"><div class="ex-name">Press de Pierna — Enfoque Flexión de Cadera</div><span class="ex-tag tag-comp">Compuesto</span></div><span class="ex-rir rir-1">RIR 1</span></div>
+      <div class="ex-sets"><div class="set-box"><div class="set-wk">S1</div><div class="set-val">2</div></div><div class="set-box"><div class="set-wk">S2</div><div class="set-val">2</div></div><div class="set-box"><div class="set-wk">S3</div><div class="set-val">3</div></div><div class="set-box"><div class="set-wk">S4</div><div class="set-val">4</div></div><div class="set-box"><div class="set-wk">S5</div><div class="set-val">2</div></div></div>
+      <div class="ex-stats"><span class="stat-chip"><b>10–12</b> reps</span><span class="stat-chip"><b>1–2 min</b> descanso</span></div>
+      <div class="ex-note">Piernas separadas, puntas abiertas, talones hacia adentro. Llevar muslos hacia costados del torso para activar glúteo.</div>
+    </div>
+
+    <div class="ex-card">
+      <div class="ex-top"><div class="ex-id">C</div><div class="ex-info"><div class="ex-name">Abductor Máquina</div><span class="ex-tag tag-iso">Aislamiento</span></div><span class="ex-rir rir-1">RIR 1</span></div>
+      <div class="ex-sets"><div class="set-box"><div class="set-wk">S1</div><div class="set-val">2</div></div><div class="set-box"><div class="set-wk">S2</div><div class="set-val">2</div></div><div class="set-box"><div class="set-wk">S3</div><div class="set-val">3</div></div><div class="set-box"><div class="set-wk">S4</div><div class="set-val">4</div></div><div class="set-box"><div class="set-wk">S5</div><div class="set-val">2</div></div></div>
+      <div class="ex-stats"><span class="stat-chip"><b>10–12</b> reps</span><span class="stat-chip"><b>1–2 min</b> descanso</span><span class="stat-chip">Glúteo Medio</span></div>
+      <div class="ex-note">Movimiento hacia afuera y controlado. Mantén contracción 2 seg.</div>
+    </div>
+
+    <div class="ex-card">
+      <div class="ex-top"><div class="ex-id">D</div><div class="ex-info"><div class="ex-name">Sentadilla Búlgara con Inclinación Anterior</div><span class="ex-tag tag-comp">Compuesto</span></div><span class="ex-rir rir-1">RIR 1</span></div>
+      <div class="ex-sets"><div class="set-box"><div class="set-wk">S1</div><div class="set-val">2</div></div><div class="set-box"><div class="set-wk">S2</div><div class="set-val">2</div></div><div class="set-box"><div class="set-wk">S3</div><div class="set-val">3</div></div><div class="set-box"><div class="set-wk">S4</div><div class="set-val">3</div></div><div class="set-box"><div class="set-wk">S5</div><div class="set-val">2</div></div></div>
+      <div class="ex-stats"><span class="stat-chip"><b>10–12</b> reps</span><span class="stat-chip"><b>1–2 min</b> descanso</span></div>
+      <div class="ex-note">Inclinación anterior para mayor activación glútea. Énfasis en glúteo sobre cuádriceps.</div>
+    </div>
+
+    <div class="ex-card">
+      <div class="ex-top"><div class="ex-id">E</div><div class="ex-info"><div class="ex-name">Extensión de Cuádriceps 2 Piernas</div><span class="ex-tag tag-iso">Aislamiento</span></div><span class="ex-rir rir-1">RIR 1</span></div>
+      <div class="ex-sets"><div class="set-box"><div class="set-wk">S1</div><div class="set-val">2</div></div><div class="set-box"><div class="set-wk">S2</div><div class="set-val">2</div></div><div class="set-box"><div class="set-wk">S3</div><div class="set-val">3</div></div><div class="set-box"><div class="set-wk">S4</div><div class="set-val">3</div></div><div class="set-box"><div class="set-wk">S5</div><div class="set-val">2</div></div></div>
+      <div class="ex-stats"><span class="stat-chip"><b>15–20</b> reps</span><span class="stat-chip"><b>1–2 min</b> descanso</span></div>
+      <div class="ex-note">Mantén 2 seg arriba en contracción.</div>
+    </div>
+
+    <div class="ex-card">
+      <div class="ex-top"><div class="ex-id">F</div><div class="ex-info"><div class="ex-name">Aductor Máquina</div><span class="ex-tag tag-iso">Aislamiento</span></div><span class="ex-rir rir-1">RIR 1</span></div>
+      <div class="ex-sets"><div class="set-box"><div class="set-wk">S1</div><div class="set-val">2</div></div><div class="set-box"><div class="set-wk">S2</div><div class="set-val">2</div></div><div class="set-box"><div class="set-wk">S3</div><div class="set-val">3</div></div><div class="set-box"><div class="set-wk">S4</div><div class="set-val">4</div></div><div class="set-box"><div class="set-wk">S5</div><div class="set-val">2</div></div></div>
+      <div class="ex-stats"><span class="stat-chip"><b>10–12</b> reps</span><span class="stat-chip"><b>1–2 min</b> descanso</span></div>
+      <div class="ex-note">Movimiento hacia adentro. Contracción 2 seg.</div>
+    </div>
+
+    <div class="ex-card">
+      <div class="ex-top"><div class="ex-id">G</div><div class="ex-info"><div class="ex-name">Abs Crunch Hincado Polea Alta</div><span class="ex-tag tag-core">Abdomen</span></div><span class="ex-rir rir-1">RIR 1</span></div>
+      <div class="ex-sets"><div class="set-box"><div class="set-wk">S1</div><div class="set-val">2</div></div><div class="set-box"><div class="set-wk">S2</div><div class="set-val">2</div></div><div class="set-box"><div class="set-wk">S3</div><div class="set-val">3</div></div><div class="set-box"><div class="set-wk">S4</div><div class="set-val">4</div></div><div class="set-box"><div class="set-wk">S5</div><div class="set-val">2</div></div></div>
+      <div class="ex-stats"><span class="stat-chip"><b>15–20</b> reps</span><span class="stat-chip"><b>1–2 min</b> descanso</span></div>
+      <div class="ex-note">Barbilla al esternón (conchita). Exhala al contraer.</div>
+    </div>
+    <div class="cardio-bar">🚶 <span><b>Cardio:</b> Caminadora 15 min · Inclinación 4–5 / 30% · Velocidad 4–5 km/h</span></div>
+  </div>
+
+  <!-- LEGS B -->
+  <div class="tcnt" id="d-legs-b">
+    <div style="padding:12px 0 0"></div>
+    <div class="day-hdr legs-h">
+      <div class="day-num">B</div>
+      <div class="day-hdr-info"><h3>Legs B — Sábado</h3><p>Isquios + Cadena Posterior</p></div>
+    </div>
+    <div class="warmup">
+      <span class="wm-chip">🚴 5-10 min cardio</span>
+      <span class="wm-chip">Aductor ×2</span>
+      <span class="wm-chip">Curl isquios ×2</span>
+    </div>
+
+    <div class="ex-card">
+      <div class="ex-top"><div class="ex-id">A</div><div class="ex-info"><div class="ex-name">Peso Muerto Piernas Rígidas</div><span class="ex-tag tag-comp">Compuesto</span></div><span class="ex-rir rir-2">RIR 2</span></div>
+      <div class="ex-sets"><div class="set-box"><div class="set-wk">S1</div><div class="set-val">2</div></div><div class="set-box"><div class="set-wk">S2</div><div class="set-val">2</div></div><div class="set-box"><div class="set-wk">S3</div><div class="set-val">3</div></div><div class="set-box"><div class="set-wk">S4</div><div class="set-val">4</div></div><div class="set-box"><div class="set-wk">S5</div><div class="set-val">2</div></div></div>
+      <div class="ex-stats"><span class="stat-chip"><b>6–8</b> reps</span><span class="stat-chip"><b>2–3 min</b> descanso</span><span class="stat-chip">Isquios · Glúteos</span></div>
+      <div class="ex-note">Barra pegada al cuerpo. Rodillas NO se flexionan. Bajar con cadera hacia atrás. NO flexionar la espalda.</div>
+    </div>
+
+    <div class="ex-card">
+      <div class="ex-top"><div class="ex-id">B</div><div class="ex-info"><div class="ex-name">Cable Pull Through</div><span class="ex-tag tag-comp">Compuesto</span></div><span class="ex-rir rir-1">RIR 1</span></div>
+      <div class="ex-sets"><div class="set-box"><div class="set-wk">S1</div><div class="set-val">2</div></div><div class="set-box"><div class="set-wk">S2</div><div class="set-val">2</div></div><div class="set-box"><div class="set-wk">S3</div><div class="set-val">3</div></div><div class="set-box"><div class="set-wk">S4</div><div class="set-val">3</div></div><div class="set-box"><div class="set-wk">S5</div><div class="set-val">2</div></div></div>
+      <div class="ex-stats"><span class="stat-chip"><b>10–12</b> reps</span><span class="stat-chip"><b>1–2 min</b> descanso</span></div>
+      <div class="ex-note">Bisagra de cadera limpia. Espalda neutral en todo momento.</div>
+    </div>
+
+    <div class="ex-card">
+      <div class="ex-top"><div class="ex-id">C</div><div class="ex-info"><div class="ex-name">Curl Isquios 1 Pierna de Pie</div><div class="ex-sub">Máquina / Polea Baja / Acostado</div><span class="ex-tag tag-iso">Aislamiento</span></div><span class="ex-rir rir-1">RIR 1</span></div>
+      <div class="ex-sets"><div class="set-box"><div class="set-wk">S1</div><div class="set-val">2</div></div><div class="set-box"><div class="set-wk">S2</div><div class="set-val">2</div></div><div class="set-box"><div class="set-wk">S3</div><div class="set-val">3</div></div><div class="set-box"><div class="set-wk">S4</div><div class="set-val">3</div></div><div class="set-box"><div class="set-wk">S5</div><div class="set-val">2</div></div></div>
+      <div class="ex-stats"><span class="stat-chip"><b>12–15</b> reps</span><span class="stat-chip"><b>1–2 min</b> descanso</span></div>
+      <div class="ex-note">Mantener postura recta muslo-torso. Mantener 2 seg en contracción.</div>
+    </div>
+
+    <div class="ex-card">
+      <div class="ex-top"><div class="ex-id">D</div><div class="ex-info"><div class="ex-name">Sentadilla Búlgara — Enfoque Cuádriceps</div><span class="ex-tag tag-comp">Compuesto</span></div><span class="ex-rir rir-1">RIR 1</span></div>
+      <div class="ex-sets"><div class="set-box"><div class="set-wk">S1</div><div class="set-val">2</div></div><div class="set-box"><div class="set-wk">S2</div><div class="set-val">2</div></div><div class="set-box"><div class="set-wk">S3</div><div class="set-val">3</div></div><div class="set-box"><div class="set-wk">S4</div><div class="set-val">3</div></div><div class="set-box"><div class="set-wk">S5</div><div class="set-val">2</div></div></div>
+      <div class="ex-stats"><span class="stat-chip"><b>10–12</b> reps</span><span class="stat-chip"><b>1–2 min</b> descanso</span></div>
+      <div class="ex-note">Toma 1 mancuerna con el lado contrario. Torso derecho. Bajada en vertical.</div>
+    </div>
+
+    <div class="ex-card">
+      <div class="ex-top"><div class="ex-id">E</div><div class="ex-info"><div class="ex-name">Aductor Máquina</div><span class="ex-tag tag-iso">Aislamiento</span></div><span class="ex-rir rir-1">RIR 1</span></div>
+      <div class="ex-sets"><div class="set-box"><div class="set-wk">S1</div><div class="set-val">2</div></div><div class="set-box"><div class="set-wk">S2</div><div class="set-val">2</div></div><div class="set-box"><div class="set-wk">S3</div><div class="set-val">3</div></div><div class="set-box"><div class="set-wk">S4</div><div class="set-val">4</div></div><div class="set-box"><div class="set-wk">S5</div><div class="set-val">2</div></div></div>
+      <div class="ex-stats"><span class="stat-chip"><b>10–12</b> reps</span><span class="stat-chip"><b>1–2 min</b> descanso</span></div>
+      <div class="ex-note">Movimiento hacia adentro. Contracción 2 seg.</div>
+    </div>
+
+    <div class="ex-card">
+      <div class="ex-top"><div class="ex-id">F</div><div class="ex-info"><div class="ex-name">Elevación de Piernas</div><span class="ex-tag tag-core">Abdomen</span></div><span class="ex-rir rir-1">RIR 1</span></div>
+      <div class="ex-sets"><div class="set-box"><div class="set-wk">S1</div><div class="set-val">2</div></div><div class="set-box"><div class="set-wk">S2</div><div class="set-val">2</div></div><div class="set-box"><div class="set-wk">S3</div><div class="set-val">3</div></div><div class="set-box"><div class="set-wk">S4</div><div class="set-val">4</div></div><div class="set-box"><div class="set-wk">S5</div><div class="set-val">2</div></div></div>
+      <div class="ex-stats"><span class="stat-chip"><b>15–20</b> reps</span><span class="stat-chip"><b>1–2 min</b> descanso</span></div>
+      <div class="ex-note">Eleva la CADERA, no solo las piernas. Exhala al contraer.</div>
+    </div>
+    <div class="cardio-bar">🚶 <span><b>Cardio:</b> Caminadora 15 min · Inclinación 4–5 / 30% · Velocidad 4–5 km/h</span></div>
+  </div>
+  <footer>Legs · Gabu Fitness</footer>
+</div>
+
+<!-- ══════════════════════════════════════
+     NUTRICIÓN
+══════════════════════════════════════ -->
+<div class="page" id="page-nutr">
+  <div class="pg-hd">
+    <button class="back" onclick="goTo('page-home')">‹</button>
+    <span class="pg-title">Nutrición</span>
+    <span class="pg-badge">Superávit para ganar músculo</span>
+  </div>
+  <div class="tbar">
+    <button class="tbtn on" onclick="swNutr('n-menus',this)">Menús</button>
+    <button class="tbtn" onclick="swNutr('n-supp',this)">Suplementos</button>
+    <button class="tbtn" onclick="swNutr('n-reglas',this)">Reglas</button>
+  </div>
+
+  <div class="tcnt on" id="n-menus">
+    <div style="height:14px"></div>
+
+    <!-- TOTALES -->
+    <div style="padding:0 16px">
+      <div class="total-hero">
+        <div class="total-ttl">📊 Totales Diarios — Días Altos</div>
+        <div class="total-grid">
+          <div class="total-item"><div class="total-num" style="color:var(--green)">~2,700</div><div class="total-lbl">Kcal</div></div>
+          <div class="total-item"><div class="total-num" style="color:#4ade80">~162g</div><div class="total-lbl">Proteína</div></div>
+          <div class="total-item"><div class="total-num" style="color:var(--pull)">~360g</div><div class="total-lbl">Carbos</div></div>
+          <div class="total-item"><div class="total-num" style="color:#fbbf24">~42g</div><div class="total-lbl">Grasas</div></div>
+        </div>
+        <div style="margin-top:10px;font-size:10px;color:var(--muted);font-family:'Barlow Condensed';letter-spacing:.5px">Días Bajos (descanso): ~2,200 kcal · P:~162g · HC:~250g · G:~42g</div>
+      </div>
+    </div>
+
+    <!-- DESAYUNO -->
+    <div style="padding:0 16px">
+      <div class="meal-card">
+        <div class="meal-hdr"><div class="meal-ttl">🌅 Desayuno</div><div class="meal-kcal">~638 kcal</div></div>
+        <div class="macro-row">
+          <div class="macro-cell"><div class="macro-lbl">P</div><div class="macro-val mp">39g</div></div>
+          <div class="macro-cell"><div class="macro-lbl">HC</div><div class="macro-val mc">71g</div></div>
+          <div class="macro-cell"><div class="macro-lbl">G</div><div class="macro-val mf">22g</div></div>
+        </div>
+        <div class="meal-body">
+          <div class="meal-item"><b>Menú 1:</b> 3 pzas huevo entero + 50 gr jamón de pavo (San Rafael Balance) + 30 gr queso mozzarella rallado + 5 pzas tortilla de maíz regular</div>
+          <div class="meal-item">Bebida: 300 ml agua, café negro sin azúcar o té verde/canela</div>
+          <div class="meal-note"><b>Suplementos:</b> 5 gr Creatina Monohidratada Essentials (todos los días) + 1 cap Vitamina D3 5,000 UI o 10–15 min de sol</div>
+        </div>
+      </div>
+
+      <!-- COMIDA -->
+      <div class="meal-card">
+        <div class="meal-hdr"><div class="meal-ttl">🍽 Comida</div><div class="meal-kcal">~457 kcal</div></div>
+        <div class="macro-row">
+          <div class="macro-cell"><div class="macro-lbl">P</div><div class="macro-val mp">44g</div></div>
+          <div class="macro-cell"><div class="macro-lbl">HC</div><div class="macro-val mc">62g</div></div>
+          <div class="macro-cell"><div class="macro-lbl">G</div><div class="macro-val mf">3.5g</div></div>
+        </div>
+        <div class="meal-body">
+          <div class="meal-item"><b>Proteínas (elegir 1):</b> 200 gr pechuga de pollo / 165 gr carne de res (pulpa) / 150 gr molida 95% / 220 gr pescado blanco tilapia</div>
+          <div class="meal-item"><b>Carbos (elegir 1):</b> 220 gr arroz blanco cocido / 255 gr camote horneado / 4 pzas tortilla de maíz</div>
+          <div class="meal-item">Vegetales al gusto · Bebida: 300 ml agua, jamaica o limón sin azúcar</div>
+        </div>
+      </div>
+
+      <!-- PRE-ENTRENO -->
+      <div class="meal-card">
+        <div class="meal-hdr"><div class="meal-ttl">⚡ Pre-Entreno</div><div class="meal-kcal">~250 kcal</div></div>
+        <div class="macro-row">
+          <div class="macro-cell"><div class="macro-lbl">P</div><div class="macro-val mp">3g</div></div>
+          <div class="macro-cell"><div class="macro-lbl">HC</div><div class="macro-val mc">46g</div></div>
+          <div class="macro-cell"><div class="macro-lbl">G</div><div class="macro-val mf">7g</div></div>
+        </div>
+        <div class="meal-body">
+          <div class="meal-item"><b>★ Sandwich Nutella (opción principal):</b> 2 rebanadas pan integral + 20 gr Nutella (1.5 cdas) · Consumir 20–30 min antes de entrenar</div>
+          <div class="meal-item"><b>Opción alternativa:</b> 2 pzas Rice Krispies Treats Kellogg's + 1 taza café negro sin azúcar</div>
+          <div class="meal-note"><b>Hidratación pre:</b> 2 gr sal de mar/himalaya con 100 ml agua natural (20 min antes)</div>
+        </div>
+      </div>
+
+      <!-- INTRA -->
+      <div class="meal-card">
+        <div class="meal-hdr"><div class="meal-ttl">🏋️ Intra-Entreno</div><div class="meal-kcal">Solo días entreno</div></div>
+        <div class="macro-row">
+          <div class="macro-cell"><div class="macro-lbl">P</div><div class="macro-val mp">0g</div></div>
+          <div class="macro-cell"><div class="macro-lbl">HC</div><div class="macro-val mc">32.5g</div></div>
+          <div class="macro-cell"><div class="macro-lbl">G</div><div class="macro-val mf">0g</div></div>
+        </div>
+        <div class="meal-body">
+          <div class="meal-item"><b>Solo Días ALTOS:</b> 35 gr Gatorade en polvo o 500 ml Gatorade líquido</div>
+          <div class="meal-item">+ 2–3 litros de agua natural durante el entrenamiento</div>
+        </div>
+      </div>
+
+      <!-- POST-ENTRENO -->
+      <div class="meal-card">
+        <div class="meal-hdr"><div class="meal-ttl">🔄 Post-Entreno</div><div class="meal-kcal">~474 kcal (alto)</div></div>
+        <div class="macro-row">
+          <div class="macro-cell"><div class="macro-lbl">P</div><div class="macro-val mp">30g</div></div>
+          <div class="macro-cell"><div class="macro-lbl">HC</div><div class="macro-val mc">90g</div></div>
+          <div class="macro-cell"><div class="macro-lbl">G</div><div class="macro-val mf">3g</div></div>
+        </div>
+        <div class="meal-body">
+          <div class="meal-item"><b>Días ALTOS:</b> 80 gr nestum arroz sin azúcar (Nestlé/Gerber) + 1 scoop proteína whey Gold Standard 100% con agua + 45 gr blueberries + 75 gr plátano</div>
+          <div class="meal-item"><b>Días BAJOS:</b> 80 gr nestum arroz sin azúcar + 1 scoop proteína whey con agua + 45 gr blueberries (sin plátano)</div>
+          <div class="meal-note">⚠️ Si da más hambre, complementar con la cena ampliada (pasta + proteína).</div>
+        </div>
+      </div>
+
+      <!-- CENA -->
+      <div class="meal-card" style="border-color:rgba(57,217,138,0.25)">
+        <div class="meal-hdr" style="background:rgba(57,217,138,0.04)"><div class="meal-ttl" style="color:var(--green)">🌙 Cena Ampliada ★</div><div class="meal-kcal" style="color:var(--green)">~880 kcal ↑</div></div>
+        <div class="macro-row">
+          <div class="macro-cell"><div class="macro-lbl">P</div><div class="macro-val mp">44g</div></div>
+          <div class="macro-cell"><div class="macro-lbl">HC</div><div class="macro-val mc">120g</div></div>
+          <div class="macro-cell"><div class="macro-lbl">G</div><div class="macro-val mf">16g</div></div>
+        </div>
+        <div class="meal-body">
+          <div class="meal-item"><b>Proteínas (elegir 1):</b> 200 gr pechuga pollo / 165 gr carne res / 150 gr molida 95% / 220 gr tilapia</div>
+          <div class="meal-item" style="color:var(--green)"><b>★ Pasta aumentada:</b> 300 gr pasta cocida (espagueti, penne, etc.) o arroz blanco cocido</div>
+          <div class="meal-item"><b>Grasas (elegir 1):</b> 13 gr aceite de oliva / 25 gr mix nueces sin sal / 25 gr crema de cacahuate natural</div>
+          <div class="meal-item">Vegetales al gusto · Bebida: 300 ml agua o jamaica sin azúcar</div>
+          <div class="meal-note"><b>✅ Cena cargada de carbos</b> — ideal para recuperación nocturna y reposición de glucógeno post-entreno.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tcnt" id="n-supp">
+    <div style="height:14px"></div>
+    <div class="stitle">Suplementación e <span>Hidratación</span></div>
+    <div class="smeta">Solo días de entrenamiento salvo indicación</div>
+    <div style="padding:0 16px">
+      <table class="supp-table">
+        <thead><tr><th>Momento</th><th>Suplemento</th><th>Dosis</th></tr></thead>
+        <tbody>
+          <tr><td>Desayuno (diario)</td><td><b>Creatina Monohidratada Essentials</b></td><td><b style="color:var(--green)">5 gr</b></td></tr>
+          <tr><td>Desayuno (diario)</td><td><b>Vitamina D3 Essentials</b></td><td><b style="color:var(--green)">5,000 UI o 10–15 min sol</b></td></tr>
+          <tr><td>Pre-entreno (20 min)</td><td>Sal de mar / Himalaya en agua</td><td><b style="color:var(--green)">2 gr en 100 ml</b></td></tr>
+          <tr><td>Intra-entreno (Días ALTOS)</td><td>Gatorade en polvo o líquido</td><td><b style="color:var(--green)">35 gr / 500 ml</b></td></tr>
+          <tr><td>Post-entreno</td><td>Papilla Proteica (ver Menús)</td><td><b style="color:var(--green)">Dentro de 30 min</b></td></tr>
+          <tr><td>Durante el día</td><td>Agua natural</td><td><b style="color:var(--green)">35–40 ml/kg + 500 ml/h entreno</b></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="tcnt" id="n-reglas">
+    <div style="height:14px"></div>
+    <div class="stitle">Reglas del <span>Plan</span></div>
+    <div style="padding:0 16px">
+      <div class="ibox ibox-green">
+        <div class="ibox-title ibox-title-green">📋 GENERALES</div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <div class="rule-row"><div class="rule-ico">⚖️</div><div class="rule-txt"><b>Báscula digital obligatoria.</b> Pesar en crudo y descongelado: pollo, pavo, pescado, carne, salmón, atún, avena. Pesar cocido y sin líquidos: arroz, pasta, papa, quínoa, leguminosas.</div></div>
+          <div class="rule-row"><div class="rule-ico">🫒</div><div class="rule-txt"><b>Aceite en spray</b> de coco, aguacate o mantequilla ghee. Retirar exceso con servilleta.</div></div>
+          <div class="rule-row"><div class="rule-ico">🚫</div><div class="rule-txt"><b>Sin azúcar refinada.</b> Sustituir por Stevia o Monk Fruit. Sin bebidas azucaradas, jugos, refrescos.</div></div>
+          <div class="rule-row"><div class="rule-ico">😴</div><div class="rule-txt"><b>Sueño reparador:</b> 6–8 horas diarias. Sin celular 1 hora antes de dormir. El sueño ES un suplemento.</div></div>
+          <div class="rule-row"><div class="rule-ico">🚭</div><div class="rule-txt"><b>NO fumar. NO alcohol.</b> Ambos interfieren directamente con la síntesis proteica y la recuperación muscular.</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <footer>Nutrición · Gabu Fitness</footer>
+</div>
+
+<!-- ══════════════════════════════════════
+     GUÍA BUILD
+══════════════════════════════════════ -->
+<div class="page" id="page-build">
+  <div class="pg-hd">
+    <button class="back" onclick="goTo('page-home')">‹</button>
+    <span class="pg-title">Guía Build</span>
+    <span class="pg-badge">Superávit inteligente</span>
+  </div>
+  <div class="tbar">
+    <button class="tbtn on" onclick="swBuild('b-base',this)">Base</button>
+    <button class="tbtn" onclick="swBuild('b-macros',this)">Macros</button>
+    <button class="tbtn" onclick="swBuild('b-prog',this)">Progresión</button>
+    <button class="tbtn" onclick="swBuild('b-ajustes',this)">Ajustes</button>
+  </div>
+
+  <div class="tcnt on" id="b-base">
+    <div class="stitle" style="margin-top:14px">El <span>Superávit</span></div>
+    <div class="smeta">Ganar músculo sin engordar innecesariamente</div>
+    <div style="padding:0 16px">
+      <div class="sup-hero">
+        <div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:5px;font-family:'Barlow Condensed'">Superávit recomendado</div>
+        <div class="sup-number">+300<span style="font-size:28px">kcal</span></div>
+        <div class="sup-label">Por día · El punto óptimo</div>
+        <div class="sup-range">
+          <div class="srange"><div class="srange-v" style="color:var(--subtle)">+200</div><div class="srange-l">Suave</div></div>
+          <div class="srange" style="border-color:var(--green);background:rgba(57,217,138,0.08)"><div class="srange-v" style="color:var(--green)">+300</div><div class="srange-l" style="color:var(--green)">Óptimo</div></div>
+          <div class="srange"><div class="srange-v" style="color:var(--subtle)">+400</div><div class="srange-l">Máximo</div></div>
+        </div>
+      </div>
+
+      <div class="ibox ibox-green">
+        <div class="ibox-title ibox-title-green">📐 LA MATEMÁTICA DEL MÚSCULO</div>
+        <div class="ibox-text"><strong>1 kg de músculo requiere ~2,500 kcal extra</strong> para construirse.<br>Con +300 kcal/día → 2,100 kcal/semana → <strong>~0.5–0.8 kg músculo por mes</strong> en condiciones óptimas.<br><br>Ese es el límite biológico real. Quien promete más te está vendiendo humo — o está hablando de grasa, no músculo.</div>
+      </div>
+
+      <div class="ibox ibox-blue">
+        <div class="ibox-title ibox-title-blue">🧠 POR QUÉ NO MÁS DE +400 KCAL</div>
+        <div class="ibox-text">Con superávit muy agresivo (+500 kcal o más), el cuerpo <strong>acumula grasa, no músculo extra.</strong> La tasa de síntesis proteica muscular tiene un límite por hora. El exceso de calorías más allá de ese límite va directo al tejido adiposo.<br><br>Superávit limpio + progresión en el gym + proteína alta = la fórmula real.</div>
+      </div>
+
+      <div class="ibox ibox-gold">
+        <div class="ibox-title ibox-title-gold">💤 EL SUEÑO ES UN SUPLEMENTO</div>
+        <div class="ibox-text">La hormona del crecimiento (GH) se libera principalmente durante el sueño profundo. Sin 7–9 horas de sueño de calidad, <strong>el músculo no se construye</strong>, sin importar cuánto entrenes o comas.<br><br>Prioridad: sueño > cualquier suplemento.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tcnt" id="b-macros">
+    <div class="stitle" style="margin-top:14px">Los <span>Macros</span></div>
+    <div class="smeta">Distribución óptima para hipertrofia</div>
+    <div style="padding:0 16px">
+      <div class="ibox ibox-green">
+        <div class="ibox-title ibox-title-green">🥩 PROTEÍNA — El ladrillo del músculo</div>
+        <div class="ibox-text"><strong>1.8–2.2 gr / kg de peso corporal.</strong><br><br>Es el macro más importante para la hipertrofia. Sin suficiente proteína, el cuerpo no puede reparar ni construir tejido muscular. Distribuir en 4–5 tomas al día para maximizar la síntesis proteica.<br><br>Fuentes: pollo, carne, tilapia, huevo, whey protein.</div>
+      </div>
+      <div class="ibox ibox-blue">
+        <div class="ibox-title ibox-title-blue">🍚 CARBOHIDRATOS — El combustible</div>
+        <div class="ibox-text"><strong>4–6 gr / kg de peso corporal.</strong><br><br>Los carbos son el combustible primario del músculo durante el entrenamiento de fuerza. Mayor consumo en días de entrenamiento. La cena cargada en pasta o arroz repone el glucógeno muscular para la sesión del día siguiente.<br><br>Fuentes: arroz, pasta, camote, tortilla, plátano, avena.</div>
+      </div>
+      <div class="ibox ibox-gold">
+        <div class="ibox-title ibox-title-gold">🥑 GRASAS — Hormonas y recuperación</div>
+        <div class="ibox-text"><strong>1–1.5 gr / kg de peso corporal.</strong><br><br>Las grasas insaturadas apoyan la producción de testosterona y hormonas anabólicas. No eliminarlas — solo priorizarlas correctamente.<br><br>Fuentes: aceite de oliva, aguacate, nueces, crema de cacahuate natural.</div>
+      </div>
+      <div class="ibox ibox-green" style="margin-bottom:6px">
+        <div class="ibox-title ibox-title-green">💧 AGUA</div>
+        <div class="ibox-text"><strong>35–40 ml / kg peso + 500 ml por hora de ejercicio intenso.</strong><br>La deshidratación reduce hasta un 15% el rendimiento en fuerza.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tcnt" id="b-prog">
+    <div class="stitle" style="margin-top:14px">Protocolo de <span>Progresión</span></div>
+    <div class="smeta">5 semanas de sobrecarga sistematizada</div>
+    <div style="padding:0 16px;overflow-x:auto">
+      <table class="prog-table">
+        <thead><tr><th>Semana</th><th>Objetivo</th><th>RPE</th><th>Carga</th><th>Volumen</th></tr></thead>
+        <tbody>
+          <tr><td class="s1c">S1 Base</td><td style="font-size:11px;color:var(--muted)">Referencia</td><td><span style="color:#4ade80;font-family:'Barlow Condensed';font-weight:700">7</span></td><td class="s1c">100%</td><td class="s1c">100%</td></tr>
+          <tr><td class="s2c">S2 Acum.</td><td style="font-size:11px;color:var(--muted)">Volumen</td><td><span style="color:var(--pull);font-family:'Barlow Condensed';font-weight:700">8</span></td><td class="s2c">+5%</td><td class="s2c">+5%</td></tr>
+          <tr><td class="s3c">S3 Intens.</td><td style="font-size:11px;color:var(--muted)">Estímulo máx.</td><td><span style="color:#fbbf24;font-family:'Barlow Condensed';font-weight:700">8–9</span></td><td class="s3c">+10%</td><td class="s3c">+5%</td></tr>
+          <tr><td class="s4c">S4 Peak</td><td style="font-size:11px;color:var(--muted)">Alta intens.</td><td><span style="color:var(--push);font-family:'Barlow Condensed';font-weight:700">9</span></td><td class="s4c">+12–15%</td><td class="s4c">–1 serie</td></tr>
+          <tr><td class="s5c">S5 Deload</td><td style="font-size:11px;color:var(--muted)">Recuperación</td><td><span style="color:var(--muted);font-family:'Barlow Condensed';font-weight:700">5–6</span></td><td class="s5c">50% S4</td><td class="s5c">50%</td></tr>
+        </tbody>
+      </table>
+
+      <div class="ibox ibox-green">
+        <div class="ibox-title ibox-title-green">📝 REGLAS DE PROGRESIÓN</div>
+        <div class="ibox-text">
+          <div class="rule-row" style="padding:6px 0"><div class="rule-ico">1️⃣</div><div class="rule-txt"><b>Doble progresión:</b> Primero llena el rango de reps. Luego sube 2.5–5 kg y vuelve al límite inferior.</div></div>
+          <div class="rule-row" style="padding:6px 0"><div class="rule-ico">📐</div><div class="rule-txt"><b>+5% por semana</b> en compuestos principales. Aislamientos solo si el RPE está por debajo del objetivo.</div></div>
+          <div class="rule-row" style="padding:6px 0"><div class="rule-ico">📝</div><div class="rule-txt"><b>Registro obligatorio</b> en cada serie. Sin datos escritos no hay progresión real.</div></div>
+          <div class="rule-row" style="padding:6px 0;border-bottom:none"><div class="rule-ico">⏱</div><div class="rule-txt"><b>Descanso mínimo:</b> 90–120 seg en compuestos. 60–90 seg en aislamientos.</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tcnt" id="b-ajustes">
+    <div class="stitle" style="margin-top:14px">Señales y <span>Ajustes</span></div>
+    <div class="smeta">Cómo leer tu cuerpo semana a semana</div>
+    <div style="padding:0 16px">
+      <div class="ibox ibox-green">
+        <div class="ibox-title ibox-title-green">✅ SEÑALES DE QUE VA BIEN</div>
+        <div class="ibox-text">
+          · Ganas 0.25–0.5 kg por semana en la báscula<br>
+          · La ropa de entrenamiento se siente más apretada en hombros y espalda<br>
+          · Los pesos en el gym suben cada 1–2 semanas<br>
+          · Tienes energía durante el entrenamiento<br>
+          · Te recuperas bien entre sesiones
+        </div>
+      </div>
+      <div class="ibox ibox-red">
+        <div class="ibox-title ibox-title-red">🚨 SEÑALES DE QUE ALGO NO FUNCIONA</div>
+        <div class="ibox-text">
+          · <strong>Subes más de 2 kg en 2 semanas</strong> → reduce 200 kcal en la cena<br>
+          · <strong>No ganas fuerza después del mes 2</strong> → revisa proteína y sueño<br>
+          · <strong>Fatiga crónica</strong> → el superávit puede ser muy bajo o el volumen muy alto<br>
+          · <strong>Solo crece la barriga pero no brazos/espalda</strong> → superávit demasiado agresivo, reduce carbos de cena<br>
+          · <strong>Sin cambios en 3 semanas</strong> → auditar qué comiste realmente esa semana
+        </div>
+      </div>
+      <div class="ibox ibox-blue">
+        <div class="ibox-title ibox-title-blue">🔧 AJUSTE SEMANA A SEMANA</div>
+        <div class="ibox-text">
+          <strong>Meta de ganancia limpia: 0.25–0.5 kg/semana.</strong><br><br>
+          Si ganas menos → sube 150–200 kcal (preferentemente en carbos de cena).<br>
+          Si ganas más de 0.5 kg/semana sostenido → baja 150 kcal (reduce pasta de cena en 50 gr cocida).<br><br>
+          Ajusta solo una variable a la vez. Espera mínimo 2 semanas para evaluar el impacto.
+        </div>
+      </div>
+    </div>
+  </div>
+  <footer>Guía Build · Gabu Fitness</footer>
+</div>
+
+<!-- ══════════════════════════════════════
+     CALCULADORA
+══════════════════════════════════════ -->
+<div class="page" id="page-calc">
+  <div class="pg-hd">
+    <button class="back" onclick="goTo('page-home')">‹</button>
+    <span class="pg-title">Calculadora</span>
+    <span class="pg-badge">Calorías y macros exactos</span>
+  </div>
+  <div style="padding:14px 16px 0">
+    <div class="ibox ibox-green" style="margin:0 0 14px">
+      <div class="ibox-title ibox-title-green">💡 CÓMO USARLA</div>
+      <div class="ibox-text">Llena tus datos, selecciona <strong>"Ganar músculo"</strong> como objetivo y la calculadora te da tus calorías exactas + macros de proteína, carbos y grasas ya calculados para tu cuerpo.</div>
+    </div>
+    <div class="calc-wrap">
+      <div class="calc-section-label">01 · SEXO</div>
+      <div style="display:flex;gap:8px">
+        <div onclick="setGender('male')" id="lbl-m" class="act-btn on" style="flex:1;text-align:center"><div class="act-name">♂ Hombre</div></div>
+        <div onclick="setGender('female')" id="lbl-f" class="act-btn" style="flex:1;text-align:center"><div class="act-name">♀ Mujer</div></div>
+      </div>
+      <div class="calc-section-label">02 · TUS DATOS</div>
+      <div class="calc-2">
+        <div class="calc-field"><div class="calc-lbl">Edad</div><input type="number" id="cc-age" class="calc-inp" placeholder="25" inputmode="numeric"></div>
+        <div class="calc-field"><div class="calc-lbl">Peso (kg)</div><input type="number" id="cc-weight" class="calc-inp" placeholder="75" inputmode="decimal" step="0.1"></div>
+        <div class="calc-field"><div class="calc-lbl">Altura (cm)</div><input type="number" id="cc-height" class="calc-inp" placeholder="175" inputmode="numeric"></div>
+        <div class="calc-field"><div class="calc-lbl">% Grasa corporal</div><input type="number" id="cc-fat" class="calc-inp" placeholder="opcional" inputmode="decimal" step="0.1"></div>
+      </div>
+      <div class="calc-section-label">03 · NIVEL DE ACTIVIDAD</div>
+      <div class="activity-grid">
+        <div class="act-btn" onclick="setActivity(1.2,this)"><div class="act-name">Sedentario</div><div class="act-desc">Sin ejercicio</div></div>
+        <div class="act-btn" onclick="setActivity(1.375,this)"><div class="act-name">Ligero</div><div class="act-desc">1–3 días/sem</div></div>
+        <div class="act-btn on" onclick="setActivity(1.55,this)"><div class="act-name">Moderado</div><div class="act-desc">3–5 días/sem</div></div>
+        <div class="act-btn" onclick="setActivity(1.725,this)"><div class="act-name">Activo</div><div class="act-desc">6–7 días/sem</div></div>
+      </div>
+      <div class="calc-section-label">04 · OBJETIVO</div>
+      <div class="activity-grid">
+        <div class="act-btn" onclick="setGoal('cut',this)"><div class="act-name">Perder grasa</div><div class="act-desc">Déficit –300 kcal</div></div>
+        <div class="act-btn" onclick="setGoal('maint',this)"><div class="act-name">Mantener</div><div class="act-desc">Sin superávit</div></div>
+        <div class="act-btn on" onclick="setGoal('build',this)"><div class="act-name">Ganar músculo</div><div class="act-desc">Superávit +300</div></div>
+        <div class="act-btn" onclick="setGoal('build_fast',this)"><div class="act-name">Build agresivo</div><div class="act-desc">Superávit +400</div></div>
+      </div>
+      <button class="calc-btn" onclick="calcMacros()">CALCULAR MIS MACROS</button>
+    </div>
+
+    <div class="results-box" id="calc-results">
+      <div class="res-kcal">
+        <div style="font-size:10px;color:var(--muted);font-family:'Barlow Condensed';letter-spacing:1.5px;text-transform:uppercase;margin-bottom:4px">Calorías diarias objetivo</div>
+        <div class="res-main" id="res-kcal-val">—</div>
+        <div class="res-lbl">kcal / día</div>
+      </div>
+      <div class="res-macros">
+        <div class="res-mac"><div class="res-mac-v mp" id="res-prot">—</div><div class="res-mac-l">Proteína (g)</div></div>
+        <div class="res-mac"><div class="res-mac-v mc" id="res-carb">—</div><div class="res-mac-l">Carbos (g)</div></div>
+        <div class="res-mac"><div class="res-mac-v mf" id="res-fat">—</div><div class="res-mac-l">Grasas (g)</div></div>
+      </div>
+      <div class="res-note" id="res-note"></div>
+    </div>
+  </div>
+  <footer>Calculadora · Gabu Fitness</footer>
+</div>
+
+<!-- ══════════════════════════════════════
+     BITÁCORA
+══════════════════════════════════════ -->
+<div class="page" id="page-log">
+  <div class="pg-hd">
+    <button class="back" onclick="goTo('page-home')">‹</button>
+    <span class="pg-title">Bitácora</span>
+    <span class="pg-badge">Registra tus series y pesos</span>
+  </div>
+  <div style="padding:14px 16px 0">
+    <div class="ibox ibox-green" style="margin:0 0 14px">
+      <div class="ibox-title ibox-title-green">📝 CÓMO USARLA</div>
+      <div class="ibox-text">Registra el peso y reps de cada serie en cada entrenamiento. <strong>Sin datos escritos no hay progresión real.</strong> Si un ejercicio no progresa en 2 semanas consecutivas, evalúa técnica, descanso y nutrición.</div>
+    </div>
+
+    <!-- PUSH A LOG -->
+    <div class="log-day">
+      <div class="log-day-hdr" onclick="toggleLog('log-push-a')">
+        <div><div class="log-day-ttl push">Push A — Lunes</div><div class="log-day-meta">Pecho · Hombros · Tríceps</div></div>
+        <span class="log-arrow" id="arr-log-push-a">▼</span>
+      </div>
+      <div class="log-body" id="log-push-a">
+        <div id="log-push-a-saved" class="log-saved"></div>
+        <div id="log-push-a-form">
+          <div class="log-ex"><div class="log-ex-name">A · Press Banca Inclinado Mancuerna</div><div class="log-sets-row" id="lpa-A"></div></div>
+          <div class="log-ex"><div class="log-ex-name">B · Empuje Declinado</div><div class="log-sets-row" id="lpa-B"></div></div>
+          <div class="log-ex"><div class="log-ex-name">C · Aperturas Pectoral</div><div class="log-sets-row" id="lpa-C"></div></div>
+          <div class="log-ex"><div class="log-ex-name">D · Fondos Tríceps</div><div class="log-sets-row" id="lpa-D"></div></div>
+          <div class="log-ex"><div class="log-ex-name">E · Copa Tríceps 1 Mano</div><div class="log-sets-row" id="lpa-E"></div></div>
+          <div class="log-ex"><div class="log-ex-name">F · Elevación Lateral Polea</div><div class="log-sets-row" id="lpa-F"></div></div>
+          <button class="log-save-btn" onclick="saveLog('push-a')">💾 GUARDAR SESIÓN</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- PULL A LOG -->
+    <div class="log-day">
+      <div class="log-day-hdr" onclick="toggleLog('log-pull-a')">
+        <div><div class="log-day-ttl pull">Pull A — Martes</div><div class="log-day-meta">Espalda · Bíceps · Trapecios</div></div>
+        <span class="log-arrow" id="arr-log-pull-a">▼</span>
+      </div>
+      <div class="log-body" id="log-pull-a">
+        <div id="log-pull-a-saved" class="log-saved"></div>
+        <div id="log-pull-a-form">
+          <div class="log-ex"><div class="log-ex-name">A · Remo Abierto Barra T</div><div class="log-sets-row" id="lpla-A"></div></div>
+          <div class="log-ex"><div class="log-ex-name">B · Jalón Agarre Supino</div><div class="log-sets-row" id="lpla-B"></div></div>
+          <div class="log-ex"><div class="log-ex-name">C · Pull Over Polea Alta</div><div class="log-sets-row" id="lpla-C"></div></div>
+          <div class="log-ex"><div class="log-ex-name">D · Curl Bayesian 1 Mano</div><div class="log-sets-row" id="lpla-D"></div></div>
+          <div class="log-ex"><div class="log-ex-name">E · Fly Posterior AMRAP</div><div class="log-sets-row" id="lpla-E"></div></div>
+          <div class="log-ex"><div class="log-ex-name">F · Trapecios Banco Inclinado</div><div class="log-sets-row" id="lpla-F"></div></div>
+          <button class="log-save-btn" onclick="saveLog('pull-a')">💾 GUARDAR SESIÓN</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- LEGS A LOG -->
+    <div class="log-day">
+      <div class="log-day-hdr" onclick="toggleLog('log-legs-a')">
+        <div><div class="log-day-ttl legs">Legs A — Miércoles</div><div class="log-day-meta">Cuádriceps · Glúteos</div></div>
+        <span class="log-arrow" id="arr-log-legs-a">▼</span>
+      </div>
+      <div class="log-body" id="log-legs-a">
+        <div id="log-legs-a-saved" class="log-saved"></div>
+        <div id="log-legs-a-form">
+          <div class="log-ex"><div class="log-ex-name">A · Hip Thrust Máquina</div><div class="log-sets-row" id="lla-A"></div></div>
+          <div class="log-ex"><div class="log-ex-name">B · Press de Pierna</div><div class="log-sets-row" id="lla-B"></div></div>
+          <div class="log-ex"><div class="log-ex-name">C · Abductor Máquina</div><div class="log-sets-row" id="lla-C"></div></div>
+          <div class="log-ex"><div class="log-ex-name">D · Sentadilla Búlgara A</div><div class="log-sets-row" id="lla-D"></div></div>
+          <div class="log-ex"><div class="log-ex-name">E · Extensión Cuádriceps</div><div class="log-sets-row" id="lla-E"></div></div>
+          <button class="log-save-btn" onclick="saveLog('legs-a')">💾 GUARDAR SESIÓN</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- PUSH B LOG -->
+    <div class="log-day">
+      <div class="log-day-hdr" onclick="toggleLog('log-push-b')">
+        <div><div class="log-day-ttl push">Push B — Jueves</div><div class="log-day-meta">Hombros · Bíceps · Tríceps SS</div></div>
+        <span class="log-arrow" id="arr-log-push-b">▼</span>
+      </div>
+      <div class="log-body" id="log-push-b">
+        <div id="log-push-b-saved" class="log-saved"></div>
+        <div id="log-push-b-form">
+          <div class="log-ex"><div class="log-ex-name">A · Press Hombro Smith</div><div class="log-sets-row" id="lpb-A"></div></div>
+          <div class="log-ex"><div class="log-ex-name">B · Elevación Lateral 2 Manos</div><div class="log-sets-row" id="lpb-B"></div></div>
+          <div class="log-ex"><div class="log-ex-name">C1 · Curl Bíceps Barra Polea</div><div class="log-sets-row" id="lpb-C1"></div></div>
+          <div class="log-ex"><div class="log-ex-name">C2 · Ext. Tríceps Cruzado</div><div class="log-sets-row" id="lpb-C2"></div></div>
+          <div class="log-ex"><div class="log-ex-name">D1 · Curl Predicador</div><div class="log-sets-row" id="lpb-D1"></div></div>
+          <div class="log-ex"><div class="log-ex-name">D2 · Ext. Tríceps Cuerda</div><div class="log-sets-row" id="lpb-D2"></div></div>
+          <button class="log-save-btn" onclick="saveLog('push-b')">💾 GUARDAR SESIÓN</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- PULL B LOG -->
+    <div class="log-day">
+      <div class="log-day-hdr" onclick="toggleLog('log-pull-b')">
+        <div><div class="log-day-ttl pull">Pull B — Viernes</div><div class="log-day-meta">Espalda Baja · Remo · Core</div></div>
+        <span class="log-arrow" id="arr-log-pull-b">▼</span>
+      </div>
+      <div class="log-body" id="log-pull-b">
+        <div id="log-pull-b-saved" class="log-saved"></div>
+        <div id="log-pull-b-form">
+          <div class="log-ex"><div class="log-ex-name">A · Remo Barra T Prono</div><div class="log-sets-row" id="lplb-A"></div></div>
+          <div class="log-ex"><div class="log-ex-name">B · Curl Barra Z Prono</div><div class="log-sets-row" id="lplb-B"></div></div>
+          <div class="log-ex"><div class="log-ex-name">C1 · Curl Martillo</div><div class="log-sets-row" id="lplb-C1"></div></div>
+          <div class="log-ex"><div class="log-ex-name">C2 · Fly Posterior</div><div class="log-sets-row" id="lplb-C2"></div></div>
+          <div class="log-ex"><div class="log-ex-name">D · Pull Over Prono</div><div class="log-sets-row" id="lplb-D"></div></div>
+          <button class="log-save-btn" onclick="saveLog('pull-b')">💾 GUARDAR SESIÓN</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- LEGS B LOG -->
+    <div class="log-day">
+      <div class="log-day-hdr" onclick="toggleLog('log-legs-b')">
+        <div><div class="log-day-ttl legs">Legs B — Sábado</div><div class="log-day-meta">Isquios · Cadena Posterior</div></div>
+        <span class="log-arrow" id="arr-log-legs-b">▼</span>
+      </div>
+      <div class="log-body" id="log-legs-b">
+        <div id="log-legs-b-saved" class="log-saved"></div>
+        <div id="log-legs-b-form">
+          <div class="log-ex"><div class="log-ex-name">A · Peso Muerto Piernas Rígidas</div><div class="log-sets-row" id="llb-A"></div></div>
+          <div class="log-ex"><div class="log-ex-name">B · Cable Pull Through</div><div class="log-sets-row" id="llb-B"></div></div>
+          <div class="log-ex"><div class="log-ex-name">C · Curl Isquios 1 Pierna</div><div class="log-sets-row" id="llb-C"></div></div>
+          <div class="log-ex"><div class="log-ex-name">D · Sentadilla Búlgara B</div><div class="log-sets-row" id="llb-D"></div></div>
+          <div class="log-ex"><div class="log-ex-name">E · Aductor Máquina</div><div class="log-sets-row" id="llb-E"></div></div>
+          <button class="log-save-btn" onclick="saveLog('legs-b')">💾 GUARDAR SESIÓN</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <footer>Bitácora · Gabu Fitness</footer>
+</div>
+
+<!-- ══════════════════════════════════════
+     TRACKER PESO
+══════════════════════════════════════ -->
+<div class="page" id="page-tracker">
+  <div class="pg-hd">
+    <button class="back" onclick="goTo('page-home')">‹</button>
+    <span class="pg-title">Tracker de Peso</span>
+    <span class="pg-badge">Sigue tu evolución</span>
+  </div>
+  <div style="padding:14px 16px 0">
+    <div class="ibox ibox-green" style="margin:0 0 14px">
+      <div class="ibox-title ibox-title-green">⚖️ CÓMO REGISTRAR</div>
+      <div class="ibox-text">Pésate <strong>en ayunas, después de ir al baño,</strong> siempre a la misma hora. La variación diaria es normal (1–2 kg). Lo que importa es la <strong>tendencia semanal.</strong></div>
+    </div>
+    <div class="weight-hero">
+      <div style="font-size:10px;color:var(--muted);font-family:'Barlow Condensed';letter-spacing:1px;text-transform:uppercase;margin-bottom:4px">Último registro</div>
+      <div class="weight-num" id="last-weight">— kg</div>
+      <div class="weight-lbl" id="last-weight-date">Sin registros aún</div>
+    </div>
+    <div class="weight-form">
+      <input type="number" class="weight-inp" id="w-inp" placeholder="Ej: 78.5" step="0.1" inputmode="decimal">
+      <button class="weight-btn" onclick="addWeight()">+ AGREGAR</button>
+    </div>
+    <canvas id="weight-chart"></canvas>
+    <div class="weight-list" id="weight-list"></div>
+  </div>
+  <footer>Tracker · Gabu Fitness</footer>
+</div>
+
+<!-- ══════════════════════════════════════
+     NAV BAR
+══════════════════════════════════════ -->
+<nav class="nav">
+  <button class="nav-btn active" onclick="goTo('page-home')"><span class="nav-ico">🏠</span>Inicio</button>
+  <button class="nav-btn" onclick="goTo('page-push')"><span class="nav-ico">🔥</span>Push</button>
+  <button class="nav-btn" onclick="goTo('page-pull')"><span class="nav-ico">💪</span>Pull</button>
+  <button class="nav-btn" onclick="goTo('page-legs')"><span class="nav-ico">🦵</span>Legs</button>
+  <button class="nav-btn" onclick="goTo('page-nutr')"><span class="nav-ico">🥗</span>Nutrición</button>
+</nav>
+
+<script>
+// ── NAVIGATION ──────────────────────────────────────
+function goTo(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0,0);
+  const map={
+    'page-home':0,'page-push':1,'page-pull':2,'page-legs':3,'page-nutr':4
+  };
+  if(map[id]!==undefined){
+    document.querySelectorAll('.nav-btn')[map[id]].classList.add('active');
+  }
+}
+
+// ── TAB SWITCHERS ──────────────────────────────────────
+function swPush(id,btn){
+  document.querySelectorAll('#page-push .tcnt').forEach(t=>t.classList.remove('on'));
+  document.getElementById(id).classList.add('on');
+  if(btn){document.querySelectorAll('#page-push .tbtn').forEach(b=>b.classList.remove('on'));btn.classList.add('on');}
+}
+function swPull(id,btn){
+  document.querySelectorAll('#page-pull .tcnt').forEach(t=>t.classList.remove('on'));
+  document.getElementById(id).classList.add('on');
+  if(btn){document.querySelectorAll('#page-pull .tbtn').forEach(b=>b.classList.remove('on'));btn.classList.add('on');}
+}
+function swLegs(id,btn){
+  document.querySelectorAll('#page-legs .tcnt').forEach(t=>t.classList.remove('on'));
+  document.getElementById(id).classList.add('on');
+  if(btn){document.querySelectorAll('#page-legs .tbtn').forEach(b=>b.classList.remove('on'));btn.classList.add('on');}
+}
+function swNutr(id,btn){
+  document.querySelectorAll('#page-nutr .tcnt').forEach(t=>t.classList.remove('on'));
+  document.getElementById(id).classList.add('on');
+  document.querySelectorAll('#page-nutr .tbtn').forEach(b=>b.classList.remove('on'));
+  if(btn)btn.classList.add('on');
+}
+function swBuild(id,btn){
+  document.querySelectorAll('#page-build .tcnt').forEach(t=>t.classList.remove('on'));
+  document.getElementById(id).classList.add('on');
+  document.querySelectorAll('#page-build .tbtn').forEach(b=>b.classList.remove('on'));
+  if(btn)btn.classList.add('on');
+}
+
+// ── CALCULADORA ──────────────────────────────────────
+let calcGender='male', calcActivity=1.55, calcGoal='build';
+
+function setGender(g){
+  calcGender=g;
+  document.getElementById('lbl-m').classList.toggle('on',g==='male');
+  document.getElementById('lbl-f').classList.toggle('on',g==='female');
+}
+function setActivity(v,el){
+  calcActivity=v;
+  document.querySelectorAll('#page-calc .activity-grid .act-btn').forEach(b=>b.classList.remove('on'));
+  el.classList.add('on');
+}
+function setGoal(g,el){
+  calcGoal=g;
+  const btns=el.parentElement.querySelectorAll('.act-btn');
+  btns.forEach(b=>b.classList.remove('on'));
+  el.classList.add('on');
+}
+function calcMacros(){
+  const age=+document.getElementById('cc-age').value||30;
+  const weight=+document.getElementById('cc-weight').value||75;
+  const height=+document.getElementById('cc-height').value||175;
+  const fatPct=+document.getElementById('cc-fat').value;
+  let bmr;
+  if(fatPct>0){
+    const lbm=weight*(1-fatPct/100);
+    bmr=370+21.6*lbm;
+  } else {
+    if(calcGender==='male') bmr=10*weight+6.25*height-5*age+5;
+    else bmr=10*weight+6.25*height-5*age-161;
+  }
+  const tdee=bmr*calcActivity;
+  const adjMap={cut:-300,maint:0,build:300,build_fast:400};
+  const target=Math.round(tdee+(adjMap[calcGoal]||0));
+  const prot=Math.round(weight*2.0);
+  const fat=Math.round(weight*1.2);
+  const carbKcal=target-(prot*4)-(fat*9);
+  const carb=Math.round(carbKcal/4);
+  document.getElementById('res-kcal-val').textContent=target;
+  document.getElementById('res-prot').textContent=prot+'g';
+  document.getElementById('res-carb').textContent=Math.max(carb,0)+'g';
+  document.getElementById('res-fat').textContent=fat+'g';
+  const goalTxt={cut:'déficit de -300 kcal para perder grasa',maint:'mantenimiento',build:'superávit limpio de +300 kcal para ganar músculo',build_fast:'superávit de +400 kcal para build más agresivo'};
+  document.getElementById('res-note').innerHTML=`<b>TDEE estimado:</b> ${Math.round(tdee)} kcal · Con ${goalTxt[calcGoal]}.<br>Proteína: ${prot}g (~2.0g/kg) · Carbos: ${Math.max(carb,0)}g · Grasas: ${fat}g (~1.2g/kg).`;
+  const r=document.getElementById('calc-results');
+  r.classList.add('visible');
+  setTimeout(()=>r.scrollIntoView({behavior:'smooth',block:'start'}),100);
+}
+
+// ── BITÁCORA ──────────────────────────────────────
+const logCfg={
+  'push-a':{prefix:'lpa',exs:['A','B','C','D','E','F'],sets:[3,3,3,2,2,2]},
+  'pull-a':{prefix:'lpla',exs:['A','B','C','D','E','F'],sets:[2,2,2,2,2,3]},
+  'legs-a':{prefix:'lla',exs:['A','B','C','D','E'],sets:[2,2,2,2,2]},
+  'push-b':{prefix:'lpb',exs:['A','B','C1','C2','D1','D2'],sets:[2,2,2,2,2,2]},
+  'pull-b':{prefix:'lplb',exs:['A','B','C1','C2','D'],sets:[2,2,2,2,2]},
+  'legs-b':{prefix:'llb',exs:['A','B','C','D','E'],sets:[2,2,2,2,2]}
+};
+
+function buildLogForms(){
+  Object.entries(logCfg).forEach(([day,cfg])=>{
+    cfg.exs.forEach((ex,i)=>{
+      const cont=document.getElementById(cfg.prefix+'-'+ex);
+      if(!cont)return;
+      cont.innerHTML='';
+      for(let s=1;s<=cfg.sets[i];s++){
+        const box=document.createElement('div');
+        box.className='log-set';
+        box.innerHTML=`<div class="log-set-n">S${s}</div><div class="log-inp-row"><input class="log-inp" id="${cfg.prefix}-${ex}-${s}-kg" placeholder="kg" type="number" step="0.5" inputmode="decimal"><input class="log-inp" id="${cfg.prefix}-${ex}-${s}-rp" placeholder="reps" type="number" inputmode="numeric"></div>`;
+        cont.appendChild(box);
+      }
+    });
+  });
+}
+
+function toggleLog(id){
+  const body=document.getElementById(id);
+  const arr=document.getElementById('arr-'+id);
+  const open=body.classList.contains('open');
+  body.classList.toggle('open',!open);
+  if(arr)arr.textContent=open?'▼':'▲';
+}
+
+function saveLog(day){
+  const cfg=logCfg[day];
+  const date=new Date().toLocaleDateString('es-MX',{day:'2-digit',month:'short',year:'numeric'});
+  let html=`<div style="font-size:11px;color:var(--green);font-family:'Barlow Condensed';letter-spacing:.5px;margin-bottom:8px;font-weight:700">✅ SESIÓN GUARDADA — ${date}</div>`;
+  cfg.exs.forEach((ex,i)=>{
+    const rows=[];
+    for(let s=1;s<=cfg.sets[i];s++){
+      const kg=document.getElementById(cfg.prefix+'-'+ex+'-'+s+'-kg')?.value;
+      const rp=document.getElementById(cfg.prefix+'-'+ex+'-'+s+'-rp')?.value;
+      if(kg||rp)rows.push(`S${s}: ${kg||'?'}kg × ${rp||'?'}`);
+    }
+    if(rows.length){
+      html+=`<div class="log-entry"><span class="log-entry-name">${ex}</span><span class="log-entry-val">${rows.join(' · ')}</span></div>`;
+    }
+  });
+  const saved=document.getElementById('log-'+day+'-saved');
+  saved.innerHTML=html;
+  saved.style.display='block';
+}
+
+// ── TRACKER PESO ──────────────────────────────────────
+let weights=[];
+
+function addWeight(){
+  const v=parseFloat(document.getElementById('w-inp').value);
+  if(isNaN(v)||v<=0)return;
+  const date=new Date().toLocaleDateString('es-MX',{day:'2-digit',month:'short'});
+  weights.push({v,date});
+  document.getElementById('w-inp').value='';
+  renderWeights();
+}
+
+function deleteWeight(i){
+  weights.splice(i,1);
+  renderWeights();
+}
+
+function renderWeights(){
+  if(!weights.length){
+    document.getElementById('last-weight').textContent='— kg';
+    document.getElementById('last-weight-date').textContent='Sin registros aún';
+    document.getElementById('weight-list').innerHTML='';
+    renderChart();return;
+  }
+  const last=weights[weights.length-1];
+  document.getElementById('last-weight').textContent=last.v.toFixed(1)+' kg';
+  document.getElementById('last-weight-date').textContent=last.date;
+  let html='';
+  [...weights].reverse().forEach((w,ri)=>{
+    const i=weights.length-1-ri;
+    const prev=i>0?weights[i-1]:null;
+    const diff=prev?w.v-prev.v:null;
+    let diffHtml='';
+    if(diff!==null){
+      const cls=diff>0?'up':diff<0?'down':'same';
+      const sign=diff>0?'+':'';
+      diffHtml=`<span class="wi-diff ${cls}">${sign}${diff.toFixed(1)}</span>`;
+    }
+    html+=`<div class="weight-item"><div><div class="wi-val">${w.v.toFixed(1)} kg</div><div class="wi-date">${w.date}</div></div><div style="display:flex;align-items:center;gap:10px">${diffHtml}<button class="wi-del" onclick="deleteWeight(${i})">✕</button></div></div>`;
+  });
+  document.getElementById('weight-list').innerHTML=html;
+  renderChart();
+}
+
+function renderChart(){
+  const canvas=document.getElementById('weight-chart');
+  if(!canvas)return;
+  const ctx=canvas.getContext('2d');
+  canvas.width=canvas.offsetWidth*window.devicePixelRatio||600;
+  canvas.height=160*window.devicePixelRatio||320;
+  ctx.scale(window.devicePixelRatio||1,window.devicePixelRatio||1);
+  const W=canvas.offsetWidth,H=160;
+  ctx.clearRect(0,0,W,H);
+  if(weights.length<2){
+    ctx.fillStyle='rgba(107,114,128,0.4)';
+    ctx.font='13px Barlow';ctx.textAlign='center';
+    ctx.fillText('Agrega más registros para ver la gráfica',W/2,H/2);
+    return;
+  }
+  const vals=weights.map(w=>w.v);
+  const min=Math.min(...vals)-1,max=Math.max(...vals)+1;
+  const pad={t:16,b:24,l:36,r:12};
+  const gW=W-pad.l-pad.r,gH=H-pad.t-pad.b;
+  const xStep=gW/(vals.length-1);
+  const yScale=v=>(H-pad.b)-(v-min)/(max-min)*gH;
+  // grid
+  ctx.strokeStyle='rgba(255,255,255,0.05)';ctx.lineWidth=1;
+  for(let i=0;i<=4;i++){
+    const y=pad.t+gH*i/4;
+    ctx.beginPath();ctx.moveTo(pad.l,y);ctx.lineTo(W-pad.r,y);ctx.stroke();
+  }
+  // area
+  ctx.beginPath();
+  vals.forEach((v,i)=>{const x=pad.l+i*xStep,y=yScale(v);i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);});
+  ctx.lineTo(pad.l+(vals.length-1)*xStep,H-pad.b);ctx.lineTo(pad.l,H-pad.b);ctx.closePath();
+  const grad=ctx.createLinearGradient(0,pad.t,0,H);
+  grad.addColorStop(0,'rgba(57,217,138,0.3)');grad.addColorStop(1,'rgba(57,217,138,0.02)');
+  ctx.fillStyle=grad;ctx.fill();
+  // line
+  ctx.beginPath();ctx.strokeStyle='#39d98a';ctx.lineWidth=2;ctx.lineJoin='round';
+  vals.forEach((v,i)=>{const x=pad.l+i*xStep,y=yScale(v);i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);});
+  ctx.stroke();
+  // dots
+  vals.forEach((v,i)=>{
+    const x=pad.l+i*xStep,y=yScale(v);
+    ctx.beginPath();ctx.arc(x,y,4,0,Math.PI*2);
+    ctx.fillStyle='#39d98a';ctx.fill();
+    ctx.fillStyle='#0a0a0c';ctx.arc(x,y,2,0,Math.PI*2);ctx.fill();
+  });
+  // labels
+  ctx.fillStyle='rgba(107,114,128,0.7)';ctx.font='9px Barlow';ctx.textAlign='center';
+  weights.forEach((w,i)=>{
+    const x=pad.l+i*xStep;
+    ctx.fillText(w.date,x,H-8);
+  });
+}
+
+// ── INIT ──────────────────────────────────────
+document.addEventListener('DOMContentLoaded',()=>{
+  buildLogForms();
+  renderWeights();
+  window.addEventListener('resize',()=>{
+    if(document.getElementById('page-tracker').classList.contains('active'))renderChart();
+  });
+});
+</script>
+</body>
+</html>
