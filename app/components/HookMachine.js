@@ -1,5 +1,6 @@
 'use client'
-import { useState } from 'react'
+
+import { useState, useEffect } from 'react'
 
 const CATEGORIES = [
   { id: 'muscle', label: 'MASA MUSCULAR', icon: '💪', color: '#FF4500' },
@@ -23,6 +24,7 @@ const hashtagSets = {
 }
 
 export default function HookMachine() {
+  const [mounted, setMounted] = useState(false)
   const [tab, setTab] = useState('generate')
   const [category, setCategory] = useState('muscle')
   const [style, setStyle] = useState('hormozi')
@@ -35,8 +37,24 @@ export default function HookMachine() {
   const [exportHook, setExportHook] = useState(null)
   const [exportPlatform, setExportPlatform] = useState('instagram')
 
+  useEffect(() => {
+    setMounted(true)
+    try {
+      const saved = localStorage.getItem('hm_favs')
+      if (saved) setFavorites(JSON.parse(saved))
+    } catch (e) {}
+  }, [])
+
+  useEffect(() => {
+    if (mounted) {
+      try { localStorage.setItem('hm_favs', JSON.stringify(favorites)) } catch (e) {}
+    }
+  }, [favorites, mounted])
+
   const generate = async () => {
-    setLoading(true); setError(''); setHooks([])
+    setLoading(true)
+    setError('')
+    setHooks([])
     try {
       const res = await fetch('/api/generate', {
         method: 'POST',
@@ -44,19 +62,24 @@ export default function HookMachine() {
         body: JSON.stringify({ category, style, customPrompt }),
       })
       const data = await res.json()
+      if (data.error) throw new Error(data.error)
       setHooks(data.hooks.map((h, i) => ({ id: Date.now() + i, text: h, category, style })))
-    } catch (e) { setError('Error al generar. Intenta de nuevo.') }
+    } catch (e) {
+      setError('Error al generar. Verifica tu API key en Netlify.')
+    }
     setLoading(false)
   }
 
   const toggleFav = (hook) => {
-    setFavorites(prev => prev.find(f => f.id === hook.id) ? prev.filter(f => f.id !== hook.id) : [...prev, hook])
+    setFavorites(prev =>
+      prev.find(f => f.id === hook.id) ? prev.filter(f => f.id !== hook.id) : [...prev, hook]
+    )
   }
 
   const isFav = (id) => favorites.some(f => f.id === id)
 
   const copyText = (text, key) => {
-    navigator.clipboard.writeText(text)
+    navigator.clipboard.writeText(text).catch(() => {})
     setCopied(key)
     setTimeout(() => setCopied(null), 1800)
   }
@@ -68,113 +91,126 @@ export default function HookMachine() {
     return hook.text + '\n\n' + ht + '\n\n—\n🔥 Sígueme para más contenido de ' + (cat?.label || 'fitness')
   }
 
-  const s = {
-    app: { background: '#0A0A0A', minHeight: '100vh', fontFamily: "'Barlow Condensed', Impact, sans-serif", color: '#F0F0F0' },
-    header: { borderBottom: '1px solid #1a1a1a', padding: '16px 20px', display: 'flex', alignItems: 'center', gap: 14 },
-    logo: { fontSize: 24, fontWeight: 900, letterSpacing: 3, textTransform: 'uppercase', lineHeight: 1 },
-    tabs: { borderBottom: '1px solid #1a1a1a', display: 'flex', padding: '0 20px' },
-    content: { padding: 20, maxWidth: 720, margin: '0 auto' },
-    label: { fontSize: 10, color: '#444', letterSpacing: 2, marginBottom: 8, textTransform: 'uppercase', fontFamily: 'Barlow, sans-serif' },
-    catGrid: { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8, marginBottom: 20 },
-    styleGrid: { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8, marginBottom: 20 },
-    genBtn: { background: '#FF4500', color: '#fff', border: 'none', padding: '14px 0', width: '100%', fontFamily: "'Barlow Condensed', sans-serif", fontSize: 17, fontWeight: 900, letterSpacing: 3, textTransform: 'uppercase', cursor: 'pointer', marginBottom: 20, clipPath: 'polygon(10px 0%, 100% 0%, calc(100% - 10px) 100%, 0% 100%)' },
-    hookCard: { background: '#111', borderLeft: '3px solid #FF4500', padding: '14px 16px', marginBottom: 10, display: 'flex', gap: 12 },
-    iconBtn: { background: 'none', border: '1px solid #272727', width: 32, height: 32, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 14, color: '#888', flexShrink: 0 },
-  }
+  if (!mounted) return null
 
   return (
     <>
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800;900&family=Barlow:wght@400;500&display=swap');
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        .cat-btn { background: #111; border: 1px solid #1e1e1e; padding: 10px; cursor: pointer; font-family: 'Barlow Condensed', sans-serif; color: #777; font-size: 12px; font-weight: 700; letter-spacing: 1px; text-align: center; text-transform: uppercase; transition: all 0.15s; }
-        .cat-btn:hover { border-color: #333; color: #bbb; }
-        .style-btn { background: #111; border: 1px solid #1e1e1e; padding: 12px; cursor: pointer; text-align: left; transition: all 0.15s; }
-        .style-btn:hover { border-color: #333; background: #141414; }
-        .tab-btn { background: none; border: none; border-bottom: 2px solid transparent; padding: 10px 20px; font-family: 'Barlow Condensed', sans-serif; font-size: 14px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; cursor: pointer; color: #444; transition: all 0.15s; }
-        .tab-btn.active { color: #FF4500; border-bottom-color: #FF4500; }
-        .icon-btn-h:hover { border-color: #FF4500 !important; color: #FF4500 !important; background: #1a0600 !important; }
-        .custom-input { background: #111; border: 1px solid #1e1e1e; color: #F0F0F0; padding: 10px 14px; font-family: Barlow, sans-serif; font-size: 13px; outline: none; width: 100%; margin-bottom: 20px; }
-        .custom-input:focus { border-color: #FF4500; }
-        .custom-input::placeholder { color: #444; }
-        .modal-bg { position: fixed; inset: 0; background: rgba(0,0,0,0.92); display: flex; align-items: center; justify-content: center; z-index: 999; padding: 16px; }
-        .export-ta { background: #0a0a0a; border: 1px solid #222; color: #e0e0e0; padding: 12px; font-family: Barlow, sans-serif; font-size: 13px; resize: none; outline: none; width: 100%; line-height: 1.65; }
-        .export-ta:focus { border-color: #FF4500; }
-        .plat-btn { flex: 1; padding: 9px; background: #111; border: 1px solid #1e1e1e; color: #666; font-family: 'Barlow Condensed', sans-serif; font-size: 13px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; }
-        @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
-        .pulse { animation: pulse 1s infinite; }
+        .hm-app { background:#0A0A0A; min-height:100vh; font-family:'Barlow Condensed',Impact,sans-serif; color:#F0F0F0; }
+        .hm-header { border-bottom:1px solid #1a1a1a; padding:16px 20px; display:flex; align-items:center; gap:14px; }
+        .hm-logo { font-size:24px; font-weight:900; letter-spacing:3px; text-transform:uppercase; line-height:1; }
+        .hm-logo span { color:#FF4500; }
+        .hm-sub { font-size:10px; color:#444; letter-spacing:2px; font-family:Barlow,sans-serif; margin-top:2px; }
+        .hm-tabs { border-bottom:1px solid #1a1a1a; display:flex; padding:0 20px; }
+        .hm-tab { background:none; border:none; border-bottom:2px solid transparent; padding:10px 20px; font-family:'Barlow Condensed',sans-serif; font-size:14px; font-weight:700; letter-spacing:2px; text-transform:uppercase; cursor:pointer; color:#444; transition:all 0.15s; }
+        .hm-tab.active { color:#FF4500; border-bottom-color:#FF4500; }
+        .hm-content { padding:20px; max-width:720px; margin:0 auto; }
+        .hm-label { font-size:10px; color:#444; letter-spacing:2px; margin-bottom:8px; text-transform:uppercase; font-family:Barlow,sans-serif; }
+        .hm-grid2 { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:20px; }
+        .hm-catbtn { background:#111; border:1px solid #1e1e1e; padding:10px; cursor:pointer; font-family:'Barlow Condensed',sans-serif; color:#777; font-size:12px; font-weight:700; letter-spacing:1px; text-align:center; text-transform:uppercase; transition:all 0.15s; }
+        .hm-catbtn:hover { border-color:#333; color:#bbb; }
+        .hm-stybtn { background:#111; border:1px solid #1e1e1e; padding:12px; cursor:pointer; text-align:left; transition:all 0.15s; }
+        .hm-stybtn:hover { border-color:#333; background:#141414; }
+        .hm-input { background:#111; border:1px solid #1e1e1e; color:#F0F0F0; padding:10px 14px; font-family:Barlow,sans-serif; font-size:13px; outline:none; width:100%; margin-bottom:20px; }
+        .hm-input:focus { border-color:#FF4500; }
+        .hm-input::placeholder { color:#444; }
+        .hm-genbtn { background:#FF4500; color:#fff; border:none; padding:14px 0; width:100%; font-family:'Barlow Condensed',sans-serif; font-size:17px; font-weight:900; letter-spacing:3px; text-transform:uppercase; cursor:pointer; margin-bottom:20px; clip-path:polygon(10px 0%,100% 0%,calc(100% - 10px) 100%,0% 100%); }
+        .hm-genbtn:hover { background:#FF6600; }
+        .hm-genbtn:disabled { background:#222; color:#444; cursor:not-allowed; clip-path:none; }
+        .hm-card { background:#111; border-left:3px solid #FF4500; padding:14px 16px; margin-bottom:10px; display:flex; gap:12px; align-items:flex-start; }
+        .hm-num { color:#FF4500; font-weight:900; font-size:18px; min-width:20px; line-height:1; flex-shrink:0; }
+        .hm-text { flex:1; font-size:15px; line-height:1.6; color:#E0E0E0; font-family:Barlow,sans-serif; }
+        .hm-actions { display:flex; gap:5px; flex-shrink:0; }
+        .hm-ibtn { background:none; border:1px solid #272727; width:32px; height:32px; cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:14px; color:#888; transition:all 0.15s; flex-shrink:0; }
+        .hm-ibtn:hover { border-color:#FF4500; color:#FF4500; background:#1a0600; }
+        .hm-ibtn.fav { border-color:#FFD700; color:#FFD700; background:#1a1400; }
+        .hm-skel { background:#161616; height:14px; margin-bottom:8px; border-radius:2px; }
+        @keyframes hmpulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+        .hm-pulse { animation:hmpulse 1s infinite; }
+        .hm-error { background:#180000; border:1px solid #400; color:#f88; padding:10px 14px; margin-bottom:14px; font-family:Barlow,sans-serif; font-size:13px; }
+        .hm-empty { text-align:center; padding:50px 0; color:#333; }
+        .hm-modal { position:fixed; inset:0; background:rgba(0,0,0,0.92); display:flex; align-items:center; justify-content:center; z-index:999; padding:16px; }
+        .hm-mbox { background:#0f0f0f; border:1px solid #222; width:100%; max-width:520px; padding:22px; }
+        .hm-ta { background:#0a0a0a; border:1px solid #222; color:#e0e0e0; padding:12px; font-family:Barlow,sans-serif; font-size:13px; resize:none; outline:none; width:100%; line-height:1.65; }
+        .hm-ta:focus { border-color:#FF4500; }
+        .hm-platbtn { flex:1; padding:9px; background:#111; border:1px solid #1e1e1e; color:#666; font-family:'Barlow Condensed',sans-serif; font-size:13px; font-weight:700; letter-spacing:1px; text-transform:uppercase; cursor:pointer; transition:all 0.15s; }
+        .hm-platbtn.active { border-color:#FF4500; color:#FF4500; background:#180800; }
+        .hm-chip { display:inline-block; padding:2px 8px; font-size:10px; font-weight:700; letter-spacing:1.5px; text-transform:uppercase; margin-right:4px; }
       `}</style>
 
-      <div style={s.app}>
-        <div style={s.header}>
-          <div style={{ width: 4, height: 32, background: '#FF4500', flexShrink: 0 }} />
+      <div className="hm-app">
+        <div className="hm-header">
+          <div style={{width:4,height:32,background:'#FF4500',flexShrink:0}} />
           <div>
-            <div style={s.logo}>HOOK<span style={{ color: '#FF4500' }}>MACHINE</span></div>
-            <div style={{ fontSize: 10, color: '#444', letterSpacing: 2, fontFamily: 'Barlow, sans-serif' }}>GENERADOR DE HOOKS FITNESS VIRALES</div>
+            <div className="hm-logo">HOOK<span>MACHINE</span></div>
+            <div className="hm-sub">GENERADOR DE HOOKS FITNESS VIRALES</div>
           </div>
           {favorites.length > 0 && (
-            <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 6 }}>
-              <span style={{ color: '#FFD700' }}>★</span>
-              <span style={{ color: '#FFD700', fontWeight: 700 }}>{favorites.length}</span>
-              <span style={{ fontSize: 10, color: '#444', letterSpacing: 1 }}>GUARDADOS</span>
+            <div style={{marginLeft:'auto',display:'flex',alignItems:'center',gap:6}}>
+              <span style={{color:'#FFD700'}}>★</span>
+              <span style={{color:'#FFD700',fontWeight:700}}>{favorites.length}</span>
+              <span style={{fontSize:10,color:'#444',letterSpacing:1}}>GUARDADOS</span>
             </div>
           )}
         </div>
 
-        <div style={s.tabs}>
-          <button className={`tab-btn ${tab === 'generate' ? 'active' : ''}`} onClick={() => setTab('generate')}>Generar</button>
-          <button className={`tab-btn ${tab === 'favorites' ? 'active' : ''}`} onClick={() => setTab('favorites')}>Favoritos {favorites.length > 0 && `(${favorites.length})`}</button>
+        <div className="hm-tabs">
+          <button className={`hm-tab ${tab==='generate'?'active':''}`} onClick={()=>setTab('generate')}>Generar</button>
+          <button className={`hm-tab ${tab==='favorites'?'active':''}`} onClick={()=>setTab('favorites')}>
+            Favoritos {favorites.length > 0 && `(${favorites.length})`}
+          </button>
         </div>
 
-        <div style={s.content}>
+        <div className="hm-content">
           {tab === 'generate' && (
             <>
-              <div style={s.label}>Categoría</div>
-              <div style={s.catGrid}>
+              <div className="hm-label">Categoría</div>
+              <div className="hm-grid2">
                 {CATEGORIES.map(cat => (
-                  <button key={cat.id} className="cat-btn" onClick={() => setCategory(cat.id)}
-                    style={category === cat.id ? { borderColor: cat.color, color: cat.color, background: cat.color + '18' } : {}}>
-                    <div style={{ fontSize: 18, marginBottom: 3 }}>{cat.icon}</div>
+                  <button key={cat.id} className="hm-catbtn" onClick={()=>setCategory(cat.id)}
+                    style={category===cat.id?{borderColor:cat.color,color:cat.color,background:cat.color+'18'}:{}}>
+                    <div style={{fontSize:18,marginBottom:3}}>{cat.icon}</div>
                     {cat.label}
                   </button>
                 ))}
               </div>
 
-              <div style={s.label}>Estilo</div>
-              <div style={s.styleGrid}>
+              <div className="hm-label">Estilo</div>
+              <div className="hm-grid2">
                 {STYLES.map(st => (
-                  <button key={st.id} className="style-btn" onClick={() => setStyle(st.id)}
-                    style={style === st.id ? { borderColor: st.color, background: st.color + '18' } : {}}>
-                    <div style={{ fontFamily: "'Barlow Condensed'", fontSize: 13, fontWeight: 700, letterSpacing: 1, textTransform: 'uppercase', color: style === st.id ? st.color : '#bbb' }}>{st.label}</div>
-                    <div style={{ fontSize: 11, color: '#555', marginTop: 2, fontFamily: 'Barlow, sans-serif' }}>{st.desc}</div>
+                  <button key={st.id} className="hm-stybtn" onClick={()=>setStyle(st.id)}
+                    style={style===st.id?{borderColor:st.color,background:st.color+'18'}:{}}>
+                    <div style={{fontFamily:"'Barlow Condensed'",fontSize:13,fontWeight:700,letterSpacing:1,textTransform:'uppercase',color:style===st.id?st.color:'#bbb'}}>{st.label}</div>
+                    <div style={{fontSize:11,color:'#555',marginTop:2,fontFamily:'Barlow,sans-serif'}}>{st.desc}</div>
                   </button>
                 ))}
               </div>
 
-              <div style={s.label}>Contexto Extra (Opcional)</div>
-              <input className="custom-input" placeholder="Ej: para mayores de 40, principiantes, ayuno intermitente..." value={customPrompt} onChange={e => setCustomPrompt(e.target.value)} />
+              <div className="hm-label">Contexto Extra (Opcional)</div>
+              <input className="hm-input" placeholder="Ej: para mayores de 40, principiantes, ayuno intermitente..." value={customPrompt} onChange={e=>setCustomPrompt(e.target.value)} />
 
-              <button style={{ ...s.genBtn, ...(loading ? { background: '#222', color: '#444', cursor: 'not-allowed', clipPath: 'none' } : {}) }} onClick={generate} disabled={loading}>
-                {loading ? <span className="pulse">GENERANDO HOOKS...</span> : '⚡ GENERAR 5 HOOKS'}
+              <button className="hm-genbtn" onClick={generate} disabled={loading}>
+                {loading ? <span className="hm-pulse">GENERANDO HOOKS...</span> : '⚡ GENERAR 5 HOOKS'}
               </button>
 
-              {error && <div style={{ background: '#180000', border: '1px solid #400', color: '#f88', padding: '10px 14px', marginBottom: 14, fontFamily: 'Barlow, sans-serif', fontSize: 13 }}>{error}</div>}
+              {error && <div className="hm-error">{error}</div>}
 
-              {loading && [1,2,3,4,5].map(i => (
-                <div key={i} style={{ background: '#111', borderLeft: '3px solid #222', padding: 16, marginBottom: 10 }}>
-                  <div className="pulse" style={{ height: 14, background: '#1a1a1a', marginBottom: 8, width: '75%' }} />
-                  <div className="pulse" style={{ height: 14, background: '#1a1a1a', width: '55%' }} />
+              {loading && [1,2,3,4,5].map(i=>(
+                <div key={i} style={{background:'#111',borderLeft:'3px solid #222',padding:16,marginBottom:10}}>
+                  <div className="hm-skel hm-pulse" style={{width:'75%'}} />
+                  <div className="hm-skel hm-pulse" style={{width:'55%'}} />
                 </div>
               ))}
 
-              {!loading && hooks.map((hook, idx) => (
-                <div key={hook.id} style={s.hookCard}>
-                  <div style={{ color: '#FF4500', fontWeight: 900, fontSize: 18, minWidth: 20, lineHeight: 1 }}>{idx + 1}</div>
-                  <div style={{ flex: 1, fontSize: 15, lineHeight: 1.6, color: '#E0E0E0', fontFamily: 'Barlow, sans-serif' }}>{hook.text}</div>
-                  <div style={{ display: 'flex', gap: 5, flexShrink: 0 }}>
-                    <button className="icon-btn-h" style={{ ...s.iconBtn, ...(isFav(hook.id) ? { borderColor: '#FFD700', color: '#FFD700', background: '#1a1400' } : {}) }} onClick={() => toggleFav(hook)}>{isFav(hook.id) ? '★' : '☆'}</button>
-                    <button className="icon-btn-h" style={s.iconBtn} onClick={() => copyText(hook.text, hook.id)}>{copied === hook.id ? '✓' : '⎘'}</button>
-                    <button className="icon-btn-h" style={{ ...s.iconBtn, fontSize: 13 }} onClick={() => setExportHook(hook)}>↗</button>
+              {!loading && hooks.map((hook,idx)=>(
+                <div key={hook.id} className="hm-card">
+                  <div className="hm-num">{idx+1}</div>
+                  <div className="hm-text">{hook.text}</div>
+                  <div className="hm-actions">
+                    <button className={`hm-ibtn ${isFav(hook.id)?'fav':''}`} onClick={()=>toggleFav(hook)}>{isFav(hook.id)?'★':'☆'}</button>
+                    <button className="hm-ibtn" onClick={()=>copyText(hook.text,hook.id)}>{copied===hook.id?'✓':'⎘'}</button>
+                    <button className="hm-ibtn" style={{fontSize:13}} onClick={()=>setExportHook(hook)}>↗</button>
                   </div>
                 </div>
               ))}
@@ -183,32 +219,32 @@ export default function HookMachine() {
 
           {tab === 'favorites' && (
             favorites.length === 0
-              ? <div style={{ textAlign: 'center', padding: '50px 0', color: '#333' }}>
-                  <div style={{ fontSize: 40, marginBottom: 10 }}>☆</div>
-                  <div style={{ fontFamily: "'Barlow Condensed'", fontSize: 16, fontWeight: 700, letterSpacing: 2 }}>SIN FAVORITOS AÚN</div>
-                  <div style={{ fontSize: 12, color: '#2a2a2a', marginTop: 6, fontFamily: 'Barlow, sans-serif' }}>Guarda hooks con la estrella ★</div>
+              ? <div className="hm-empty">
+                  <div style={{fontSize:40,marginBottom:10}}>☆</div>
+                  <div style={{fontFamily:"'Barlow Condensed'",fontSize:16,fontWeight:700,letterSpacing:2,color:'#333'}}>SIN FAVORITOS AÚN</div>
+                  <div style={{fontSize:12,color:'#2a2a2a',marginTop:6,fontFamily:'Barlow,sans-serif'}}>Guarda hooks con la estrella ★</div>
                 </div>
               : <>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 14 }}>
-                    <div style={{ ...s.label, margin: 0 }}>{favorites.length} HOOKS GUARDADOS</div>
-                    <button onClick={() => copyText(favorites.map((f,i) => `${i+1}. ${f.text}`).join('\n\n'), 'all')}
-                      style={{ background: 'none', border: '1px solid #272727', color: '#888', padding: '5px 14px', cursor: 'pointer', fontFamily: "'Barlow Condensed'", fontSize: 12, letterSpacing: 1, textTransform: 'uppercase' }}>
-                      {copied === 'all' ? '✓ COPIADO' : 'COPIAR TODOS'}
+                  <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:14}}>
+                    <div className="hm-label" style={{margin:0}}>{favorites.length} HOOKS GUARDADOS</div>
+                    <button onClick={()=>copyText(favorites.map((f,i)=>`${i+1}. ${f.text}`).join('\n\n'),'all')}
+                      style={{background:'none',border:'1px solid #272727',color:'#888',padding:'5px 14px',cursor:'pointer',fontFamily:"'Barlow Condensed'",fontSize:12,letterSpacing:1,textTransform:'uppercase'}}>
+                      {copied==='all'?'✓ COPIADO':'COPIAR TODOS'}
                     </button>
                   </div>
-                  {favorites.map((hook, idx) => {
-                    const cat = CATEGORIES.find(c => c.id === hook.category)
+                  {favorites.map((hook,idx)=>{
+                    const cat=CATEGORIES.find(c=>c.id===hook.category)
                     return (
-                      <div key={hook.id} style={{ ...s.hookCard, borderLeftColor: cat?.color || '#FF4500' }}>
-                        <div style={{ color: cat?.color || '#FF4500', fontWeight: 900, fontSize: 18, minWidth: 20 }}>{idx + 1}</div>
-                        <div style={{ flex: 1 }}>
-                          <span style={{ background: (cat?.color || '#FF4500') + '22', color: cat?.color || '#FF4500', padding: '2px 8px', fontSize: 10, fontWeight: 700, letterSpacing: 1.5, textTransform: 'uppercase', marginRight: 4 }}>{cat?.label}</span>
-                          <div style={{ fontSize: 15, lineHeight: 1.6, color: '#E0E0E0', fontFamily: 'Barlow, sans-serif', marginTop: 8 }}>{hook.text}</div>
+                      <div key={hook.id} className="hm-card" style={{borderLeftColor:cat?.color||'#FF4500'}}>
+                        <div className="hm-num" style={{color:cat?.color||'#FF4500'}}>{idx+1}</div>
+                        <div style={{flex:1}}>
+                          <span className="hm-chip" style={{background:(cat?.color||'#FF4500')+'22',color:cat?.color||'#FF4500'}}>{cat?.label}</span>
+                          <div className="hm-text" style={{marginTop:8}}>{hook.text}</div>
                         </div>
-                        <div style={{ display: 'flex', gap: 5, flexShrink: 0 }}>
-                          <button className="icon-btn-h" style={{ ...s.iconBtn, borderColor: '#FFD700', color: '#FFD700', background: '#1a1400' }} onClick={() => toggleFav(hook)}>★</button>
-                          <button className="icon-btn-h" style={s.iconBtn} onClick={() => copyText(hook.text, hook.id)}>{copied === hook.id ? '✓' : '⎘'}</button>
-                          <button className="icon-btn-h" style={{ ...s.iconBtn, fontSize: 13 }} onClick={() => setExportHook(hook)}>↗</button>
+                        <div className="hm-actions">
+                          <button className="hm-ibtn fav" onClick={()=>toggleFav(hook)}>★</button>
+                          <button className="hm-ibtn" onClick={()=>copyText(hook.text,hook.id)}>{copied===hook.id?'✓':'⎘'}</button>
+                          <button className="hm-ibtn" style={{fontSize:13}} onClick={()=>setExportHook(hook)}>↗</button>
                         </div>
                       </div>
                     )
@@ -218,25 +254,24 @@ export default function HookMachine() {
         </div>
 
         {exportHook && (
-          <div className="modal-bg" onClick={e => e.target === e.currentTarget && setExportHook(null)}>
-            <div style={{ background: '#0f0f0f', border: '1px solid #222', width: '100%', maxWidth: 520, padding: 22 }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 18 }}>
-                <div style={{ fontFamily: "'Barlow Condensed'", fontSize: 18, fontWeight: 800, letterSpacing: 2, textTransform: 'uppercase' }}>EXPORTAR HOOK</div>
-                <button onClick={() => setExportHook(null)} style={{ background: 'none', border: 'none', color: '#555', cursor: 'pointer', fontSize: 20 }}>✕</button>
+          <div className="hm-modal" onClick={e=>e.target===e.currentTarget&&setExportHook(null)}>
+            <div className="hm-mbox">
+              <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:18}}>
+                <div style={{fontFamily:"'Barlow Condensed'",fontSize:18,fontWeight:800,letterSpacing:2,textTransform:'uppercase'}}>EXPORTAR HOOK</div>
+                <button onClick={()=>setExportHook(null)} style={{background:'none',border:'none',color:'#555',cursor:'pointer',fontSize:20}}>✕</button>
               </div>
-              <div style={{ display: 'flex', gap: 8, marginBottom: 18 }}>
-                {['instagram', 'twitter'].map(p => (
-                  <button key={p} className="plat-btn" onClick={() => setExportPlatform(p)}
-                    style={exportPlatform === p ? { borderColor: '#FF4500', color: '#FF4500', background: '#180800' } : {}}>
-                    {p === 'instagram' ? 'Instagram' : 'Twitter / X'}
+              <div style={{display:'flex',gap:8,marginBottom:18}}>
+                {['instagram','twitter'].map(p=>(
+                  <button key={p} className={`hm-platbtn ${exportPlatform===p?'active':''}`} onClick={()=>setExportPlatform(p)}>
+                    {p==='instagram'?'Instagram':'Twitter / X'}
                   </button>
                 ))}
               </div>
-              <div style={{ fontSize: 10, color: '#444', letterSpacing: 2, marginBottom: 8, textTransform: 'uppercase' }}>TEXTO LISTO PARA PEGAR</div>
-              <textarea className="export-ta" rows={9} defaultValue={buildExport(exportHook, exportPlatform)} key={`${exportHook.id}-${exportPlatform}`} />
-              <button style={{ ...s.genBtn, marginTop: 14, marginBottom: 0 }}
-                onClick={() => { copyText(buildExport(exportHook, exportPlatform), 'export'); setTimeout(() => setExportHook(null), 1400) }}>
-                {copied === 'export' ? '✓ COPIADO' : 'COPIAR Y CERRAR'}
+              <div className="hm-label">TEXTO LISTO PARA PEGAR</div>
+              <textarea className="hm-ta" rows={9} defaultValue={buildExport(exportHook,exportPlatform)} key={`${exportHook.id}-${exportPlatform}`} />
+              <button className="hm-genbtn" style={{marginTop:14,marginBottom:0}}
+                onClick={()=>{copyText(buildExport(exportHook,exportPlatform),'export');setTimeout(()=>setExportHook(null),1400)}}>
+                {copied==='export'?'✓ COPIADO':'COPIAR Y CERRAR'}
               </button>
             </div>
           </div>
