@@ -1,282 +1,377 @@
-'use client'
-
-import { useState, useEffect } from 'react'
+"use client";
+import { useState } from "react";
 
 const CATEGORIES = [
-  { id: 'muscle', label: 'MASA MUSCULAR', icon: '💪', color: '#FF4500' },
-  { id: 'fat_loss', label: 'PÉRDIDA DE GRASA', icon: '🔥', color: '#FF6B00' },
-  { id: 'testosterone', label: 'TESTOSTERONA', icon: '⚡', color: '#FFD700' },
-  { id: 'discipline', label: 'DISCIPLINA', icon: '🎯', color: '#C0C0C0' },
-]
+  { id: "muscle", label: "Masa muscular", icon: "💪", accent: "#FF4500" },
+  { id: "fat_loss", label: "Quema de grasa", icon: "🔥", accent: "#FF6B00" },
+  { id: "testosterone", label: "Testosterona", icon: "⚡", accent: "#FFD700" },
+  { id: "discipline", label: "Disciplina", icon: "🎯", accent: "#C0C0C0" },
+  { id: "nutrition", label: "Nutrición", icon: "🥩", accent: "#00C853" },
+  { id: "transformation", label: "Transformación", icon: "🔄", accent: "#9C27B0" },
+];
 
 const STYLES = [
-  { id: 'hormozi', label: 'Alex Hormozi', desc: 'Directo, datos, brutal honesty', color: '#FF4500' },
-  { id: 'aggressive', label: 'Reel Agresivo', desc: 'Alta energía, provocador, viral', color: '#FF6B00' },
-  { id: 'stoic', label: 'Estoico', desc: 'Frío, filosófico, impacto silencioso', color: '#C0C0C0' },
-  { id: 'challenger', label: 'Challenger', desc: 'Rompe creencias, controversia', color: '#FFD700' },
-]
+  { id: "hormozi", label: "Hormozi", desc: "Datos + brutal honesty" },
+  { id: "shock", label: "Shock", desc: "Rompe creencia desde el seg 1" },
+  { id: "storytelling", label: "Story", desc: "Historia que engancha" },
+  { id: "challenger", label: "Challenger", desc: "Confronta al espectador" },
+  { id: "educational", label: "Educativo viral", desc: "Enseña algo que nadie sabe" },
+  { id: "prueba_social", label: "Prueba social", desc: "Resultados como gancho" },
+];
 
-const hashtagSets = {
-  muscle: { instagram: '#MasaMuscular #Hipertrofia #Gym #FitnessMotivation #Musculacion #GymLife', twitter: '#Fitness #Gym' },
-  fat_loss: { instagram: '#PerdidaDeGrasa #QuemarGrasa #TransformacionFisica #Fitness #Metabolismo', twitter: '#QuemarGrasa #Fitness' },
-  testosterone: { instagram: '#Testosterona #SaludMasculina #HombresFit #MasculinidadReal #FuerzaMental', twitter: '#Testosterona #Salud' },
-  discipline: { instagram: '#Disciplina #MentalidadGanadora #Habitos #NoExcusas #Consistencia', twitter: '#Disciplina #Motivacion' },
-}
+const buildPrompt = (categoryLabel, styleLabel) => `
+Eres el mejor estratega de contenido viral de fitness del mundo. Tu trabajo es generar scripts de video que generen máxima retención y viralidad en Instagram Reels, TikTok y YouTube Shorts.
 
-export default function HookMachine() {
-  const [mounted, setMounted] = useState(false)
-  const [tab, setTab] = useState('generate')
-  const [category, setCategory] = useState('muscle')
-  const [style, setStyle] = useState('hormozi')
-  const [customPrompt, setCustomPrompt] = useState('')
-  const [hooks, setHooks] = useState([])
-  const [favorites, setFavorites] = useState([])
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState('')
-  const [copied, setCopied] = useState(null)
-  const [exportHook, setExportHook] = useState(null)
-  const [exportPlatform, setExportPlatform] = useState('instagram')
+CATEGORÍA: ${categoryLabel}
+ESTILO: ${styleLabel}
 
-  useEffect(() => {
-    setMounted(true)
-    try {
-      const saved = localStorage.getItem('hm_favs')
-      if (saved) setFavorites(JSON.parse(saved))
-    } catch (e) {}
-  }, [])
+Inventa tú el tema del video. Elige el ángulo más viral, contraintuitivo o provocador posible dentro de esa categoría y ese estilo. No preguntes, decide.
 
-  useEffect(() => {
-    if (mounted) {
-      try { localStorage.setItem('hm_favs', JSON.stringify(favorites)) } catch (e) {}
+Responde SOLO con este JSON (sin backticks, sin texto extra):
+
+{
+  "tema": "El tema/ángulo que elegiste en una línea",
+  "hook_variants": [
+    {
+      "version": "A",
+      "linea": "Exactamente qué dices o muestras en los primeros 3 segundos",
+      "texto_pantalla": "Texto grande que aparece en pantalla",
+      "trigger": "Emoción o mecanismo psicológico que activa (curiosidad/miedo/shock/identidad)"
+    },
+    {
+      "version": "B",
+      "linea": "Segunda opción completamente diferente",
+      "texto_pantalla": "Texto pantalla B",
+      "trigger": "Trigger psicológico B"
+    },
+    {
+      "version": "C",
+      "linea": "Tercera opción",
+      "texto_pantalla": "Texto pantalla C",
+      "trigger": "Trigger psicológico C"
     }
-  }, [favorites, mounted])
+  ],
+  "script": [
+    {
+      "segundo": "0-3s",
+      "seccion": "HOOK",
+      "guion": "Exactamente qué dices",
+      "camara": "Qué haces físicamente / ángulo de cámara",
+      "pantalla": "Texto/gráfico en pantalla",
+      "edicion": "Tip de edición o ritmo"
+    },
+    {
+      "segundo": "3-12s",
+      "seccion": "TENSIÓN",
+      "guion": "Desarrollas el problema o la promesa para que no puedan irse",
+      "camara": "Acción en cámara",
+      "pantalla": "Texto pantalla",
+      "edicion": "Tip edición"
+    },
+    {
+      "segundo": "12-35s",
+      "seccion": "VALOR",
+      "guion": "El contenido real. Concreto, puntos claros, sin relleno.",
+      "camara": "Acción en cámara",
+      "pantalla": "Texto pantalla",
+      "edicion": "Tip edición"
+    },
+    {
+      "segundo": "35-50s",
+      "seccion": "GIRO",
+      "guion": "Dato sorpresa, resultado o giro que nadie esperaba",
+      "camara": "Acción en cámara",
+      "pantalla": "Texto pantalla",
+      "edicion": "Tip edición"
+    },
+    {
+      "segundo": "50-60s",
+      "seccion": "CTA",
+      "guion": "CTA directo y específico",
+      "camara": "Acción en cámara",
+      "pantalla": "Texto pantalla",
+      "edicion": "Tip edición"
+    }
+  ],
+  "viral_score": 88,
+  "por_que_va_a_viral": "Una sola frase explicando el mecanismo viral principal",
+  "caption_line": "Primera línea del caption (gancho para que abran el post)"
+}
+`;
+
+const SECTION_COLORS = {
+  "HOOK": "#FF4500",
+  "TENSIÓN": "#FF6B00",
+  "VALOR": "#FFD700",
+  "GIRO": "#00C853",
+  "CTA": "#7B61FF",
+};
+
+export default function ScriptMachine() {
+  const [category, setCategory] = useState(null);
+  const [style, setStyle] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [result, setResult] = useState(null);
+  const [error, setError] = useState(null);
+  const [activeHook, setActiveHook] = useState("A");
+  const [activeStep, setActiveStep] = useState(0);
+  const [saved, setSaved] = useState([]);
+  const [copied, setCopied] = useState(false);
+
+  const ready = category && style;
+  const catObj = CATEGORIES.find(c => c.id === category);
+  const accent = catObj?.accent || "#FF4500";
 
   const generate = async () => {
-    setLoading(true)
-    setError('')
-    setHooks([])
+    if (!ready) return;
+    setLoading(true);
+    setResult(null);
+    setError(null);
+    setActiveStep(0);
+    setActiveHook("A");
     try {
-      const res = await fetch('/api/generate', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ category, style, customPrompt }),
-      })
-      const data = await res.json()
-      if (data.error) throw new Error(data.error)
-      setHooks(data.hooks.map((h, i) => ({ id: Date.now() + i, text: h, category, style })))
+      const catLabel = CATEGORIES.find(c => c.id === category)?.label;
+      const styleLabel = STYLES.find(s => s.id === style)?.label;
+      const res = await fetch("/api/generate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ prompt: buildPrompt(catLabel, styleLabel) }),
+      });
+      const data = await res.json();
+      const text = data.content?.find(b => b.type === "text")?.text || "";
+      const clean = text.replace(/```json|```/g, "").trim();
+      setResult(JSON.parse(clean));
     } catch (e) {
-      setError('Error al generar. Verifica tu API key en Netlify.')
+      setError("Error al generar. Intenta de nuevo.");
+    } finally {
+      setLoading(false);
     }
-    setLoading(false)
-  }
+  };
 
-  const toggleFav = (hook) => {
-    setFavorites(prev =>
-      prev.find(f => f.id === hook.id) ? prev.filter(f => f.id !== hook.id) : [...prev, hook]
-    )
-  }
+  const copyAll = () => {
+    if (!result) return;
+    const hook = result.hook_variants?.find(h => h.version === activeHook);
+    const lines = result.script?.map(s =>
+      `[${s.segundo} — ${s.seccion}]\n${s.guion}\nCámara: ${s.camara}\nPantalla: ${s.pantalla}`
+    ).join("\n\n");
+    const txt = `TEMA: ${result.tema}\n\nHOOK ${activeHook}: ${hook?.linea}\nPantalla: ${hook?.texto_pantalla}\n\n${lines}\n\nCAPTION: ${result.caption_line}`;
+    navigator.clipboard.writeText(txt);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
 
-  const isFav = (id) => favorites.some(f => f.id === id)
-
-  const copyText = (text, key) => {
-    navigator.clipboard.writeText(text).catch(() => {})
-    setCopied(key)
-    setTimeout(() => setCopied(null), 1800)
-  }
-
-  const buildExport = (hook, platform) => {
-    const ht = (hashtagSets[hook.category] || {})[platform] || ''
-    const cat = CATEGORIES.find(c => c.id === hook.category)
-    if (platform === 'twitter') return hook.text.slice(0, 240) + '\n\n' + ht
-    return hook.text + '\n\n' + ht + '\n\n—\n🔥 Sígueme para más contenido de ' + (cat?.label || 'fitness')
-  }
-
-  if (!mounted) return null
+  const saveScript = () => {
+    if (!result) return;
+    setSaved(prev => [{ id: Date.now(), category, style, result }, ...prev.slice(0, 9)]);
+  };
 
   return (
-    <>
-      <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800;900&family=Barlow:wght@400;500&display=swap');
-        .hm-app { background:#0A0A0A; min-height:100vh; font-family:'Barlow Condensed',Impact,sans-serif; color:#F0F0F0; }
-        .hm-header { border-bottom:1px solid #1a1a1a; padding:16px 20px; display:flex; align-items:center; gap:14px; }
-        .hm-logo { font-size:24px; font-weight:900; letter-spacing:3px; text-transform:uppercase; line-height:1; }
-        .hm-logo span { color:#FF4500; }
-        .hm-sub { font-size:10px; color:#444; letter-spacing:2px; font-family:Barlow,sans-serif; margin-top:2px; }
-        .hm-tabs { border-bottom:1px solid #1a1a1a; display:flex; padding:0 20px; }
-        .hm-tab { background:none; border:none; border-bottom:2px solid transparent; padding:10px 20px; font-family:'Barlow Condensed',sans-serif; font-size:14px; font-weight:700; letter-spacing:2px; text-transform:uppercase; cursor:pointer; color:#444; transition:all 0.15s; }
-        .hm-tab.active { color:#FF4500; border-bottom-color:#FF4500; }
-        .hm-content { padding:20px; max-width:720px; margin:0 auto; }
-        .hm-label { font-size:10px; color:#444; letter-spacing:2px; margin-bottom:8px; text-transform:uppercase; font-family:Barlow,sans-serif; }
-        .hm-grid2 { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:20px; }
-        .hm-catbtn { background:#111; border:1px solid #1e1e1e; padding:10px; cursor:pointer; font-family:'Barlow Condensed',sans-serif; color:#777; font-size:12px; font-weight:700; letter-spacing:1px; text-align:center; text-transform:uppercase; transition:all 0.15s; }
-        .hm-catbtn:hover { border-color:#333; color:#bbb; }
-        .hm-stybtn { background:#111; border:1px solid #1e1e1e; padding:12px; cursor:pointer; text-align:left; transition:all 0.15s; }
-        .hm-stybtn:hover { border-color:#333; background:#141414; }
-        .hm-input { background:#111; border:1px solid #1e1e1e; color:#F0F0F0; padding:10px 14px; font-family:Barlow,sans-serif; font-size:13px; outline:none; width:100%; margin-bottom:20px; }
-        .hm-input:focus { border-color:#FF4500; }
-        .hm-input::placeholder { color:#444; }
-        .hm-genbtn { background:#FF4500; color:#fff; border:none; padding:14px 0; width:100%; font-family:'Barlow Condensed',sans-serif; font-size:17px; font-weight:900; letter-spacing:3px; text-transform:uppercase; cursor:pointer; margin-bottom:20px; clip-path:polygon(10px 0%,100% 0%,calc(100% - 10px) 100%,0% 100%); }
-        .hm-genbtn:hover { background:#FF6600; }
-        .hm-genbtn:disabled { background:#222; color:#444; cursor:not-allowed; clip-path:none; }
-        .hm-card { background:#111; border-left:3px solid #FF4500; padding:14px 16px; margin-bottom:10px; display:flex; gap:12px; align-items:flex-start; }
-        .hm-num { color:#FF4500; font-weight:900; font-size:18px; min-width:20px; line-height:1; flex-shrink:0; }
-        .hm-text { flex:1; font-size:15px; line-height:1.6; color:#E0E0E0; font-family:Barlow,sans-serif; }
-        .hm-actions { display:flex; gap:5px; flex-shrink:0; }
-        .hm-ibtn { background:none; border:1px solid #272727; width:32px; height:32px; cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:14px; color:#888; transition:all 0.15s; flex-shrink:0; }
-        .hm-ibtn:hover { border-color:#FF4500; color:#FF4500; background:#1a0600; }
-        .hm-ibtn.fav { border-color:#FFD700; color:#FFD700; background:#1a1400; }
-        .hm-skel { background:#161616; height:14px; margin-bottom:8px; border-radius:2px; }
-        @keyframes hmpulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
-        .hm-pulse { animation:hmpulse 1s infinite; }
-        .hm-error { background:#180000; border:1px solid #400; color:#f88; padding:10px 14px; margin-bottom:14px; font-family:Barlow,sans-serif; font-size:13px; }
-        .hm-empty { text-align:center; padding:50px 0; color:#333; }
-        .hm-modal { position:fixed; inset:0; background:rgba(0,0,0,0.92); display:flex; align-items:center; justify-content:center; z-index:999; padding:16px; }
-        .hm-mbox { background:#0f0f0f; border:1px solid #222; width:100%; max-width:520px; padding:22px; }
-        .hm-ta { background:#0a0a0a; border:1px solid #222; color:#e0e0e0; padding:12px; font-family:Barlow,sans-serif; font-size:13px; resize:none; outline:none; width:100%; line-height:1.65; }
-        .hm-ta:focus { border-color:#FF4500; }
-        .hm-platbtn { flex:1; padding:9px; background:#111; border:1px solid #1e1e1e; color:#666; font-family:'Barlow Condensed',sans-serif; font-size:13px; font-weight:700; letter-spacing:1px; text-transform:uppercase; cursor:pointer; transition:all 0.15s; }
-        .hm-platbtn.active { border-color:#FF4500; color:#FF4500; background:#180800; }
-        .hm-chip { display:inline-block; padding:2px 8px; font-size:10px; font-weight:700; letter-spacing:1.5px; text-transform:uppercase; margin-right:4px; }
-      `}</style>
+    <div style={{ background: "#080808", minHeight: "100vh", color: "#fff", fontFamily: "'Barlow Condensed', Arial, sans-serif" }}>
+      <style>{`@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;900&display=swap');`}</style>
 
-      <div className="hm-app">
-        <div className="hm-header">
-          <div style={{width:4,height:32,background:'#FF4500',flexShrink:0}} />
-          <div>
-            <div className="hm-logo">HOOK<span>MACHINE</span></div>
-            <div className="hm-sub">GENERADOR DE HOOKS FITNESS VIRALES</div>
-          </div>
-          {favorites.length > 0 && (
-            <div style={{marginLeft:'auto',display:'flex',alignItems:'center',gap:6}}>
-              <span style={{color:'#FFD700'}}>★</span>
-              <span style={{color:'#FFD700',fontWeight:700}}>{favorites.length}</span>
-              <span style={{fontSize:10,color:'#444',letterSpacing:1}}>GUARDADOS</span>
-            </div>
-          )}
-        </div>
+      <div style={{ padding: "18px 20px 14px", borderBottom: "1px solid #111", display: "flex", alignItems: "center", gap: 10 }}>
+        <div style={{ width: 4, height: 24, background: accent, transition: "background 0.3s" }} />
+        <div style={{ fontSize: 20, fontWeight: 900, letterSpacing: 3, textTransform: "uppercase" }}>Script Machine</div>
+        <div style={{ marginLeft: "auto", fontSize: 11, color: "#333", letterSpacing: 1 }}>@gabufitness</div>
+      </div>
 
-        <div className="hm-tabs">
-          <button className={`hm-tab ${tab==='generate'?'active':''}`} onClick={()=>setTab('generate')}>Generar</button>
-          <button className={`hm-tab ${tab==='favorites'?'active':''}`} onClick={()=>setTab('favorites')}>
-            Favoritos {favorites.length > 0 && `(${favorites.length})`}
-          </button>
-        </div>
+      <div style={{ maxWidth: 860, margin: "0 auto", padding: "20px 16px" }}>
 
-        <div className="hm-content">
-          {tab === 'generate' && (
-            <>
-              <div className="hm-label">Categoría</div>
-              <div className="hm-grid2">
-                {CATEGORIES.map(cat => (
-                  <button key={cat.id} className="hm-catbtn" onClick={()=>setCategory(cat.id)}
-                    style={category===cat.id?{borderColor:cat.color,color:cat.color,background:cat.color+'18'}:{}}>
-                    <div style={{fontSize:18,marginBottom:3}}>{cat.icon}</div>
-                    {cat.label}
-                  </button>
-                ))}
-              </div>
-
-              <div className="hm-label">Estilo</div>
-              <div className="hm-grid2">
-                {STYLES.map(st => (
-                  <button key={st.id} className="hm-stybtn" onClick={()=>setStyle(st.id)}
-                    style={style===st.id?{borderColor:st.color,background:st.color+'18'}:{}}>
-                    <div style={{fontFamily:"'Barlow Condensed'",fontSize:13,fontWeight:700,letterSpacing:1,textTransform:'uppercase',color:style===st.id?st.color:'#bbb'}}>{st.label}</div>
-                    <div style={{fontSize:11,color:'#555',marginTop:2,fontFamily:'Barlow,sans-serif'}}>{st.desc}</div>
-                  </button>
-                ))}
-              </div>
-
-              <div className="hm-label">Contexto Extra (Opcional)</div>
-              <input className="hm-input" placeholder="Ej: para mayores de 40, principiantes, ayuno intermitente..." value={customPrompt} onChange={e=>setCustomPrompt(e.target.value)} />
-
-              <button className="hm-genbtn" onClick={generate} disabled={loading}>
-                {loading ? <span className="hm-pulse">GENERANDO HOOKS...</span> : '⚡ GENERAR 5 HOOKS'}
+        <div style={{ marginBottom: 22 }}>
+          <div style={{ fontSize: 10, color: "#444", letterSpacing: 2, textTransform: "uppercase", marginBottom: 10 }}>1 — Categoría</div>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 8 }}>
+            {CATEGORIES.map(c => (
+              <button key={c.id} onClick={() => setCategory(c.id)} style={{
+                background: category === c.id ? c.accent : "#0e0e0e",
+                border: `1px solid ${category === c.id ? c.accent : "#1a1a1a"}`,
+                color: category === c.id ? "#000" : "#555",
+                padding: "11px 8px", borderRadius: 4, cursor: "pointer",
+                fontSize: 12, fontWeight: 700, letterSpacing: 1, textTransform: "uppercase",
+                transition: "all 0.15s", display: "flex", alignItems: "center", gap: 6,
+              }}>
+                <span style={{ fontSize: 14 }}>{c.icon}</span>
+                <span style={{ flex: 1, textAlign: "left" }}>{c.label}</span>
               </button>
-
-              {error && <div className="hm-error">{error}</div>}
-
-              {loading && [1,2,3,4,5].map(i=>(
-                <div key={i} style={{background:'#111',borderLeft:'3px solid #222',padding:16,marginBottom:10}}>
-                  <div className="hm-skel hm-pulse" style={{width:'75%'}} />
-                  <div className="hm-skel hm-pulse" style={{width:'55%'}} />
-                </div>
-              ))}
-
-              {!loading && hooks.map((hook,idx)=>(
-                <div key={hook.id} className="hm-card">
-                  <div className="hm-num">{idx+1}</div>
-                  <div className="hm-text">{hook.text}</div>
-                  <div className="hm-actions">
-                    <button className={`hm-ibtn ${isFav(hook.id)?'fav':''}`} onClick={()=>toggleFav(hook)}>{isFav(hook.id)?'★':'☆'}</button>
-                    <button className="hm-ibtn" onClick={()=>copyText(hook.text,hook.id)}>{copied===hook.id?'✓':'⎘'}</button>
-                    <button className="hm-ibtn" style={{fontSize:13}} onClick={()=>setExportHook(hook)}>↗</button>
-                  </div>
-                </div>
-              ))}
-            </>
-          )}
-
-          {tab === 'favorites' && (
-            favorites.length === 0
-              ? <div className="hm-empty">
-                  <div style={{fontSize:40,marginBottom:10}}>☆</div>
-                  <div style={{fontFamily:"'Barlow Condensed'",fontSize:16,fontWeight:700,letterSpacing:2,color:'#333'}}>SIN FAVORITOS AÚN</div>
-                  <div style={{fontSize:12,color:'#2a2a2a',marginTop:6,fontFamily:'Barlow,sans-serif'}}>Guarda hooks con la estrella ★</div>
-                </div>
-              : <>
-                  <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:14}}>
-                    <div className="hm-label" style={{margin:0}}>{favorites.length} HOOKS GUARDADOS</div>
-                    <button onClick={()=>copyText(favorites.map((f,i)=>`${i+1}. ${f.text}`).join('\n\n'),'all')}
-                      style={{background:'none',border:'1px solid #272727',color:'#888',padding:'5px 14px',cursor:'pointer',fontFamily:"'Barlow Condensed'",fontSize:12,letterSpacing:1,textTransform:'uppercase'}}>
-                      {copied==='all'?'✓ COPIADO':'COPIAR TODOS'}
-                    </button>
-                  </div>
-                  {favorites.map((hook,idx)=>{
-                    const cat=CATEGORIES.find(c=>c.id===hook.category)
-                    return (
-                      <div key={hook.id} className="hm-card" style={{borderLeftColor:cat?.color||'#FF4500'}}>
-                        <div className="hm-num" style={{color:cat?.color||'#FF4500'}}>{idx+1}</div>
-                        <div style={{flex:1}}>
-                          <span className="hm-chip" style={{background:(cat?.color||'#FF4500')+'22',color:cat?.color||'#FF4500'}}>{cat?.label}</span>
-                          <div className="hm-text" style={{marginTop:8}}>{hook.text}</div>
-                        </div>
-                        <div className="hm-actions">
-                          <button className="hm-ibtn fav" onClick={()=>toggleFav(hook)}>★</button>
-                          <button className="hm-ibtn" onClick={()=>copyText(hook.text,hook.id)}>{copied===hook.id?'✓':'⎘'}</button>
-                          <button className="hm-ibtn" style={{fontSize:13}} onClick={()=>setExportHook(hook)}>↗</button>
-                        </div>
-                      </div>
-                    )
-                  })}
-                </>
-          )}
+            ))}
+          </div>
         </div>
 
-        {exportHook && (
-          <div className="hm-modal" onClick={e=>e.target===e.currentTarget&&setExportHook(null)}>
-            <div className="hm-mbox">
-              <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:18}}>
-                <div style={{fontFamily:"'Barlow Condensed'",fontSize:18,fontWeight:800,letterSpacing:2,textTransform:'uppercase'}}>EXPORTAR HOOK</div>
-                <button onClick={()=>setExportHook(null)} style={{background:'none',border:'none',color:'#555',cursor:'pointer',fontSize:20}}>✕</button>
+        <div style={{ marginBottom: 26 }}>
+          <div style={{ fontSize: 10, color: "#444", letterSpacing: 2, textTransform: "uppercase", marginBottom: 10 }}>2 — Estilo narrativo</div>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 8 }}>
+            {STYLES.map(s => (
+              <button key={s.id} onClick={() => setStyle(s.id)} style={{
+                background: style === s.id ? "#111" : "#0a0a0a",
+                border: `1px solid ${style === s.id ? accent : "#1a1a1a"}`,
+                color: "#fff", padding: "11px 10px", borderRadius: 4,
+                cursor: "pointer", textAlign: "left", transition: "all 0.15s",
+              }}>
+                <div style={{ fontSize: 12, fontWeight: 700, letterSpacing: 1, color: style === s.id ? accent : "#ccc", marginBottom: 2 }}>{s.label}</div>
+                <div style={{ fontSize: 10, color: "#444" }}>{s.desc}</div>
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <button onClick={generate} disabled={!ready || loading} style={{
+          width: "100%",
+          background: !ready ? "#0e0e0e" : loading ? "#111" : accent,
+          color: !ready ? "#2a2a2a" : loading ? "#666" : "#000",
+          border: `1px solid ${!ready ? "#1a1a1a" : accent}`,
+          padding: "15px", fontSize: 13, fontWeight: 900, letterSpacing: 3,
+          textTransform: "uppercase", cursor: !ready || loading ? "not-allowed" : "pointer",
+          borderRadius: 4, transition: "all 0.2s", marginBottom: 28,
+        }}>
+          {loading ? "⚡ GENERANDO SCRIPT..." : ready ? "GENERAR SCRIPT VIRAL →" : "ELIGE CATEGORÍA + ESTILO"}
+        </button>
+
+        {error && (
+          <div style={{ background: "#110000", border: "1px solid #FF1744", borderRadius: 4, padding: 12, color: "#FF1744", fontSize: 12, marginBottom: 20 }}>{error}</div>
+        )}
+
+        {result && (
+          <div>
+            <div style={{ background: "#0d0d0d", border: `1px solid #1a1a1a`, borderLeft: `3px solid ${accent}`, borderRadius: 4, padding: "14px 16px", marginBottom: 20, display: "flex", gap: 16, alignItems: "flex-start" }}>
+              <div style={{ flex: 1 }}>
+                <div style={{ fontSize: 10, color: "#444", letterSpacing: 2, marginBottom: 5 }}>TEMA ELEGIDO POR LA IA</div>
+                <div style={{ fontSize: 16, fontWeight: 700, color: "#fff", lineHeight: 1.4 }}>{result.tema}</div>
+                {result.por_que_va_a_viral && (
+                  <div style={{ fontSize: 11, color: "#555", marginTop: 6 }}>⚡ {result.por_que_va_a_viral}</div>
+                )}
               </div>
-              <div style={{display:'flex',gap:8,marginBottom:18}}>
-                {['instagram','twitter'].map(p=>(
-                  <button key={p} className={`hm-platbtn ${exportPlatform===p?'active':''}`} onClick={()=>setExportPlatform(p)}>
-                    {p==='instagram'?'Instagram':'Twitter / X'}
-                  </button>
+              <div style={{ textAlign: "center", minWidth: 56 }}>
+                <div style={{ fontSize: 28, fontWeight: 900, color: result.viral_score >= 85 ? "#00C853" : result.viral_score >= 70 ? "#FFD700" : "#FF4500" }}>{result.viral_score}</div>
+                <div style={{ fontSize: 9, color: "#333", letterSpacing: 1 }}>VIRAL SCORE</div>
+              </div>
+            </div>
+
+            <div style={{ marginBottom: 22 }}>
+              <div style={{ fontSize: 10, color: "#444", letterSpacing: 2, textTransform: "uppercase", marginBottom: 10 }}>Hooks — primeros 3 segundos</div>
+              <div style={{ display: "flex", gap: 6, marginBottom: 10 }}>
+                {result.hook_variants?.map(h => (
+                  <button key={h.version} onClick={() => setActiveHook(h.version)} style={{
+                    background: activeHook === h.version ? accent : "#0e0e0e",
+                    border: `1px solid ${activeHook === h.version ? accent : "#1a1a1a"}`,
+                    color: activeHook === h.version ? "#000" : "#555",
+                    padding: "6px 18px", fontSize: 11, fontWeight: 900,
+                    cursor: "pointer", borderRadius: 3, letterSpacing: 1, transition: "all 0.15s",
+                  }}>HOOK {h.version}</button>
                 ))}
               </div>
-              <div className="hm-label">TEXTO LISTO PARA PEGAR</div>
-              <textarea className="hm-ta" rows={9} defaultValue={buildExport(exportHook,exportPlatform)} key={`${exportHook.id}-${exportPlatform}`} />
-              <button className="hm-genbtn" style={{marginTop:14,marginBottom:0}}
-                onClick={()=>{copyText(buildExport(exportHook,exportPlatform),'export');setTimeout(()=>setExportHook(null),1400)}}>
-                {copied==='export'?'✓ COPIADO':'COPIAR Y CERRAR'}
+              {result.hook_variants?.filter(h => h.version === activeHook).map(h => (
+                <div key={h.version} style={{ background: "#0a0a0a", border: "1px solid #1a1a1a", borderRadius: 4, padding: 16 }}>
+                  <div style={{ fontSize: 17, fontWeight: 700, color: "#fff", marginBottom: 10, lineHeight: 1.4 }}>"{h.linea}"</div>
+                  <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
+                    {h.texto_pantalla && (
+                      <div style={{ background: "#000", border: `1px solid ${accent}`, borderRadius: 3, padding: "5px 12px", fontSize: 11, color: accent }}>
+                        📺 {h.texto_pantalla}
+                      </div>
+                    )}
+                    {h.trigger && (
+                      <div style={{ background: "#111", border: "1px solid #222", borderRadius: 3, padding: "5px 12px", fontSize: 11, color: "#666" }}>
+                        🧠 {h.trigger}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div style={{ marginBottom: 22 }}>
+              <div style={{ fontSize: 10, color: "#444", letterSpacing: 2, textTransform: "uppercase", marginBottom: 10 }}>Script completo</div>
+              <div style={{ display: "flex", gap: 4, marginBottom: 12, flexWrap: "wrap" }}>
+                {result.script?.map((s, i) => {
+                  const col = SECTION_COLORS[s.seccion] || accent;
+                  return (
+                    <button key={i} onClick={() => setActiveStep(i)} style={{
+                      background: activeStep === i ? col : "#0e0e0e",
+                      border: `1px solid ${activeStep === i ? col : "#1a1a1a"}`,
+                      color: activeStep === i ? "#000" : "#555",
+                      padding: "5px 12px", fontSize: 10, fontWeight: 900,
+                      cursor: "pointer", borderRadius: 3, letterSpacing: 1, transition: "all 0.15s",
+                    }}>{s.seccion}</button>
+                  );
+                })}
+              </div>
+
+              {(() => {
+                const s = result.script?.[activeStep];
+                if (!s) return null;
+                const col = SECTION_COLORS[s.seccion] || accent;
+                return (
+                  <div style={{ background: "#0a0a0a", border: `1px solid ${col}33`, borderLeft: `3px solid ${col}`, borderRadius: 4, padding: 18 }}>
+                    <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 14 }}>
+                      <span style={{ fontSize: 12, fontWeight: 900, letterSpacing: 2, color: col }}>{s.seccion}</span>
+                      <span style={{ fontSize: 10, color: "#333" }}>{s.segundo}</span>
+                    </div>
+                    <div style={{ fontSize: 17, fontWeight: 700, color: "#fff", lineHeight: 1.5, marginBottom: 14 }}>{s.guion}</div>
+                    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginBottom: s.edicion ? 10 : 0 }}>
+                      <div style={{ background: "#111", borderRadius: 3, padding: "9px 12px" }}>
+                        <div style={{ fontSize: 9, color: "#333", letterSpacing: 1.5, marginBottom: 4 }}>CÁMARA</div>
+                        <div style={{ fontSize: 12, color: "#777", lineHeight: 1.4 }}>{s.camara}</div>
+                      </div>
+                      <div style={{ background: "#111", borderRadius: 3, padding: "9px 12px" }}>
+                        <div style={{ fontSize: 9, color: "#333", letterSpacing: 1.5, marginBottom: 4 }}>PANTALLA</div>
+                        <div style={{ fontSize: 12, color: "#777", lineHeight: 1.4 }}>{s.pantalla}</div>
+                      </div>
+                    </div>
+                    {s.edicion && <div style={{ fontSize: 11, color: "#444", fontStyle: "italic" }}>⚡ {s.edicion}</div>}
+                    <div style={{ display: "flex", justifyContent: "space-between", marginTop: 14 }}>
+                      <button onClick={() => setActiveStep(Math.max(0, activeStep - 1))} disabled={activeStep === 0}
+                        style={{ background: "none", border: "1px solid #1a1a1a", color: activeStep === 0 ? "#222" : "#555", padding: "5px 14px", fontSize: 11, cursor: activeStep === 0 ? "not-allowed" : "pointer", borderRadius: 3 }}>
+                        ← Anterior
+                      </button>
+                      <button onClick={() => setActiveStep(Math.min((result.script?.length || 1) - 1, activeStep + 1))} disabled={activeStep === (result.script?.length || 1) - 1}
+                        style={{ background: "none", border: "1px solid #1a1a1a", color: activeStep === (result.script?.length || 1) - 1 ? "#222" : "#555", padding: "5px 14px", fontSize: 11, cursor: activeStep === (result.script?.length || 1) - 1 ? "not-allowed" : "pointer", borderRadius: 3 }}>
+                        Siguiente →
+                      </button>
+                    </div>
+                  </div>
+                );
+              })()}
+            </div>
+
+            {result.caption_line && (
+              <div style={{ background: "#0a0a0a", border: "1px solid #1a1a1a", borderRadius: 4, padding: "12px 14px", marginBottom: 20 }}>
+                <div style={{ fontSize: 9, color: "#333", letterSpacing: 2, marginBottom: 5 }}>PRIMERA LÍNEA DEL CAPTION</div>
+                <div style={{ fontSize: 14, color: "#999" }}>{result.caption_line}</div>
+              </div>
+            )}
+
+            <div style={{ display: "flex", gap: 8 }}>
+              <button onClick={copyAll} style={{ flex: 1, background: copied ? "#001a00" : "#0e0e0e", border: `1px solid ${copied ? "#00C853" : "#1a1a1a"}`, color: copied ? "#00C853" : "#666", padding: "11px", fontSize: 11, fontWeight: 700, cursor: "pointer", borderRadius: 4, letterSpacing: 1, transition: "all 0.2s" }}>
+                {copied ? "✓ COPIADO" : "COPIAR SCRIPT"}
+              </button>
+              <button onClick={saveScript} style={{ flex: 1, background: "#0e0e0e", border: "1px solid #1a1a1a", color: "#666", padding: "11px", fontSize: 11, fontWeight: 700, cursor: "pointer", borderRadius: 4, letterSpacing: 1 }}>
+                GUARDAR
+              </button>
+              <button onClick={generate} style={{ flex: 1, background: "#0e0e0e", border: `1px solid ${accent}44`, color: accent, padding: "11px", fontSize: 11, fontWeight: 700, cursor: "pointer", borderRadius: 4, letterSpacing: 1 }}>
+                REGENERAR
               </button>
             </div>
           </div>
         )}
+
+        {saved.length > 0 && (
+          <div style={{ marginTop: 36, borderTop: "1px solid #0e0e0e", paddingTop: 20 }}>
+            <div style={{ fontSize: 10, color: "#2a2a2a", letterSpacing: 2, textTransform: "uppercase", marginBottom: 10 }}>Guardados ({saved.length})</div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+              {saved.map(s => {
+                const c = CATEGORIES.find(c => c.id === s.category);
+                return (
+                  <div key={s.id} style={{ background: "#0a0a0a", border: "1px solid #111", borderRadius: 4, padding: "9px 12px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                    <div>
+                      <div style={{ fontSize: 12, color: "#888" }}>{s.result.tema}</div>
+                      <div style={{ fontSize: 10, color: "#333" }}>{c?.label} · {STYLES.find(st => st.id === s.style)?.label}</div>
+                    </div>
+                    <div style={{ fontSize: 13, fontWeight: 900, color: c?.accent || "#FF4500" }}>{s.result.viral_score}</div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        )}
       </div>
-    </>
-  )
+    </div>
+  );
 }
