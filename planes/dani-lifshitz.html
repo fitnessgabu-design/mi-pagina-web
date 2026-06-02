@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Plan Gabu Fitness — Dani Lifshitz</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+  :root {
+    --accent: #E8FF00;
+    --dark: #0a0a0a;
+    --card: #111111;
+    --card2: #181818;
+    --muted: #555;
+    --text: #e8e8e8;
+    --danger: #ff4b4b;
+    --green: #39d98a;
+    --border: rgba(232,255,0,0.15);
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior:smooth; }
+  body { background:var(--dark); color:var(--text); font-family:'DM Sans',sans-serif; line-height:1.6; }
+
+  /* NAV */
+  nav { position:sticky; top:0; z-index:100; background:rgba(10,10,10,0.95); backdrop-filter:blur(12px); border-bottom:1px solid var(--border); padding:0 24px; }
+  .nav-inner { max-width:1100px; margin:0 auto; display:flex; align-items:center; gap:8px; overflow-x:auto; scrollbar-width:none; padding:14px 0; }
+  .nav-inner::-webkit-scrollbar { display:none; }
+  nav a { font-family:'Bebas Neue',sans-serif; letter-spacing:1px; font-size:14px; color:var(--muted); text-decoration:none; padding:6px 14px; border-radius:4px; white-space:nowrap; transition:.2s; }
+  nav a:hover, nav a.active { color:var(--accent); background:rgba(232,255,0,0.08); }
+
+  /* HERO */
+  .hero { background: linear-gradient(135deg,#0a0a0a 0%,#111 50%,#0d1400 100%); border-bottom:1px solid var(--border); padding:60px 24px 50px; }
+  .hero-inner { max-width:1100px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:32px; flex-wrap:wrap; }
+  .hero-badge { font-family:'Bebas Neue',sans-serif; font-size:11px; letter-spacing:3px; color:var(--accent); background:rgba(232,255,0,0.1); border:1px solid var(--border); padding:4px 12px; border-radius:2px; display:inline-block; margin-bottom:16px; }
+  .hero h1 { font-family:'Bebas Neue',sans-serif; font-size:clamp(42px,6vw,72px); letter-spacing:2px; line-height:1; color:#fff; }
+  .hero h1 span { color:var(--accent); }
+  .hero-sub { margin-top:12px; color:var(--muted); font-size:15px; max-width:420px; }
+  .hero-stats { display:flex; gap:24px; flex-wrap:wrap; margin-top:28px; }
+  .hstat { text-align:center; }
+  .hstat .val { font-family:'Bebas Neue',sans-serif; font-size:32px; color:var(--accent); line-height:1; }
+  .hstat .lbl { font-size:11px; color:var(--muted); letter-spacing:1px; text-transform:uppercase; margin-top:2px; }
+  .hero-logo { font-family:'Bebas Neue',sans-serif; font-size:13px; letter-spacing:3px; color:var(--muted); }
+  .hero-logo span { color:var(--accent); }
+
+  /* SECTION */
+  section { padding:48px 24px; border-bottom:1px solid rgba(255,255,255,0.05); }
+  .section-inner { max-width:1100px; margin:0 auto; }
+  .section-title { font-family:'Bebas Neue',sans-serif; font-size:28px; letter-spacing:2px; color:#fff; margin-bottom:4px; }
+  .section-title span { color:var(--accent); }
+  .section-sub { color:var(--muted); font-size:13px; margin-bottom:28px; }
+
+  /* CARDS */
+  .grid-2 { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:16px; }
+  .grid-3 { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:16px; }
+  .card { background:var(--card); border:1px solid rgba(255,255,255,0.06); border-radius:10px; padding:24px; }
+  .card-accent { border-left:3px solid var(--accent); }
+
+  /* ALERTA LESIONES */
+  .injury-banner { background:rgba(255,75,75,0.08); border:1px solid rgba(255,75,75,0.3); border-radius:10px; padding:20px 24px; margin-bottom:28px; }
+  .injury-banner h3 { color:var(--danger); font-family:'Bebas Neue',sans-serif; font-size:18px; letter-spacing:1px; margin-bottom:10px; }
+  .injury-tag { display:inline-block; background:rgba(255,75,75,0.15); color:var(--danger); font-size:12px; padding:3px 10px; border-radius:20px; margin:3px; border:1px solid rgba(255,75,75,0.3); }
+  .injury-note { font-size:13px; color:#cc8080; margin-top:10px; line-height:1.6; }
+
+  /* MACROS */
+  .macro-ring-wrap { display:flex; align-items:center; gap:32px; flex-wrap:wrap; }
+  .macro-legend { display:flex; flex-direction:column; gap:12px; }
+  .macro-item { display:flex; align-items:center; gap:10px; }
+  .macro-dot { width:12px; height:12px; border-radius:2px; }
+  .macro-name { font-size:13px; color:var(--muted); width:90px; }
+  .macro-val { font-family:'Bebas Neue',sans-serif; font-size:20px; color:#fff; }
+  .macro-g { font-size:11px; color:var(--muted); }
+  .kcal-big { font-family:'Bebas Neue',sans-serif; font-size:48px; color:var(--accent); line-height:1; }
+  .kcal-lbl { font-size:12px; color:var(--muted); letter-spacing:1px; }
+
+  /* TRAINING SPLIT */
+  .day-card { background:var(--card); border:1px solid rgba(255,255,255,0.06); border-radius:10px; overflow:hidden; margin-bottom:12px; }
+  .day-header { background:var(--card2); padding:14px 20px; display:flex; align-items:center; gap:14px; cursor:pointer; user-select:none; }
+  .day-dot { width:8px; height:8px; border-radius:50%; background:var(--accent); }
+  .day-dot.rest { background:var(--muted); }
+  .day-label { font-family:'Bebas Neue',sans-serif; font-size:16px; letter-spacing:1px; color:#fff; }
+  .day-focus { font-size:12px; color:var(--muted); margin-left:auto; }
+  .day-body { padding:0 20px; max-height:0; overflow:hidden; transition:max-height .4s ease, padding .3s; }
+  .day-body.open { max-height:1200px; padding:16px 20px 20px; }
+
+  /* EXERCISES TABLE */
+  .ex-table { width:100%; border-collapse:collapse; font-size:13px; }
+  .ex-table th { text-align:left; color:var(--muted); font-weight:500; padding:6px 8px; border-bottom:1px solid rgba(255,255,255,0.06); font-size:11px; letter-spacing:1px; text-transform:uppercase; }
+  .ex-table td { padding:10px 8px; border-bottom:1px solid rgba(255,255,255,0.04); vertical-align:top; }
+  .ex-table tr:last-child td { border-bottom:none; }
+  .ex-name { font-weight:500; color:#fff; display:block; }
+  .ex-mod { font-size:11px; color:var(--danger); margin-top:2px; }
+  .badge-sets { background:rgba(232,255,0,0.1); color:var(--accent); font-size:11px; padding:2px 8px; border-radius:3px; font-weight:700; white-space:nowrap; }
+  .yt-link { color:var(--accent); font-size:11px; text-decoration:none; display:inline-flex; align-items:center; gap:4px; margin-top:4px; }
+  .yt-link:hover { text-decoration:underline; }
+
+  /* MEALS */
+  .meal-card { background:var(--card); border-radius:10px; border:1px solid rgba(255,255,255,0.06); padding:20px; }
+  .meal-title { font-family:'Bebas Neue',sans-serif; font-size:17px; letter-spacing:1px; color:var(--accent); margin-bottom:12px; }
+  .meal-row { display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid rgba(255,255,255,0.04); font-size:13px; }
+  .meal-row:last-child { border-bottom:none; }
+  .meal-food { color:var(--text); }
+  .meal-macro { color:var(--muted); font-size:12px; white-space:nowrap; }
+  .meal-total { display:flex; gap:16px; margin-top:14px; padding-top:12px; border-top:1px solid var(--border); flex-wrap:wrap; }
+  .meal-total-item { font-size:12px; }
+  .meal-total-item .v { color:var(--accent); font-weight:700; }
+
+  /* TRACKER */
+  .tracker-controls { display:flex; gap:10px; flex-wrap:wrap; margin-bottom:20px; align-items:center; }
+  .tracker-controls input[type=number], .tracker-controls input[type=date] { background:var(--card2); border:1px solid rgba(255,255,255,0.1); color:#fff; padding:10px 14px; border-radius:6px; font-size:14px; font-family:'DM Sans',sans-serif; width:150px; }
+  .btn { background:var(--accent); color:#000; font-family:'Bebas Neue',sans-serif; letter-spacing:1px; font-size:15px; padding:10px 24px; border:none; border-radius:6px; cursor:pointer; transition:.2s; }
+  .btn:hover { background:#d4e800; }
+  .btn-outline { background:transparent; color:var(--accent); border:1px solid var(--accent); }
+  .btn-outline:hover { background:rgba(232,255,0,0.1); }
+  .chart-wrap { background:var(--card); border-radius:10px; padding:20px; border:1px solid rgba(255,255,255,0.06); }
+
+  /* PHOTO LOG */
+  .photo-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(160px,1fr)); gap:12px; }
+  .photo-slot { background:var(--card2); border:1px dashed rgba(232,255,0,0.2); border-radius:8px; aspect-ratio:3/4; display:flex; flex-direction:column; align-items:center; justify-content:center; cursor:pointer; transition:.2s; position:relative; overflow:hidden; }
+  .photo-slot:hover { border-color:var(--accent); }
+  .photo-slot input[type=file] { position:absolute; inset:0; opacity:0; cursor:pointer; }
+  .photo-slot img { width:100%; height:100%; object-fit:cover; border-radius:8px; }
+  .photo-slot .photo-label { font-size:11px; color:var(--muted); margin-top:6px; text-align:center; }
+  .plus-icon { font-size:28px; color:var(--muted); }
+
+  /* TIPS */
+  .tip-list { list-style:none; display:flex; flex-direction:column; gap:10px; }
+  .tip-list li { background:var(--card); border-radius:8px; padding:14px 18px; font-size:13px; color:var(--text); display:flex; gap:12px; align-items:flex-start; border:1px solid rgba(255,255,255,0.04); }
+  .tip-icon { font-size:18px; flex-shrink:0; margin-top:1px; }
+
+  /* CHECKLIST SEMANAL */
+  .check-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:10px; }
+  .check-item { display:flex; align-items:center; gap:10px; background:var(--card); padding:12px 16px; border-radius:8px; border:1px solid rgba(255,255,255,0.05); cursor:pointer; transition:.2s; }
+  .check-item:hover { border-color:var(--border); }
+  .check-item input { accent-color:var(--accent); width:16px; height:16px; cursor:pointer; }
+  .check-item label { font-size:13px; cursor:pointer; }
+  .check-item.done { opacity:0.5; }
+
+  /* FOOTER */
+  footer { padding:32px 24px; text-align:center; background:var(--card); border-top:1px solid var(--border); }
+  footer .logo { font-family:'Bebas Neue',sans-serif; font-size:24px; letter-spacing:3px; color:#fff; }
+  footer .logo span { color:var(--accent); }
+  footer p { font-size:12px; color:var(--muted); margin-top:8px; }
+
+  @media(max-width:600px) {
+    .hero-inner { flex-direction:column; }
+    .macro-ring-wrap { flex-direction:column; }
+    canvas { max-width:200px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <a href="#perfil" class="active">Perfil</a>
+    <a href="#macros">Macros</a>
+    <a href="#entrenamiento">Entrenamiento</a>
+    <a href="#nutricion">Nutrición</a>
+    <a href="#progreso">Progreso</a>
+    <a href="#fotos">Fotos</a>
+    <a href="#tips">Tips</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-inner">
+    <div>
+      <div class="hero-badge">GABU FITNESS — PLAN PERSONALIZADO</div>
+      <h1>DANI<br><span>LIFSHITZ</span></h1>
+      <p class="hero-sub">Plan enfocado en mejorar salud general y composición corporal, adaptado a tus lesiones y alto nivel de actividad física.</p>
+      <div class="hero-stats">
+        <div class="hstat"><div class="val">110</div><div class="lbl">kg</div></div>
+        <div class="hstat"><div class="val">198</div><div class="lbl">cm</div></div>
+        <div class="hstat"><div class="val">22</div><div class="lbl">años</div></div>
+        <div class="hstat"><div class="val">6</div><div class="lbl">meses</div></div>
+      </div>
+    </div>
+    <div style="text-align:right">
+      <div class="hero-logo"><span>GABU</span>FITNESS</div>
+      <div style="font-size:12px;color:var(--muted);margin-top:8px;">@gabufitness</div>
+    </div>
+  </div>
+</div>
+
+<!-- PERFIL -->
+<section id="perfil">
+  <div class="section-inner">
+    <div class="section-title">PERFIL <span>DEL CLIENTE</span></div>
+    <div class="section-sub">Información base para la programación</div>
+
+    <div class="injury-banner">
+      <h3>⚠️ LESIONES / LIMITACIONES REPORTADAS</h3>
+      <span class="injury-tag">Cadera</span>
+      <span class="injury-tag">Espalda</span>
+      <span class="injury-tag">Cuello</span>
+      <span class="injury-tag">Mano</span>
+      <p class="injury-note">⚡ Todos los ejercicios han sido seleccionados y adaptados teniendo en cuenta estas limitaciones. Evitamos carga axial pesada en columna, movimientos de alto impacto en cadera y ejercicios con agarre intenso. Ante cualquier dolor agudo, detén el ejercicio de inmediato.</p>
+    </div>
+
+    <div class="grid-3">
+      <div class="card card-accent">
+        <div style="font-size:11px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:8px">Objetivo Principal</div>
+        <div style="font-size:16px;font-weight:500">Mejorar salud general</div>
+        <div style="font-size:13px;color:var(--muted);margin-top:4px">+ Ponerse en forma</div>
+      </div>
+      <div class="card card-accent">
+        <div style="font-size:11px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:8px">Nivel & Historial</div>
+        <div style="font-size:16px;font-weight:500">Avanzado (2+ años)</div>
+        <div style="font-size:13px;color:var(--muted);margin-top:4px">Completó programas anteriores</div>
+      </div>
+      <div class="card card-accent">
+        <div style="font-size:11px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:8px">Actividad Diaria</div>
+        <div style="font-size:16px;font-weight:500">Muy activo</div>
+        <div style="font-size:13px;color:var(--muted);margin-top:4px">Trabajo físico diario</div>
+      </div>
+      <div class="card">
+        <div style="font-size:11px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:8px">Sesiones</div>
+        <div style="font-size:16px;font-weight:500">60 min / Noche</div>
+        <div style="font-size:13px;color:var(--muted);margin-top:4px">Gym completo</div>
+      </div>
+      <div class="card">
+        <div style="font-size:11px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:8px">Sueño</div>
+        <div style="font-size:16px;font-weight:500">7–8 horas</div>
+        <div style="font-size:13px;color:var(--muted);margin-top:4px">Recuperación óptima ✅</div>
+      </div>
+      <div class="card">
+        <div style="font-size:11px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:8px">Estrés</div>
+        <div style="font-size:16px;font-weight:500">Bajo</div>
+        <div style="font-size:13px;color:var(--muted);margin-top:4px">Favorece recuperación</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MACROS -->
+<section id="macros">
+  <div class="section-inner">
+    <div class="section-title">MACROS <span>& CALORÍAS</span></div>
+</div>
+
+    <div class="grid-2">
+      <div class="card">
+        <div class="macro-ring-wrap">
+          <div>
+            <canvas id="macroChart" width="180" height="180"></canvas>
+          </div>
+          <div>
+            <div class="kcal-big">2,800</div>
+            <div class="kcal-lbl">KCAL / DÍA</div>
+            <div style="font-size:11px;color:var(--muted);margin-top:6px">TDEE estimado: ~3,851 kcal<br>Déficit: ~1,051 kcal (fuerte)</div>
+            <div class="macro-legend" style="margin-top:20px">
+              <div class="macro-item">
+                <div class="macro-dot" style="background:#E8FF00"></div>
+                <div class="macro-name">Proteína</div>
+                <div><span class="macro-val">220</span><span class="macro-g">g</span></div>
+              </div>
+              <div class="macro-item">
+                <div class="macro-dot" style="background:#4ecdc4"></div>
+                <div class="macro-name">Carbos</div>
+                <div><span class="macro-val">300</span><span class="macro-g">g</span></div>
+              </div>
+              <div class="macro-item">
+                <div class="macro-dot" style="background:#ff6b6b"></div>
+                <div class="macro-name">Grasas</div>
+                <div><span class="macro-val">80</span><span class="macro-g">g</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:1px;color:var(--accent);margin-bottom:16px">CÓMO SE CALCULÓ</div>
+        <div style="font-size:13px;color:var(--muted);line-height:2">
+          <div>BMR (Mifflin): <span style="color:#fff">2,232 kcal</span></div>
+          <div>Factor actividad (×1.725 — muy activo): <span style="color:#fff">3,851 kcal</span></div>
+          <div>Déficit aplicado (~27%): <span style="color:var(--accent)">2,800 kcal</span></div>
+          <div style="margin-top:16px;padding-top:16px;border-top:1px solid rgba(255,255,255,0.06)">
+            Proteína: <span style="color:#fff">2g × 110kg = 220g</span><br>
+            Grasas: <span style="color:#fff">26% calorías = 80g</span><br>
+            Carbohidratos: <span style="color:#fff">resto = 300g</span>
+          </div>
+        </div>
+        <div style="margin-top:20px;padding:14px;background:rgba(232,255,0,0.06);border-radius:8px;border:1px solid var(--border)">
+          <div style="font-size:12px;color:var(--accent);font-weight:600;margin-bottom:6px">💧 HIDRATACIÓN</div>
+          <div style="font-size:13px;color:var(--muted)">Mínimo <strong style="color:#fff">3.5–4 litros de agua al día</strong> dada tu masa corporal y trabajo físico intenso.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ENTRENAMIENTO -->
+<section id="entrenamiento">
+  <div class="section-inner">
+    <div class="section-title">PLAN DE <span>ENTRENAMIENTO</span></div>
+    <div class="section-sub">Split Upper/Lower + Día de Movilidad — 4 días/semana. Adaptado a cadera, espalda, cuello y mano.</div>
+
+    <!-- DÍA 1 -->
+    <div class="day-card">
+      <div class="day-header" onclick="toggleDay(this)">
+        <div class="day-dot"></div>
+        <div class="day-label">LUNES — UPPER A (Empuje)</div>
+        <div class="day-focus">Pecho · Hombros · Tríceps</div>
+        <span style="color:var(--muted);font-size:18px;margin-left:8px">▾</span>
+      </div>
+      <div class="day-body">
+        <table class="ex-table">
+          <tr><th>Ejercicio</th><th>Series × Reps</th><th>Descanso</th><th>Video</th></tr>
+          <tr>
+            <td><span class="ex-name">Press en máquina inclinado</span><span class="ex-mod">⚡ Sin barra — protege hombro y cuello</span></td>
+            <td><span class="badge-sets">4×10–12</span></td><td>90s</td>
+            <td><a class="yt-link" href="https://www.youtube.com/results?search_query=press+maquina+inclinado" target="_blank">▶ Ver</a></td>
+          </tr>
+          <tr>
+            <td><span class="ex-name">Aperturas con cables (polea baja)</span></span></td>
+            <td><span class="badge-sets">3×12–15</span></td><td>60s</td>
+            <td><a class="yt-link" href="https://www.youtube.com/results?search_query=aperturas+cables+polea+baja+pecho" target="_blank">▶ Ver</a></td>
+          </tr>
+          <tr>
+            <td><span class="ex-name">Press Arnold con mancuernas (rango parcial)</span><span class="ex-mod">⚡ Rango parcial — no forzar cuello/hombro</span></td>
+            <td><span class="badge-sets">3×10–12</span></td><td>75s</td>
+            <td><a class="yt-link" href="https://www.youtube.com/results?search_query=press+arnold+mancuernas" target="_blank">▶ Ver</a></td>
+          </tr>
+          <tr>
+            <td><span class="ex-name">Elevaciones laterales con cables</span></td>
+            <td><span class="badge-sets">4×15</span></td><td>60s</td>
+            <td><a class="yt-link" href="https://www.youtube.com/results?search_query=elevaciones+laterales+cable" target="_blank">▶ Ver</a></td>
+          </tr>
+          <tr>
+            <td><span class="ex-name">Fondos en paralelas asistidos (máquina)</span><span class="ex-mod">⚡ Máquina — sin carga libre sobre articulaciones</span></td>
+            <td><span class="badge-sets">3×12</span></td><td>60s</td>
+            <td><a class="yt-link" href="https://www.youtube.com/results?search_query=fondos+paralelas+asistidos+maquina" target="_blank">▶ Ver</a></td>
+          </tr>
+          <tr>
+            <td><span class="ex-name">Extension de tríceps en polea alta (cuerda)</span><span class="ex-mod">⚡ Usar muñequeras si la mano molesta</span></td>
+            <td><span class="badge-sets">3×15</span></td><td>60s</td>
+            <td><a class="yt-link" href="https://www.youtube.com/results?search_query=extension+triceps+polea+cuerda" target="_blank">▶ Ver</a></td>
+          </tr>
+        </table>
+      </div>
+    </div>
+
+    <!-- DÍA 2 -->
+    <div class="day-card">
+      <div class="day-header" onclick="toggleDay(this)">
+        <div class="day-dot"></div>
+        <div class="day-label">MARTES — LOWER A (Cuádriceps dominante)</div>
+        <div class="day-focus">Pierna Anterior · Glúteo</div>
+        <span style="color:var(--muted);font-size:18px;margin-left:8px">▾</span>
+      </div>
+      <div class="day-body">
+        <table class="ex-table">
+          <tr><th>Ejercicio</th><th>Series × Reps</th><th>Descanso</th><th>Video</th></tr>
+          <tr>
+            <td><span class="ex-name">Prensa horizontal (45°)</span><span class="ex-mod">⚡ Reemplaza sentadilla con barra — sin carga axial en cadera/espalda</span></td>
+            <td><span class="badge-sets">4×10–12</span></td><td>120s</td>
+            <td><a class="yt-link" href="https://www.youtube.com/results?search_query=prensa+45+grados+leg+press" target="_blank">▶ Ver</a></td>
+          </tr>
+          <tr>
+            <td><span class="ex-name">Extensión de cuádriceps en máquina</span></td>
+            <td><span class="badge-sets">4×12–15</span></td><td>75s</td>
+            <td><a class="yt-link" href="https://www.youtube.com/results?search_query=extension+cuadriceps+maquina" target="_blank">▶ Ver</a></td>
+          </tr>
+          <tr>
+            <td><span class="ex-name">Hip thrust en máquina Smith</span><span class="ex-mod">⚡ Evitar hip thrust libre con disco — mayor control</span></td>
+            <td><span class="badge-sets">4×12</span></td><td>90s</td>
+            <td><a class="yt-link" href="https://www.youtube.com/results?search_query=hip+thrust+smith+machine" target="_blank">▶ Ver</a></td>
+          </tr>
+          <tr>
+            <td><span class="ex-name">Zancada en Smith (rango corto)</span><span class="ex-mod">⚡ Rango parcial para proteger cadera</span></td>
+            <td><span class="badge-sets">3×10 c/u</span></td><td>90s</td>
+            <td><a class="yt-link" href="https://www.youtube.com/results?search_query=zancada+smith+machine" target="_blank">▶ Ver</a></td>
+          </tr>
+          <tr>
+            <td><span class="ex-name">Elevaciones de pantorrilla en máquina</span></td>
+            <td><span class="badge-sets">4×20</span></td><td>60s</td>
+            <td><a class="yt-link" href="https://www.youtube.com/results?search_query=elevacion+pantorrilla+maquina" target="_blank">▶ Ver</a></td>
+          </tr>
+        </table>
+      </div>
+    </div>
+
+    <!-- DÍA 3 -->
+    <div class="day-card">
+      <div class="day-header" onclick="toggleDay(this)">
+        <div class="day-dot"></div>
+        <div class="day-label">MIÉRCOLES — MOVILIDAD & CORE</div>
+        <div class="day-focus">Recuperación activa · Espalda · Cadera</div>
+        <span style="color:var(--muted);font-size:18px;margin-left:8px">▾</span>
+      </div>
+      <div class="day-body">
+        <table class="ex-table">
+          <tr><th>Ejercicio</th><th>Series × Reps / Tiempo</th><th>Nota</th><th>Video</th></tr>
+          <tr>
+            <td><span class="ex-name">Birddog</span><span class="ex-mod">Core estabilizador — espalda neutral</span></td>
+            <td><span class="badge-sets">3×12 c/u</span></td><td>Sin carga</td>
+            <td><a class="yt-link" href="https://www.youtube.com/results?search_query=birddog+ejercicio+core" target="_blank">▶ Ver</a></td>
+          </tr>
+          <tr>
+            <td><span class="ex-name">Dead Bug</span></td>
+            <td><span class="badge-sets">3×10 c/u</span></td><td>Lento y controlado</td>
+            <td><a class="yt-link" href="https://www.youtube.com/results?search_query=dead+bug+ejercicio" target="_blank">▶ Ver</a></td>
+          </tr>
+          <tr>
+            <td><span class="ex-name">Plancha frontal</span></td>
+            <td><span class="badge-sets">3×30–45s</span></td><td>Sin hiperextensión</td>
+            <td><a class="yt-link" href="https://www.youtube.com/results?search_query=plancha+frontal+correcta" target="_blank">▶ Ver</a></td>
+          </tr>
+          <tr>
+            <td><span class="ex-name">Estiramiento cadena posterior (correa/banda)</span></td>
+            <td><span class="badge-sets">3×30s c/u</span></td><td>Sin dolor</td>
+            <td><a class="yt-link" href="https://www.youtube.com/results?search_query=estiramiento+cadena+posterior+banda" target="_blank">▶ Ver</a></td>
+          </tr>
+          <tr>
+            <td><span class="ex-name">Hip flexor stretch en rodilla (90/90)</span><span class="ex-mod">⚡ Clave para la cadera</span></td>
+            <td><span class="badge-sets">3×45s c/u</span></td><td>Suave, sin forzar</td>
+            <td><a class="yt-link" href="https://www.youtube.com/results?search_query=hip+flexor+stretch+90+90" target="_blank">▶ Ver</a></td>
+          </tr>
+          <tr>
+            <td><span class="ex-name">Rotaciones torácicas en el piso</span><span class="ex-mod">⚡ Descomprime espalda y cuello</span></td>
+            <td><span class="badge-sets">2×10 c/u</span></td><td>Muy lento</td>
+            <td><a class="yt-link" href="https://www.youtube.com/results?search_query=rotacion+toracica+movilidad+piso" target="_blank">▶ Ver</a></td>
+          </tr>
+          <tr>
+            <td><span class="ex-name">Cardio suave — caminadora inclinación 5–8%</span></td>
+            <td><span class="badge-sets">20 min</span></td><td>FC 55–65%</td>
+            <td><a class="yt-link" href="https://www.youtube.com/results?search_query=walking+pad+inclinacion+cardio" target="_blank">▶ Ver</a></td>
+          </tr>
+        </table>
+      </div>
+    </div>
+
+    <!-- DÍA 4 -->
+    <div class="day-card">
+      <div class="day-header" onclick="toggleDay(this)">
+        <div class="day-dot"></div>
+        <div class="day-label">JUEVES — UPPER B (Jalón/Tirón)</div>
+        <div class="day-focus">Espalda · Bíceps · Deltoides post.</div>
+        <span style="color:var(--muted);font-size:18px;margin-left:8px">▾</span>
+      </div>
+      <div class="day-body">
+        <table class="ex-table">
+          <tr><th>Ejercicio</th><th>Series × Reps</th><th>Descanso</th><th>Video</th></tr>
+          <tr>
+            <td><span class="ex-name">Jalón al pecho en polea (agarre neutro, barra V)</span><span class="ex-mod">⚡ Agarre neutro — menos tensión en cuello y hombros</span></td>
+            <td><span class="badge-sets">4×10–12</span></td><td>90s</td>
+            <td><a class="yt-link" href="https://www.youtube.com/results?search_query=jalon+polea+agarre+neutro" target="_blank">▶ Ver</a></td>
+          </tr>
+          <tr>
+            <td><span class="ex-name">Remo en máquina (Hammer Strength)</span><span class="ex-mod">⚡ Máquina en lugar de remo con barra — protege espalda baja</span></td>
+            <td><span class="badge-sets">4×10–12</span></td><td>90s</td>
+            <td><a class="yt-link" href="https://www.youtube.com/results?search_query=remo+maquina+hammer+strength" target="_blank">▶ Ver</a></td>
+          </tr>
+          <tr>
+            <td><span class="ex-name">Pullover en polea alta</span></td>
+            <td><span class="badge-sets">3×12–15</span></td><td>75s</td>
+            <td><a class="yt-link" href="https://www.youtube.com/results?search_query=pullover+polea+alta+espalda" target="_blank">▶ Ver</a></td>
+          </tr>
+          <tr>
+            <td><span class="ex-name">Curl de bíceps en polea (cuerda)</span><span class="ex-mod">⚡ Polea — grip más suave para la mano</span></td>
+            <td><span class="badge-sets">3×12–15</span></td><td>60s</td>
+            <td><a class="yt-link" href="https://www.youtube.com/results?search_query=curl+biceps+polea+cuerda" target="_blank">▶ Ver</a></td>
+          </tr>
+          <tr>
+            <td><span class="ex-name">Reverse fly en máquina (deltoides posterior)</span></td>
+            <td><span class="badge-sets">3×15</span></td><td>60s</td>
+            <td><a class="yt-link" href="https://www.youtube.com/results?search_query=reverse+fly+maquina+deltoides+posterior" target="_blank">▶ Ver</a></td>
+          </tr>
+          <tr>
+            <td><span class="ex-name">Encogimientos en máquina (trapecios)</span><span class="ex-mod">⚡ Máquina — evitamos barra sobre cuello</span></td>
+            <td><span class="badge-sets">3×15</span></td><td>60s</td>
+            <td><a class="yt-link" href="https://www.youtube.com/results?search_query=encogimientos+maquina+trapecios" target="_blank">▶ Ver</a></td>
+          </tr>
+        </table>
+      </div>
+    </div>
+
+    <!-- DÍA 5 -->
+    <div class="day-card">
+      <div class="day-header" onclick="toggleDay(this)">
+        <div class="day-dot"></div>
+        <div class="day-label">VIERNES — LOWER B (Isquio/Glúteo dominante)</div>
+        <div class="day-focus">Pierna Posterior · Glúteo · Core</div>
+        <span style="color:var(--muted);font-size:18px;margin-left:8px">▾</span>
+      </div>
+      <div class="day-body">
+        <table class="ex-table">
+          <tr><th>Ejercicio</th><th>Series × Reps</th><th>Descanso</th><th>Video</th></tr>
+          <tr>
+            <td><span class="ex-name">Romanian Deadlift con mancuernas</span><span class="ex-mod">⚡ Mancuernas en lugar de barra — menos compresión en columna</span></td>
+            <td><span class="badge-sets">4×10</span></td><td>120s</td>
+            <td><a class="yt-link" href="https://www.youtube.com/results?search_query=romanian+deadlift+mancuernas" target="_blank">▶ Ver</a></td>
+          </tr>
+          <tr>
+            <td><span class="ex-name">Curl femoral acostado en máquina</span></td>
+            <td><span class="badge-sets">4×12</span></td><td>75s</td>
+            <td><a class="yt-link" href="https://www.youtube.com/results?search_query=curl+femoral+maquina+acostado" target="_blank">▶ Ver</a></td>
+          </tr>
+          <tr>
+            <td><span class="ex-name">Abductor en máquina</span></td>
+            <td><span class="badge-sets">3×15</span></td><td>60s</td>
+            <td><a class="yt-link" href="https://www.youtube.com/results?search_query=abductor+maquina+glutes" target="_blank">▶ Ver</a></td>
+          </tr>
+          <tr>
+            <td><span class="ex-name">Glute kickback en polea baja</span></td>
+            <td><span class="badge-sets">3×15 c/u</span></td><td>60s</td>
+            <td><a class="yt-link" href="https://www.youtube.com/results?search_query=glute+kickback+polea+cable" target="_blank">▶ Ver</a></td>
+          </tr>
+          <tr>
+            <td><span class="ex-name">Crunch en máquina abdominal</span></td>
+            <td><span class="badge-sets">3×15</span></td><td>60s</td>
+            <td><a class="yt-link" href="https://www.youtube.com/results?search_query=crunch+maquina+abdominal" target="_blank">▶ Ver</a></td>
+          </tr>
+          <tr>
+            <td><span class="ex-name">Caminadora 15 min (inclinación 6%)</span></td>
+            <td><span class="badge-sets">15 min</span></td><td>—</td>
+            <td><a class="yt-link" href="https://www.youtube.com/results?search_query=incline+walking+fat+burn" target="_blank">▶ Ver</a></td>
+          </tr>
+        </table>
+      </div>
+    </div>
+
+    <!-- Días descanso -->
+    <div class="day-card">
+      <div class="day-header">
+        <div class="day-dot rest"></div>
+        <div class="day-label">SÁBADO & DOMINGO — DESCANSO ACTIVO</div>
+        <div class="day-focus">Caminar · Estirar · Recuperar</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- NUTRICIÓN -->
+<section id="nutricion">
+  <div class="section-inner">
+    <div class="section-title">PLAN DE <span>NUTRICIÓN</span></div>
+    <div class="section-sub">6 comidas · 2,800 kcal · 220g proteína · Sin restricciones alimenticias</div>
+
+    <div class="grid-2" style="margin-bottom:16px">
+
+      <div class="meal-card">
+        <div class="meal-title">🌅 COMIDA 1 — DESAYUNO</div>
+        <div class="meal-row"><span class="meal-food">4 huevos enteros + 4 claras</span><span class="meal-macro">40g P · 0g C · 14g G</span></div>
+        <div class="meal-row"><span class="meal-food">70g avena en agua</span><span class="meal-macro">9g P · 42g C · 4g G</span></div>
+        <div class="meal-row"><span class="meal-food">1 plátano mediano</span><span class="meal-macro">1g P · 27g C · 0g G</span></div>
+        <div class="meal-total">
+          <div class="meal-total-item">Kcal: <span class="v">490</span></div>
+          <div class="meal-total-item">P: <span class="v">50g</span></div>
+          <div class="meal-total-item">C: <span class="v">69g</span></div>
+          <div class="meal-total-item">G: <span class="v">18g</span></div>
+        </div>
+      </div>
+
+      <div class="meal-card">
+        <div class="meal-title">🥤 COMIDA 2 — MEDIA MAÑANA</div>
+        <div class="meal-row"><span class="meal-food">Shake: 1 scoop proteína (whey)</span><span class="meal-macro">25g P · 3g C · 2g G</span></div>
+        <div class="meal-row"><span class="meal-food">1 manzana mediana</span><span class="meal-macro">0g P · 25g C · 0g G</span></div>
+        <div class="meal-row"><span class="meal-food">200g yogur griego natural (0%)</span><span class="meal-macro">20g P · 8g C · 0g G</span></div>
+        <div class="meal-total">
+          <div class="meal-total-item">Kcal: <span class="v">330</span></div>
+          <div class="meal-total-item">P: <span class="v">45g</span></div>
+          <div class="meal-total-item">C: <span class="v">36g</span></div>
+          <div class="meal-total-item">G: <span class="v">2g</span></div>
+        </div>
+      </div>
+
+      <div class="meal-card">
+        <div class="meal-title">☀️ COMIDA 3 — ALMUERZO</div>
+        <div class="meal-row"><span class="meal-food">200g pechuga de pollo a la plancha</span><span class="meal-macro">60g P · 0g C · 5g G</span></div>
+        <div class="meal-row"><span class="meal-food">120g arroz blanco cocido</span><span class="meal-macro">2g P · 30g C · 0g G</span></div>
+        <div class="meal-row"><span class="meal-food">Ensalada grande (lechuga, jitomate, pepino, limón — sin aceite)</span><span class="meal-macro">2g P · 10g C · 0g G</span></div>
+        <div class="meal-row"><span class="meal-food">150g frijoles negros</span><span class="meal-macro">9g P · 25g C · 1g G</span></div>
+        <div class="meal-total">
+          <div class="meal-total-item">Kcal: <span class="v">500</span></div>
+          <div class="meal-total-item">P: <span class="v">73g</span></div>
+          <div class="meal-total-item">C: <span class="v">65g</span></div>
+          <div class="meal-total-item">G: <span class="v">6g</span></div>
+        </div>
+      </div>
+
+      <div class="meal-card">
+        <div class="meal-title">🕐 COMIDA 4 — MERIENDA PRE-ENTRENO</div>
+        <div class="meal-row"><span class="meal-food">200g requesón / cottage</span><span class="meal-macro">24g P · 8g C · 4g G</span></div>
+        <div class="meal-row"><span class="meal-food">1 plátano mediano</span><span class="meal-macro">1g P · 27g C · 0g G</span></div>
+        <div class="meal-row"><span class="meal-food">5 galletas de arroz</span><span class="meal-macro">1g P · 20g C · 0g G</span></div>
+        <div class="meal-total">
+          <div class="meal-total-item">Kcal: <span class="v">280</span></div>
+          <div class="meal-total-item">P: <span class="v">26g</span></div>
+          <div class="meal-total-item">C: <span class="v">55g</span></div>
+          <div class="meal-total-item">G: <span class="v">4g</span></div>
+        </div>
+      </div>
+
+      <div class="meal-card">
+        <div class="meal-title">🏋️ COMIDA 5 — POST-ENTRENO (NOCHE)</div>
+        <div class="meal-row"><span class="meal-food">200g atún en agua</span><span class="meal-macro">46g P · 0g C · 2g G</span></div>
+        <div class="meal-row"><span class="meal-food">2 tortillas de maíz</span><span class="meal-macro">2g P · 30g C · 1g G</span></div>
+        <div class="meal-row"><span class="meal-food">½ aguacate (50g)</span><span class="meal-macro">1g P · 4g C · 8g G</span></div>
+        <div class="meal-row"><span class="meal-food">150g camote cocido</span><span class="meal-macro">2g P · 30g C · 0g G</span></div>
+        <div class="meal-total">
+          <div class="meal-total-item">Kcal: <span class="v">490</span></div>
+          <div class="meal-total-item">P: <span class="v">51g</span></div>
+          <div class="meal-total-item">C: <span class="v">64g</span></div>
+          <div class="meal-total-item">G: <span class="v">11g</span></div>
+        </div>
+      </div>
+
+      <div class="meal-card">
+        <div class="meal-title">🌙 COMIDA 6 — CENA</div>
+        <div class="meal-row"><span class="meal-food">150g pechuga de pavo a la plancha</span><span class="meal-macro">35g P · 0g C · 2g G</span></div>
+        <div class="meal-row"><span class="meal-food">200g brócoli + espinacas al vapor</span><span class="meal-macro">5g P · 12g C · 0g G</span></div>
+        <div class="meal-row"><span class="meal-food">80g quinoa cocida</span><span class="meal-macro">3g P · 16g C · 1g G</span></div>
+        <div class="meal-total">
+          <div class="meal-total-item">Kcal: <span class="v">230</span></div>
+          <div class="meal-total-item">P: <span class="v">43g</span></div>
+          <div class="meal-total-item">C: <span class="v">28g</span></div>
+          <div class="meal-total-item">G: <span class="v">3g</span></div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- TOTAL DIARIO -->
+    <div class="card" style="background:rgba(232,255,0,0.05);border-color:var(--border)">
+      <div style="display:flex;gap:32px;flex-wrap:wrap;align-items:center">
+        <div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:2px;color:var(--muted);margin-bottom:4px">TOTAL DIARIO</div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:42px;color:var(--accent);line-height:1">2,800 <span style="font-size:18px">KCAL</span></div>
+        </div>
+        <div style="display:flex;gap:24px;flex-wrap:wrap">
+          <div style="text-align:center"><div style="font-family:'Bebas Neue',sans-serif;font-size:28px;color:#fff">220g</div><div style="font-size:11px;color:var(--muted)">PROTEÍNA*</div></div>
+          <div style="text-align:center"><div style="font-family:'Bebas Neue',sans-serif;font-size:28px;color:#4ecdc4">300g</div><div style="font-size:11px;color:var(--muted)">CARBOS</div></div>
+          <div style="text-align:center"><div style="font-family:'Bebas Neue',sans-serif;font-size:28px;color:#ff6b6b">80g</div><div style="font-size:11px;color:var(--muted)">GRASAS</div></div>
+        </div>
+        <div style="font-size:12px;color:var(--muted);max-width:280px">*Proteína mantenida en objetivo para preservar músculo en déficit agresivo. Ajusta porciones según hambre/saciedad.</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- PROGRESO -->
+<section id="progreso">
+  <div class="section-inner">
+    <div class="section-title">REGISTRO DE <span>PROGRESO</span></div>
+    <div class="section-sub">Registra tu peso semanalmente para visualizar tu avance</div>
+
+    <div class="tracker-controls">
+      <input type="date" id="weighDate">
+      <input type="number" id="weighVal" placeholder="Peso (kg)" step="0.1" min="50" max="200">
+      <button class="btn" onclick="addWeight()">REGISTRAR</button>
+      <button class="btn btn-outline" onclick="clearWeight()">LIMPIAR</button>
+    </div>
+
+    <div class="chart-wrap">
+      <canvas id="weightChart" height="80"></canvas>
+    </div>
+
+    <div id="weightLog" style="margin-top:16px;display:flex;flex-wrap:wrap;gap:10px"></div>
+  </div>
+</section>
+
+<!-- FOTOS -->
+<section id="fotos">
+  <div class="section-inner">
+    <div class="section-title">GALERÍA DE <span>PROGRESO</span></div>
+    <div class="section-sub">Sube tus fotos de progreso. Se guardan localmente en tu dispositivo.</div>
+    <div class="photo-grid" id="photoGrid"></div>
+  </div>
+</section>
+
+<!-- TIPS -->
+<section id="tips">
+  <div class="section-inner">
+    <div class="section-title">TIPS <span>CLAVE</span></div>
+    <div class="section-sub">Principios que harán la diferencia en tus 6 meses</div>
+
+    <ul class="tip-list">
+      <li><span class="tip-icon">🦴</span><div><strong>Respeta las lesiones:</strong> Si sientes dolor agudo (no molestia muscular normal) en cadera, espalda, cuello o mano durante cualquier ejercicio, para de inmediato. Sustituye por la versión en máquina o reduce el rango. Un día de ajuste vale más que semanas de recuperación.</div></li>
+      <li><span class="tip-icon">📈</span><div><strong>Sobrecarga progresiva:</strong> Tu objetivo semanal es agregar 1 rep o 2.5kg a algún ejercicio. No necesitas cambiar todo. Solo progresar en algo.</div></li>
+      <li><span class="tip-icon">🥩</span><div><strong>Proteína primero:</strong> En cada comida asegúrate de tener una fuente proteica. Es el macro más importante para preservar músculo mientras bajas grasa.</div></li>
+      <li><span class="tip-icon">💧</span><div><strong>Hidratación crítica:</strong> Con trabajo físico diario más gym nocturno, tu demanda de agua es alta. Lleva botella de al menos 1.5L al gym y completa tus 4L durante el día.</div></li>
+      <li><span class="tip-icon">📸</span><div><strong>Fotos cada 4 semanas:</strong> La báscula puede engañar (retención, variaciones). Las fotos y cómo se siente tu ropa son indicadores más honestos de recomposición corporal.</div></li>
+      <li><span class="tip-icon">😴</span><div><strong>El sueño es entrenamiento:</strong> Tus 7–8h son perfectas. Protégelas. La hormona de crecimiento se libera principalmente en sueño profundo — dormir poco destruye los resultados.</div></li>
+      <li><span class="tip-icon">🔁</span><div><strong>Consistencia > perfección:</strong> Si un día no puedes entrenar, no lo recuperes. Sigue al día siguiente. 4 semanas consistente > 1 semana perfecta y 3 abandonadas.</div></li>
+    </ul>
+
+    <div style="margin-top:32px">
+      <div class="section-title" style="font-size:20px;margin-bottom:16px">CHECKLIST <span>SEMANAL</span></div>
+      <div class="check-grid" id="checkGrid"></div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="logo"><span>GABU</span>FITNESS</div>
+  <p>Plan personalizado para Dani Lifshitz · gabufitness.com · @gabufitness</p>
+  <p style="margin-top:6px">Cualquier duda o ajuste: comunícate directamente con Gabu.</p>
+</footer>
+
+<script>
+// ── STORAGE KEY ──
+const KEY_W = 'gabu_weight_dani';
+const KEY_P = 'gabu_photos_dani';
+const KEY_C = 'gabu_checks_dani';
+
+// ── NAV ACTIVE ──
+const navLinks = document.querySelectorAll('nav a');
+const sections = document.querySelectorAll('section, .hero');
+window.addEventListener('scroll', () => {
+  let current = '';
+  sections.forEach(s => { if (window.scrollY >= s.offsetTop - 100) current = s.id; });
+  navLinks.forEach(a => { a.classList.toggle('active', a.getAttribute('href') === '#'+current); });
+});
+
+// ── TOGGLE DAYS ──
+function toggleDay(header) {
+  const body = header.nextElementSibling;
+  body.classList.toggle('open');
+}
+// open first day by default
+document.querySelector('.day-body').classList.add('open');
+
+// ── MACRO CHART ──
+new Chart(document.getElementById('macroChart'), {
+  type: 'doughnut',
+  data: {
+    labels: ['Proteína','Carbos','Grasas'],
+    datasets: [{ data: [880,1200,720], backgroundColor: ['#E8FF00','#4ecdc4','#ff6b6b'], borderWidth: 0, hoverOffset: 6 }]
+  },
+  options: {
+    cutout: '72%',
+    plugins: { legend: { display: false } }
+  }
+});
+
+// ── WEIGHT TRACKER ──
+let weightData = JSON.parse(localStorage.getItem(KEY_W) || '[]');
+
+const weightCtx = document.getElementById('weightChart').getContext('2d');
+const weightChart = new Chart(weightCtx, {
+  type: 'line',
+  data: {
+    labels: weightData.map(d => d.date),
+    datasets: [{
+      label: 'Peso (kg)',
+      data: weightData.map(d => d.val),
+      borderColor: '#E8FF00',
+      backgroundColor: 'rgba(232,255,0,0.08)',
+      pointBackgroundColor: '#E8FF00',
+      tension: 0.4,
+      fill: true
+    }]
+  },
+  options: {
+    responsive: true,
+    plugins: { legend: { labels: { color: '#888', font: { family: 'DM Sans' } } } },
+    scales: {
+      x: { ticks: { color: '#555' }, grid: { color: 'rgba(255,255,255,0.04)' } },
+      y: { ticks: { color: '#555' }, grid: { color: 'rgba(255,255,255,0.04)' }, suggestedMin: 90, suggestedMax: 115 }
+    }
+  }
+});
+
+function addWeight() {
+  const date = document.getElementById('weighDate').value;
+  const val = parseFloat(document.getElementById('weighVal').value);
+  if (!date || isNaN(val)) return;
+  weightData.push({ date, val });
+  weightData.sort((a,b) => a.date.localeCompare(b.date));
+  localStorage.setItem(KEY_W, JSON.stringify(weightData));
+  weightChart.data.labels = weightData.map(d => d.date);
+  weightChart.data.datasets[0].data = weightData.map(d => d.val);
+  weightChart.update();
+  renderWeightLog();
+  document.getElementById('weighDate').value = '';
+  document.getElementById('weighVal').value = '';
+}
+
+function clearWeight() {
+  if (!confirm('¿Borrar todos los registros de peso?')) return;
+  weightData = [];
+  localStorage.removeItem(KEY_W);
+  weightChart.data.labels = [];
+  weightChart.data.datasets[0].data = [];
+  weightChart.update();
+  renderWeightLog();
+}
+
+function renderWeightLog() {
+  const el = document.getElementById('weightLog');
+  el.innerHTML = weightData.slice(-10).reverse().map(d =>
+    `<div style="background:var(--card);padding:8px 14px;border-radius:6px;font-size:13px;border:1px solid rgba(255,255,255,0.06)">
+      <span style="color:var(--muted)">${d.date}</span> — <strong>${d.val} kg</strong>
+    </div>`
+  ).join('');
+}
+renderWeightLog();
+
+// Set default date
+document.getElementById('weighDate').value = new Date().toISOString().split('T')[0];
+
+// ── PHOTO LOG ──
+const photoSlots = [
+  'Semana 1 — Frontal','Semana 1 — Lateral','Semana 1 — Espalda',
+  'Semana 4','Semana 8','Semana 12',
+  'Semana 16','Semana 20','Semana 24 (Final)'
+];
+const savedPhotos = JSON.parse(localStorage.getItem(KEY_P) || '{}');
+const photoGrid = document.getElementById('photoGrid');
+
+photoSlots.forEach((label, i) => {
+  const slot = document.createElement('div');
+  slot.className = 'photo-slot';
+  if (savedPhotos[i]) {
+    slot.innerHTML = `<img src="${savedPhotos[i]}"><div class="photo-label">${label}</div>`;
+  } else {
+    slot.innerHTML = `<div class="plus-icon">+</div><div class="photo-label">${label}</div><input type="file" accept="image/*">`;
+    slot.querySelector('input').addEventListener('change', function(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = ev => {
+        savedPhotos[i] = ev.target.result;
+        localStorage.setItem(KEY_P, JSON.stringify(savedPhotos));
+        slot.innerHTML = `<img src="${ev.target.result}"><div class="photo-label">${label}</div>`;
+      };
+      reader.readAsDataURL(file);
+    });
+  }
+  photoGrid.appendChild(slot);
+});
+
+// ── CHECKLIST ──
+const checks = [
+  'Lunes: Upper A ✓','Martes: Lower A ✓','Miércoles: Movilidad ✓','Jueves: Upper B ✓','Viernes: Lower B ✓',
+  '4L agua hoy ✓','Proteína en cada comida ✓','8h sueño ✓','Sin alcohol ✓','Pesaje semanal ✓','Foto mensual ✓','Comunicación con Gabu ✓'
+];
+const savedChecks = JSON.parse(localStorage.getItem(KEY_C) || '{}');
+const checkGrid = document.getElementById('checkGrid');
+
+checks.forEach((c, i) => {
+  const item = document.createElement('div');
+  item.className = 'check-item' + (savedChecks[i] ? ' done' : '');
+  item.innerHTML = `<input type="checkbox" id="c${i}" ${savedChecks[i] ? 'checked' : ''}><label for="c${i}">${c}</label>`;
+  item.querySelector('input').addEventListener('change', function() {
+    savedChecks[i] = this.checked;
+    localStorage.setItem(KEY_C, JSON.stringify(savedChecks));
+    item.classList.toggle('done', this.checked);
+  });
+  checkGrid.appendChild(item);
+});
+</script>
+</body>
+</html>
