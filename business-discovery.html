@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Descubre tu negocio</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #fafafa;
+    --surface: #ffffff;
+    --border: #e5e5e5;
+    --border-strong: #c8c8c8;
+    --text-primary: #111111;
+    --text-secondary: #555555;
+    --text-tertiary: #999999;
+    --accent: #111111;
+    --green-bg: #f0f7ec;
+    --green-text: #2d6a1c;
+    --amber-bg: #fef8ec;
+    --amber-text: #7a5a10;
+    --radius: 10px;
+    --radius-sm: 6px;
+  }
+
+  body {
+    font-family: -apple-system, 'Helvetica Neue', Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text-primary);
+    min-height: 100vh;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 2rem 1rem;
+  }
+
+  .container {
+    width: 100%;
+    max-width: 560px;
+  }
+
+  .header {
+    margin-bottom: 2.5rem;
+  }
+
+  .eyebrow {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-tertiary);
+    margin-bottom: 8px;
+  }
+
+  h1 {
+    font-size: 26px;
+    font-weight: 600;
+    line-height: 1.2;
+    color: var(--text-primary);
+    margin-bottom: 8px;
+  }
+
+  .subtitle {
+    font-size: 14px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+
+  .progress-bar {
+    height: 2px;
+    background: var(--border);
+    border-radius: 2px;
+    margin-bottom: 2.5rem;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: var(--text-primary);
+    border-radius: 2px;
+    transition: width 0.4s ease;
+  }
+
+  .step { display: none; }
+  .step.active { display: block; }
+
+  .field-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 4px;
+  }
+
+  .field-hint {
+    font-size: 12px;
+    color: var(--text-tertiary);
+    margin-bottom: 12px;
+  }
+
+  .tag-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+    margin-bottom: 16px;
+  }
+
+  .tag {
+    padding: 6px 13px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    font-size: 13px;
+    cursor: pointer;
+    background: var(--surface);
+    color: var(--text-secondary);
+    transition: all 0.12s;
+    user-select: none;
+    line-height: 1;
+  }
+
+  .tag:hover { border-color: var(--border-strong); color: var(--text-primary); }
+
+  .tag.selected {
+    background: var(--text-primary);
+    color: #ffffff;
+    border-color: var(--text-primary);
+  }
+
+  input[type="text"], textarea {
+    width: 100%;
+    padding: 9px 12px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    font-size: 13px;
+    font-family: inherit;
+    color: var(--text-primary);
+    background: var(--surface);
+    outline: none;
+    transition: border-color 0.12s;
+    line-height: 1.5;
+  }
+
+  input[type="text"]:focus, textarea:focus { border-color: var(--border-strong); }
+
+  textarea { resize: vertical; min-height: 70px; }
+
+  .field-group { margin-bottom: 1.5rem; }
+
+  .btn-row {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    margin-top: 2rem;
+  }
+
+  button {
+    padding: 9px 20px;
+    border-radius: var(--radius-sm);
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.12s;
+    font-family: inherit;
+    border: 1px solid var(--border-strong);
+    background: var(--surface);
+    color: var(--text-primary);
+  }
+
+  button:hover { background: #f0f0f0; }
+
+  button.primary {
+    background: var(--text-primary);
+    color: #ffffff;
+    border-color: var(--text-primary);
+  }
+
+  button.primary:hover { background: #333; }
+  button:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  .result-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.25rem;
+    margin-bottom: 12px;
+  }
+
+  .result-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 8px;
+    margin-bottom: 4px;
+  }
+
+  .result-name {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+
+  .badge {
+    font-size: 11px;
+    font-weight: 500;
+    padding: 3px 9px;
+    border-radius: 12px;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .badge-high { background: var(--green-bg); color: var(--green-text); }
+  .badge-med { background: var(--amber-bg); color: var(--amber-text); }
+
+  .result-tagline {
+    font-size: 13px;
+    color: var(--text-secondary);
+    margin-bottom: 1rem;
+    font-style: italic;
+  }
+
+  .divider { border: none; border-top: 1px solid var(--border); margin: 12px 0; }
+
+  .result-rows { display: grid; gap: 10px; }
+
+  .result-row { font-size: 13px; color: var(--text-secondary); line-height: 1.5; }
+  .result-row strong { color: var(--text-primary); font-weight: 600; }
+
+  .action-box {
+    background: #f5f5f5;
+    border-left: 2px solid var(--text-primary);
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    padding: 10px 12px;
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--text-secondary);
+  }
+
+  .action-box strong { color: var(--text-primary); font-weight: 600; }
+
+  .loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    padding: 4rem 0;
+    color: var(--text-secondary);
+    font-size: 14px;
+  }
+
+  .spinner {
+    width: 28px;
+    height: 28px;
+    border: 2px solid var(--border);
+    border-top-color: var(--text-primary);
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+  }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .results-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.25rem;
+  }
+
+  .results-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-tertiary);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .restart-link {
+    font-size: 13px;
+    color: var(--text-tertiary);
+    cursor: pointer;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    background: none;
+    border: none;
+    padding: 0;
+    font-family: inherit;
+  }
+
+  .restart-link:hover { color: var(--text-primary); background: none; }
+
+  .error-msg {
+    background: #fff5f5;
+    border: 1px solid #fecaca;
+    border-radius: var(--radius-sm);
+    padding: 1rem;
+    font-size: 13px;
+    color: #991b1b;
+    margin-bottom: 1rem;
+  }
+
+  .section-divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 1.5rem 0;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="header">
+    <div class="eyebrow">Gabu Fitness × IA</div>
+    <h1>Descubre tu negocio ideal</h1>
+    <p class="subtitle">3 preguntas. La IA cruza tus habilidades y pasiones para generarte ideas reales con alto potencial.</p>
+  </div>
+
+  <div class="progress-bar">
+    <div class="progress-fill" id="progress" style="width: 33%"></div>
+  </div>
+
+  <!-- STEP 1 -->
+  <div class="step active" id="step-1">
+    <div class="field-group">
+      <div class="field-label">¿En qué eres bueno?</div>
+      <div class="field-hint">Selecciona los que apliquen o escribe los tuyos</div>
+      <div class="tag-grid" id="skills-tags">
+        <span class="tag" data-val="editar video">Editar video</span>
+        <span class="tag" data-val="diseño gráfico">Diseño gráfico</span>
+        <span class="tag" data-val="redes sociales">Redes sociales</span>
+        <span class="tag" data-val="entrenamiento físico">Entrenamiento físico</span>
+        <span class="tag" data-val="nutrición">Nutrición</span>
+        <span class="tag" data-val="cocinar">Cocinar</span>
+        <span class="tag" data-val="programar">Programar</span>
+        <span class="tag" data-val="escribir">Escribir</span>
+        <span class="tag" data-val="hablar en público">Hablar en público</span>
+        <span class="tag" data-val="fotografía">Fotografía</span>
+        <span class="tag" data-val="finanzas / números">Finanzas / números</span>
+        <span class="tag" data-val="ventas">Ventas</span>
+        <span class="tag" data-val="enseñar / tutorías">Enseñar / tutorías</span>
+        <span class="tag" data-val="idiomas">Idiomas</span>
+      </div>
+      <input type="text" id="skill-custom" placeholder="Agrega algo más: ej. hacer pasteles, reparar celulares..." />
+    </div>
+    <div class="btn-row">
+      <button class="primary" onclick="nextStep(1)">Siguiente →</button>
+    </div>
+  </div>
+
+  <!-- STEP 2 -->
+  <div class="step" id="step-2">
+    <div class="field-group">
+      <div class="field-label">¿Qué temas te apasionan?</div>
+      <div class="field-hint">Lo que disfrutas aunque no te paguen por ello</div>
+      <div class="tag-grid" id="passion-tags">
+        <span class="tag" data-val="fitness y salud">Fitness y salud</span>
+        <span class="tag" data-val="tecnología">Tecnología</span>
+        <span class="tag" data-val="emprendimiento">Emprendimiento</span>
+        <span class="tag" data-val="música">Música</span>
+        <span class="tag" data-val="moda y estilo">Moda y estilo</span>
+        <span class="tag" data-val="viajes">Viajes</span>
+        <span class="tag" data-val="comida y gastronomía">Comida</span>
+        <span class="tag" data-val="educación">Educación</span>
+        <span class="tag" data-val="arte y diseño">Arte y diseño</span>
+        <span class="tag" data-val="videojuegos">Videojuegos</span>
+        <span class="tag" data-val="bienestar mental">Bienestar mental</span>
+        <span class="tag" data-val="sustentabilidad">Sustentabilidad</span>
+        <span class="tag" data-val="animales">Animales</span>
+        <span class="tag" data-val="deportes">Deportes</span>
+      </div>
+      <input type="text" id="passion-custom" placeholder="Agrega algo más: ej. anime, fotografía urbana..." />
+    </div>
+    <div class="btn-row">
+      <button onclick="prevStep(2)">← Atrás</button>
+      <button class="primary" onclick="nextStep(2)">Siguiente →</button>
+    </div>
+  </div>
+
+  <!-- STEP 3 -->
+  <div class="step" id="step-3">
+    <div class="field-group">
+      <div class="field-label">¿Cuánto tiempo tienes disponible?</div>
+      <div class="tag-grid" id="time-tags" style="margin-bottom:0">
+        <span class="tag" data-val="pocas horas a la semana (sigo estudiando o trabajando)">Pocas horas/semana</span>
+        <span class="tag" data-val="medio tiempo">Medio tiempo</span>
+        <span class="tag" data-val="tiempo completo">Tiempo completo</span>
+      </div>
+    </div>
+    <div class="field-group">
+      <div class="field-label">¿Ya has vendido o cobrado por algo?</div>
+      <div class="tag-grid" id="exp-tags" style="margin-bottom:0">
+        <span class="tag" data-val="sin experiencia vendiendo todavía">Aún no</span>
+        <span class="tag" data-val="algo de experiencia informal vendiendo">Algo informal</span>
+        <span class="tag" data-val="ya tengo experiencia vendiendo">Sí, ya he vendido</span>
+      </div>
+    </div>
+    <div class="field-group">
+      <div class="field-label">¿Algo más que la IA deba saber? <span style="font-weight:400;color:var(--text-tertiary)">(opcional)</span></div>
+      <textarea id="extra-context" placeholder="ej. estoy en prepa, vivo en CDMX, no tengo capital inicial, quiero algo 100% digital..."></textarea>
+    </div>
+    <div class="btn-row">
+      <button onclick="prevStep(3)">← Atrás</button>
+      <button class="primary" onclick="generateIdeas()">Generar ideas →</button>
+    </div>
+  </div>
+
+  <!-- LOADING -->
+  <div class="step" id="step-loading">
+    <div class="loading">
+      <div class="spinner"></div>
+      <span>Analizando tu perfil...</span>
+    </div>
+  </div>
+
+  <!-- RESULTS -->
+  <div class="step" id="step-results">
+    <div class="results-header">
+      <span class="results-title">Tus ideas de negocio</span>
+      <button class="restart-link" onclick="restart()">Empezar de nuevo</button>
+    </div>
+    <div id="error-container"></div>
+    <div id="results-container"></div>
+  </div>
+
+</div>
+
+<script>
+let currentStep = 1;
+const TOTAL = 3;
+
+function updateProgress(step) {
+  document.getElementById('progress').style.width = (step / TOTAL * 100) + '%';
+}
+
+function showStep(n) {
+  document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+  const el = document.getElementById('step-' + n) || document.getElementById('step-loading');
+  if (el) el.classList.add('active');
+  currentStep = n;
+  if (typeof n === 'number') updateProgress(n);
+}
+
+document.querySelectorAll('.tag').forEach(tag => {
+  tag.addEventListener('click', () => tag.classList.toggle('selected'));
+});
+
+function getSelected(id) {
+  return Array.from(document.querySelectorAll('#' + id + ' .tag.selected')).map(t => t.dataset.val);
+}
+
+function nextStep(from) {
+  if (from === 1) {
+    const s = getSelected('skills-tags');
+    const c = document.getElementById('skill-custom').value.trim();
+    if (!s.length && !c) { alert('Selecciona o escribe al menos una habilidad.'); return; }
+  }
+  if (from === 2) {
+    const p = getSelected('passion-tags');
+    const c = document.getElementById('passion-custom').value.trim();
+    if (!p.length && !c) { alert('Selecciona o escribe al menos una pasión.'); return; }
+  }
+  showStep(from + 1);
+}
+
+function prevStep(from) { showStep(from - 1); }
+
+async function generateIdeas() {
+  const time = getSelected('time-tags');
+  const exp = getSelected('exp-tags');
+  if (!time.length) { alert('Selecciona cuánto tiempo tienes.'); return; }
+  if (!exp.length) { alert('Selecciona tu nivel de experiencia.'); return; }
+
+  const skills = [...getSelected('skills-tags'), document.getElementById('skill-custom').value.trim()].filter(Boolean);
+  const passions = [...getSelected('passion-tags'), document.getElementById('passion-custom').value.trim()].filter(Boolean);
+  const extra = document.getElementById('extra-context').value.trim();
+
+  document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+  document.getElementById('step-loading').classList.add('active');
+
+  const prompt = `Eres un experto en emprendimiento, modelos de negocio y negocios digitales. Analiza el perfil de la persona y genera exactamente 3 ideas de negocio con alto potencial real, específicas y accionables.
+
+PERFIL:
+- Habilidades: ${skills.join(', ')}
+- Pasiones: ${passions.join(', ')}
+- Disponibilidad: ${time.join(', ')}
+- Experiencia en ventas: ${exp.join(', ')}
+${extra ? `- Contexto adicional: ${extra}` : ''}
+
+Genera ideas que realmente crucen sus habilidades CON sus pasiones. No des ideas genéricas.
+
+Responde ÚNICAMENTE con un array JSON válido, sin markdown, sin texto adicional, sin backticks:
+[
+  {
+    "nombre": "Nombre corto del negocio (máx 5 palabras)",
+    "tagline": "Una frase de menos de 10 palabras que describe el negocio",
+    "potencial": "alto",
+    "por_que": "2 oraciones explicando por qué encaja perfectamente con su perfil específico",
+    "modelo": "Cómo gana dinero en una oración concreta",
+    "primer_cliente": "A quién le vendería primero y cómo conseguirlo esta semana",
+    "accion_hoy": "La única acción específica que puede hacer hoy para empezar, sin dinero"
+  }
+]`;
+
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-haiku-4-5-20251001',
+        max_tokens: 1200,
+        messages: [{ role: 'user', content: prompt }]
+      })
+    });
+
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const data = await res.json();
+
+    const raw = data.content.map(b => b.text || '').join('');
+    const clean = raw.replace(/```json|```/g, '').trim();
+    const ideas = JSON.parse(clean);
+    renderResults(ideas);
+  } catch (e) {
+    document.getElementById('step-loading').classList.remove('active');
+    document.getElementById('step-results').classList.add('active');
+    document.getElementById('error-container').innerHTML = `
+      <div class="error-msg">
+        Error al conectar con la IA: ${e.message}. Intenta de nuevo.
+      </div>`;
+    document.getElementById('results-container').innerHTML = '';
+  }
+}
+
+function renderResults(ideas) {
+  const container = document.getElementById('results-container');
+  container.innerHTML = ideas.map((idea, i) => `
+    <div class="result-card">
+      <div class="result-header">
+        <div class="result-name">${i + 1}. ${idea.nombre}</div>
+        <span class="badge ${idea.potencial === 'alto' ? 'badge-high' : 'badge-med'}">${idea.potencial === 'alto' ? 'alto potencial' : 'potencial medio'}</span>
+      </div>
+      <div class="result-tagline">${idea.tagline}</div>
+      <hr class="divider" />
+      <div class="result-rows">
+        <div class="result-row"><strong>Por qué encaja:</strong> ${idea.por_que}</div>
+        <div class="result-row"><strong>Modelo:</strong> ${idea.modelo}</div>
+        <div class="result-row"><strong>Primer cliente:</strong> ${idea.primer_cliente}</div>
+        <div class="action-box"><strong>Acción de hoy:</strong> ${idea.accion_hoy}</div>
+      </div>
+    </div>
+  `).join('');
+
+  document.getElementById('error-container').innerHTML = '';
+  document.getElementById('step-loading').classList.remove('active');
+  document.getElementById('step-results').classList.add('active');
+  updateProgress(3);
+}
+
+function restart() {
+  document.querySelectorAll('.tag').forEach(t => t.classList.remove('selected'));
+  ['skill-custom', 'passion-custom', 'extra-context'].forEach(id => {
+    document.getElementById(id).value = '';
+  });
+  document.getElementById('results-container').innerHTML = '';
+  document.getElementById('error-container').innerHTML = '';
+  showStep(1);
+}
+</script>
+</body>
+</html>
