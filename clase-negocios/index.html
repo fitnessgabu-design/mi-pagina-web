@@ -1,0 +1,934 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Negocios para Adolescentes — Gabriel Berezin</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,700;0,9..144,900;1,9..144,300;1,9..144,700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --ink:#0A0906;
+  --ink-2:#3D3A34;
+  --ink-3:#6B6760;
+  --paper:#F7F4EE;
+  --paper-2:#EDE9E0;
+  --gold:#B8912A;
+  --gold-light:#D4AF55;
+  --gold-pale:#F5EDD5;
+  --red:#C03A2B;
+  --green:#2A6B45;
+  --blue:#1E4E8C;
+  --slide-w:1100px;
+}
+html,body{height:100%;overflow:hidden;background:#1A1814;font-family:'DM Sans',sans-serif}
+#deck{width:100%;height:100%;display:flex;align-items:center;justify-content:center;position:relative}
+.slide{
+  width:var(--slide-w);max-width:96vw;
+  aspect-ratio:16/9;
+  background:var(--paper);
+  position:absolute;
+  opacity:0;pointer-events:none;
+  transition:opacity .45s ease, transform .45s ease;
+  transform:translateY(18px);
+  overflow:hidden;
+  border-radius:4px;
+}
+.slide.active{opacity:1;pointer-events:all;transform:translateY(0)}
+.slide.out{opacity:0;transform:translateY(-18px)}
+
+/* --- FONTS --- */
+.f-display{font-family:'Fraunces',serif;font-weight:900}
+.f-serif{font-family:'Fraunces',serif;font-weight:300}
+.f-serif-bold{font-family:'Fraunces',serif;font-weight:700}
+.f-sans{font-family:'DM Sans',sans-serif}
+
+/* --- NAV --- */
+#nav{position:fixed;bottom:28px;left:50%;transform:translateX(-50%);
+  display:flex;align-items:center;gap:16px;z-index:100;
+  background:rgba(255,255,255,.08);backdrop-filter:blur(12px);
+  border:1px solid rgba(255,255,255,.12);border-radius:40px;
+  padding:10px 20px}
+#nav button{background:none;border:none;cursor:pointer;color:rgba(255,255,255,.7);
+  font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;
+  padding:6px 14px;border-radius:24px;transition:all .2s}
+#nav button:hover{background:rgba(255,255,255,.12);color:#fff}
+#counter{color:rgba(255,255,255,.45);font-size:12px;min-width:48px;text-align:center;
+  font-family:'DM Sans',sans-serif;letter-spacing:.04em}
+#progress{position:fixed;top:0;left:0;height:2px;background:var(--gold-light);
+  transition:width .4s ease;z-index:200}
+
+/* --- SLIDE LAYOUTS --- */
+.s-cover{
+  background:#0A0906;
+  display:grid;grid-template-columns:1fr 1fr;
+}
+.s-cover .left{
+  padding:8% 7%;
+  display:flex;flex-direction:column;justify-content:flex-end;
+  border-right:1px solid rgba(255,255,255,.08);
+}
+.s-cover .right{
+  padding:8% 7%;
+  display:flex;flex-direction:column;justify-content:center;
+  background:#0E0C09;
+}
+.s-cover .eyebrow{
+  font-family:'DM Sans',sans-serif;font-size:10px;font-weight:500;
+  letter-spacing:.18em;text-transform:uppercase;
+  color:var(--gold);margin-bottom:auto;
+}
+.s-cover h1{
+  font-family:'Fraunces',serif;font-weight:900;
+  font-size:clamp(32px,5.5vw,62px);line-height:1.0;
+  color:#F7F4EE;
+}
+.s-cover h1 em{color:var(--gold-light);font-style:normal}
+.s-cover .sub{
+  margin-top:28px;
+  font-size:13px;color:rgba(247,244,238,.45);
+  font-family:'DM Sans',sans-serif;line-height:1.6;
+}
+.s-cover .autor{
+  margin-top:32px;font-size:11px;font-weight:500;letter-spacing:.1em;
+  text-transform:uppercase;color:rgba(247,244,238,.3);
+}
+.s-cover .big-q{
+  font-family:'Fraunces',serif;font-weight:300;font-style:italic;
+  font-size:clamp(18px,2.6vw,30px);line-height:1.4;
+  color:rgba(247,244,238,.7);
+}
+.s-cover .big-q strong{
+  font-weight:700;font-style:normal;color:#F7F4EE;
+  display:block;margin-top:16px;font-size:1.2em;
+}
+
+/* --- GENERIC PAD --- */
+.pad{padding:6% 7%}
+
+/* --- FORMULA SLIDE --- */
+.s-formula{background:var(--paper)}
+.s-formula .grid-formula{
+  display:grid;grid-template-columns:1fr auto 1fr auto 1fr;
+  align-items:center;gap:0;height:100%;
+}
+.f-box{
+  background:#fff;border:1px solid var(--paper-2);
+  display:flex;flex-direction:column;justify-content:center;
+  padding:28px 24px;height:100%;
+}
+.f-box .label{
+  font-size:9px;letter-spacing:.18em;text-transform:uppercase;
+  font-weight:500;margin-bottom:12px;
+}
+.f-box h3{font-family:'Fraunces',serif;font-weight:900;font-size:clamp(20px,3vw,36px);line-height:1.1}
+.f-box p{font-size:12px;color:var(--ink-3);line-height:1.55;margin-top:10px}
+.f-plus{
+  font-family:'Fraunces',serif;font-weight:300;font-size:clamp(28px,4vw,52px);
+  color:var(--ink-3);padding:0 20px;flex-shrink:0;
+}
+.f-result{
+  grid-column:1/-1;
+  background:var(--ink);
+  display:flex;align-items:center;justify-content:space-between;
+  padding:18px 32px;
+}
+.f-result span{
+  font-family:'Fraunces',serif;font-weight:700;font-size:clamp(14px,2vw,22px);
+  color:var(--gold-light);
+}
+.f-result .ej-row{display:flex;gap:24px}
+.f-ej{font-size:11px;font-weight:400;color:rgba(247,244,238,.5)}
+.f-ej.ok{color:var(--gold)}
+
+/* --- CARDS GRID --- */
+.cards-2{display:grid;grid-template-columns:1fr 1fr;gap:16px;height:100%}
+.cards-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;height:100%}
+.card{
+  background:#fff;border:1px solid var(--paper-2);
+  padding:24px 22px;
+  display:flex;flex-direction:column;
+}
+.card .c-tag{
+  font-size:9px;font-weight:500;letter-spacing:.15em;text-transform:uppercase;
+  margin-bottom:12px;padding:4px 10px;align-self:flex-start;
+  border-radius:2px;
+}
+.card h3{font-family:'Fraunces',serif;font-weight:700;font-size:clamp(15px,2vw,22px);line-height:1.2;margin-bottom:10px}
+.card p{font-size:12px;color:var(--ink-2);line-height:1.6;flex:1}
+.card .c-pros{font-size:11px;margin-top:12px;color:var(--green);font-weight:500}
+.card .c-cons{font-size:11px;color:var(--red);font-weight:400}
+.card .c-ej{font-size:10px;color:var(--ink-3);margin-top:8px;font-style:italic}
+
+/* --- TWO COLUMN TEXT --- */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:0;height:100%}
+.col-block{padding:7%;display:flex;flex-direction:column;justify-content:center}
+.col-block.dark{background:var(--ink);color:var(--paper)}
+.col-block.mid{background:var(--paper-2)}
+.col-block h2{font-family:'Fraunces',serif;font-weight:900;font-size:clamp(20px,3vw,38px);line-height:1.1;margin-bottom:16px}
+.col-block p{font-size:12.5px;line-height:1.7;color:inherit;opacity:.8}
+.col-block ul{list-style:none;margin-top:16px}
+.col-block ul li{font-size:12px;line-height:1.6;padding:6px 0;border-bottom:1px solid rgba(0,0,0,.07)}
+.col-block ul li:last-child{border:none}
+.col-block ul li::before{content:'— ';opacity:.4}
+.col-block.dark ul li{border-bottom-color:rgba(255,255,255,.08)}
+
+/* --- TABLE ROWS --- */
+.row-list{display:flex;flex-direction:column;gap:0;flex:1}
+.row-item{
+  display:grid;grid-template-columns:1.4fr 1fr 1fr;
+  gap:0;border-bottom:1px solid var(--paper-2);
+  align-items:stretch;
+}
+.row-item:last-child{border:none}
+.row-item div{padding:12px 18px;font-size:11.5px;line-height:1.5}
+.row-item .col-q{font-weight:500;color:var(--ink);border-right:1px solid var(--paper-2)}
+.row-item .col-bad{color:var(--red);border-right:1px solid var(--paper-2)}
+.row-item .col-good{color:var(--green)}
+.row-head{
+  display:grid;grid-template-columns:1.4fr 1fr 1fr;
+  background:var(--ink);
+}
+.row-head span{
+  padding:9px 18px;font-size:9px;letter-spacing:.15em;
+  text-transform:uppercase;font-weight:500;color:rgba(247,244,238,.5);
+  border-right:1px solid rgba(255,255,255,.06);
+}
+.row-head span:last-child{border:none}
+
+/* --- STEPS --- */
+.steps{display:flex;flex-direction:column;gap:0;flex:1}
+.step{
+  display:grid;grid-template-columns:52px 1fr;
+  gap:0;border-bottom:1px solid var(--paper-2);
+  align-items:stretch;
+}
+.step:last-child{border:none}
+.step-num{
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Fraunces',serif;font-weight:900;
+  font-size:clamp(18px,2.5vw,28px);
+  border-right:1px solid var(--paper-2);
+  color:var(--ink-3);
+}
+.step-body{padding:14px 20px}
+.step-body h4{font-size:13px;font-weight:500;margin-bottom:4px}
+.step-body p{font-size:11.5px;color:var(--ink-2);line-height:1.55}
+
+/* --- ACTIVITY --- */
+.s-activity{background:var(--ink)}
+.act-head{
+  background:var(--gold);
+  padding:22px 7%;
+  display:flex;align-items:baseline;gap:16px;
+}
+.act-head h2{
+  font-family:'Fraunces',serif;font-weight:900;
+  font-size:clamp(20px,3.2vw,38px);color:var(--ink);
+}
+.act-head .badge{
+  font-size:10px;letter-spacing:.12em;text-transform:uppercase;
+  font-weight:500;color:var(--ink);opacity:.6;
+}
+.act-body{padding:5% 7%;display:flex;flex-direction:column;gap:14px;flex:1}
+.act-q{
+  background:rgba(255,255,255,.04);
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:2px;
+  display:grid;grid-template-columns:40px 1fr;
+  gap:0;align-items:stretch;
+}
+.act-q-letter{
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Fraunces',serif;font-weight:900;font-size:22px;
+  color:var(--gold);border-right:1px solid rgba(255,255,255,.08);
+}
+.act-q-body{padding:12px 16px}
+.act-q-body h4{font-size:13px;font-weight:500;color:#F7F4EE;margin-bottom:3px}
+.act-q-body p{font-size:11px;color:var(--gold);font-style:italic;opacity:.85}
+.act-footer{
+  padding:12px 7%;border-top:1px solid rgba(255,255,255,.08);
+  font-size:11px;color:rgba(247,244,238,.35);font-style:italic;
+}
+
+/* --- BIG QUOTE --- */
+.s-quote{background:var(--ink);display:flex;align-items:center;justify-content:center}
+.q-inner{padding:8%;text-align:center;max-width:820px;margin:auto}
+.q-inner .q-pre{
+  font-size:11px;letter-spacing:.2em;text-transform:uppercase;
+  color:rgba(247,244,238,.3);font-weight:500;margin-bottom:28px;
+}
+.q-inner blockquote{
+  font-family:'Fraunces',serif;font-weight:300;font-style:italic;
+  font-size:clamp(22px,4vw,48px);line-height:1.3;
+  color:rgba(247,244,238,.9);
+}
+.q-inner blockquote strong{font-weight:700;font-style:normal;color:var(--gold-light)}
+.q-inner .q-attr{
+  margin-top:28px;font-size:12px;color:rgba(247,244,238,.35);
+  font-family:'DM Sans',sans-serif;
+}
+
+/* --- ERRORS SLIDE --- */
+.err-list{display:flex;flex-direction:column;gap:0;flex:1}
+.err-item{
+  display:grid;grid-template-columns:36px 1fr 1fr;
+  gap:0;border-bottom:1px solid var(--paper-2);
+  align-items:stretch;flex:1;
+}
+.err-item:last-child{border:none}
+.err-num{
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Fraunces',serif;font-weight:900;font-size:18px;
+  color:var(--paper-2);background:var(--paper-2);
+  border-right:1px solid var(--paper-2);
+}
+.err-title{
+  padding:12px 16px;border-right:1px solid var(--paper-2);
+  display:flex;align-items:center;
+}
+.err-title h4{font-size:12.5px;font-weight:500;color:var(--ink)}
+.err-fix{padding:12px 16px;display:flex;align-items:center}
+.err-fix p{font-size:11.5px;color:var(--green);line-height:1.5}
+
+/* --- TAKEAWAYS --- */
+.takeaway-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;flex:1}
+.tcard{
+  background:#fff;border:1px solid var(--paper-2);
+  padding:20px 22px;
+  display:flex;gap:14px;align-items:flex-start;
+}
+.tcard .t-num{
+  font-family:'Fraunces',serif;font-weight:900;font-size:32px;
+  color:var(--paper-2);line-height:1;flex-shrink:0;
+}
+.tcard h4{font-size:13px;font-weight:500;margin-bottom:5px}
+.tcard p{font-size:11.5px;color:var(--ink-2);line-height:1.6}
+
+/* --- SECTION HEADER inside slides --- */
+.slide-head{margin-bottom:22px}
+.slide-head .eyebrow{
+  font-size:9px;letter-spacing:.2em;text-transform:uppercase;
+  font-weight:500;color:var(--gold);margin-bottom:6px;
+}
+.slide-head h2{
+  font-family:'Fraunces',serif;font-weight:900;
+  font-size:clamp(18px,3vw,34px);line-height:1.1;color:var(--ink);
+}
+.slide-head .deck-sub{
+  font-size:12px;color:var(--ink-3);margin-top:6px;
+  font-style:italic;
+}
+
+/* --- CLOSE SLIDE --- */
+.s-close{background:#0A0906;display:grid;grid-template-rows:1fr auto}
+.close-center{display:flex;flex-direction:column;align-items:center;
+  justify-content:center;text-align:center;padding:8%}
+.close-center h2{
+  font-family:'Fraunces',serif;font-weight:900;
+  font-size:clamp(28px,5vw,64px);color:#F7F4EE;margin-bottom:8px;
+}
+.close-center .handle{
+  font-family:'Fraunces',serif;font-weight:300;font-style:italic;
+  font-size:clamp(18px,3vw,38px);color:var(--gold-light);margin-bottom:20px;
+}
+.close-center p{font-size:12px;color:rgba(247,244,238,.35);max-width:420px;line-height:1.7}
+.close-links{
+  display:flex;border-top:1px solid rgba(255,255,255,.06);
+}
+.close-link{
+  flex:1;padding:16px;text-align:center;
+  border-right:1px solid rgba(255,255,255,.06);
+}
+.close-link:last-child{border:none}
+.close-link .cl-label{font-size:9px;letter-spacing:.15em;text-transform:uppercase;
+  color:rgba(247,244,238,.25);margin-bottom:4px}
+.close-link .cl-val{font-size:12px;color:rgba(247,244,238,.6);font-style:italic}
+
+/* PRICE/VALUE CALLOUT */
+.pv-grid{display:grid;grid-template-columns:1fr 80px 1fr;gap:0;height:100%}
+.pv-col{
+  display:flex;flex-direction:column;
+  padding:7%;
+}
+.pv-col h3{font-family:'Fraunces',serif;font-weight:900;
+  font-size:clamp(24px,3.5vw,44px);line-height:1;margin-bottom:10px}
+.pv-col .pv-def{font-size:13px;font-weight:500;margin-bottom:18px}
+.pv-col ul{list-style:none;flex:1}
+.pv-col ul li{font-size:12px;line-height:1.6;color:var(--ink-2);
+  padding:7px 0;border-bottom:1px solid var(--paper-2)}
+.pv-col ul li:last-child{border:none}
+.pv-col.right-col{background:var(--paper-2)}
+.pv-mid{
+  display:flex;align-items:center;justify-content:center;
+  border-left:1px solid var(--paper-2);border-right:1px solid var(--paper-2);
+}
+.pv-mid span{font-family:'Fraunces',serif;font-weight:700;font-size:28px;color:var(--ink-3)}
+.pv-footer{
+  background:var(--ink);padding:12px 7%;
+  font-size:11.5px;color:var(--gold);font-style:italic;
+}
+
+/* VOTE SLIDE */
+.vote-list{display:flex;flex-direction:column;gap:0;flex:1}
+.vote-item{
+  display:grid;grid-template-columns:1fr 100px;
+  border-bottom:1px solid var(--paper-2);align-items:center;flex:1;
+}
+.vote-item:last-child{border:none}
+.vote-item p{padding:12px 0;font-size:13px;color:var(--ink);line-height:1.4}
+.vote-badge{
+  padding:5px 14px;border-radius:2px;
+  font-size:9px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;
+  text-align:center;justify-self:end;
+}
+
+/* MODELO / ERROR colored stripe */
+.stripe-row{
+  display:grid;grid-template-columns:90px 1fr;
+  border-bottom:1px solid var(--paper-2);align-items:stretch;
+}
+.stripe-row:last-child{border:none}
+.stripe-label{
+  display:flex;align-items:center;justify-content:center;
+  font-size:9px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;
+  border-right:1px solid var(--paper-2);text-align:center;padding:10px;
+}
+.stripe-body{padding:13px 18px}
+.stripe-body h4{font-size:13px;font-weight:500;margin-bottom:3px}
+.stripe-body p{font-size:11.5px;color:var(--ink-2);line-height:1.5}
+</style>
+</head>
+<body>
+
+<div id="progress"></div>
+<div id="deck">
+
+<!-- ═══ 01 PORTADA ════════════════════════════════ -->
+<section class="slide s-cover active" id="s1">
+  <div class="left">
+    <div class="eyebrow">Clase de negocios · Preparatoria</div>
+    <h1>¿Por qué dos personas con el mismo talento <em>ganan dinero muy diferente?</em></h1>
+    <p class="sub">Eso es lo que vamos a entender hoy. No teoría. Conceptos reales que puedes usar.</p>
+    <p class="autor">Gabriel Berezin · Entrenador WABBA · @gabufitness</p>
+  </div>
+  <div class="right">
+    <p class="big-q">La mayoría espera el momento perfecto para empezar.
+      <strong>El momento perfecto no existe.</strong>
+    </p>
+  </div>
+</section>
+
+<!-- ═══ 02 VOTACIÓN ═══════════════════════════════ -->
+<section class="slide" id="s2">
+  <div class="pad" style="display:flex;flex-direction:column;height:100%">
+    <div class="slide-head">
+      <div class="eyebrow">Rompehielo</div>
+      <h2>Vota. Sin pensarlo mucho.</h2>
+      <p class="deck-sub">Levanta la mano en cada pregunta. No hay respuesta incorrecta.</p>
+    </div>
+    <div class="vote-list">
+      <div class="vote-item">
+        <p>¿Conoces a alguien que trabaja mucho y gana poco?</p>
+        <span class="vote-badge" style="background:#FEE9E8;color:#A32D2D">Casi todos</span>
+      </div>
+      <div class="vote-item">
+        <p>¿Conoces a alguien que trabaja en lo que le gusta y gana bien?</p>
+        <span class="vote-badge" style="background:#EAF3DE;color:#27500A">Algunos</span>
+      </div>
+      <div class="vote-item">
+        <p>¿Alguien ya ganó dinero por algo que sabe hacer?</p>
+        <span class="vote-badge" style="background:#E6F1FB;color:#0C447C">Pocos</span>
+      </div>
+      <div class="vote-item">
+        <p>¿Alguien tiene en mente algo que podría vender o cobrar, pero no lo ha hecho?</p>
+        <span class="vote-badge" style="background:#FAEEDA;color:#633806">La mayoría</span>
+      </div>
+    </div>
+    <p style="font-size:11px;color:var(--ink-3);margin-top:14px;font-style:italic">
+      Eso último es exactamente el problema que vamos a resolver hoy.
+    </p>
+  </div>
+</section>
+
+<!-- ═══ 03 LA FÓRMULA ══════════════════════════════ -->
+<section class="slide s-formula" id="s3">
+  <div style="display:flex;flex-direction:column;height:100%">
+    <div class="pad" style="padding-bottom:16px">
+      <div class="slide-head" style="margin-bottom:0">
+        <div class="eyebrow">El concepto central</div>
+        <h2>La fórmula que nadie te enseña en la escuela</h2>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 48px 1fr 48px 1fr;flex:1;border-top:1px solid var(--paper-2)">
+      <div class="f-box">
+        <div class="label" style="color:var(--gold)">Elemento 1</div>
+        <h3 style="color:var(--ink)">Habilidad</h3>
+        <p>Algo en lo que eres bueno — de verdad, no lo que "deberías" ser bueno. Aquello que sale natural.</p>
+      </div>
+      <div class="f-plus">+</div>
+      <div class="f-box">
+        <div class="label" style="color:var(--blue)">Elemento 2</div>
+        <h3 style="color:var(--ink)">Valor</h3>
+        <p>Que esa habilidad resuelva un problema real para otra persona. No lo que a ti te parece útil — lo que <em>el otro</em> necesita.</p>
+      </div>
+      <div class="f-plus">+</div>
+      <div class="f-box">
+        <div class="label" style="color:var(--green)">Elemento 3</div>
+        <h3 style="color:var(--ink)">Mercado</h3>
+        <p>Gente dispuesta a pagar por ese resultado. Sin mercado, es un hobby. Con mercado, es un negocio.</p>
+      </div>
+    </div>
+    <div class="f-result">
+      <span>= Negocio sostenible</span>
+      <div class="f-ej-row" style="display:flex;gap:28px">
+        <span class="f-ej" style="color:#D44545">✕ &nbsp;Eres el mejor guitarrista del barrio pero nadie quiere clases → sin mercado</span>
+        <span class="f-ej ok">✓ &nbsp;Sabes editar videos y marcas locales necesitan contenido → negocio</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ 04 CASO REAL ════════════════════════════════ -->
+<section class="slide" id="s4">
+  <div class="pad" style="display:flex;flex-direction:column;height:100%">
+    <div class="slide-head">
+      <div class="eyebrow">Ejemplo aplicado</div>
+      <h2>Así se ve la fórmula en la vida real</h2>
+      <p class="deck-sub">Mi caso. Sin adornos.</p>
+    </div>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <h4 style="color:var(--gold)">Habilidad — Me volví muy bueno en entrenamiento y nutrición</h4>
+          <p>Estudié, practiqué, me certifiqué. No fue rápido. Tomó tiempo real de dedicación antes de que valiera algo.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <h4 style="color:var(--blue)">Valor — Identifiqué el problema que podía resolver</h4>
+          <p>Mucha gente quería bajar grasa o ganar músculo pero no sabía cómo entrenar ni comer. Ese era el problema. Yo tenía la solución.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <h4 style="color:var(--green)">Mercado — Empecé a ofrecer, primero gratis, luego cobrando</h4>
+          <p>Tres clientes gratis para tener casos reales. Al cuarto, cobré. Al décimo, subí el precio. La demanda confirmó que había mercado.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-body">
+          <h4 style="color:var(--ink)">Resultado — Programas digitales, coaching, contenido</h4>
+          <p>Todo desde el celular. Sin local, sin empleados, sin inversión inicial. La habilidad fue el capital.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ 05 PRECIO vs VALOR ══════════════════════════ -->
+<section class="slide" id="s5">
+  <div style="display:flex;flex-direction:column;height:100%">
+    <div class="pad" style="padding-bottom:0">
+      <div class="slide-head" style="margin-bottom:0">
+        <div class="eyebrow">Concepto clave</div>
+        <h2>Precio ≠ Valor</h2>
+      </div>
+    </div>
+    <div class="pv-grid" style="flex:1;border-top:1px solid var(--paper-2);margin-top:14px">
+      <div class="pv-col" style="border-right:1px solid var(--paper-2)">
+        <h3 style="color:var(--red)">Precio</h3>
+        <p class="pv-def">Lo que tú cobras.</p>
+        <ul>
+          <li>Es un número que tú decides</li>
+          <li>Puede ser alto o bajo independientemente del tiempo invertido</li>
+          <li>No tiene relación automática con el esfuerzo</li>
+          <li>Lo controlas tú, no el mercado</li>
+        </ul>
+      </div>
+      <div class="pv-mid"><span>≠</span></div>
+      <div class="pv-col right-col">
+        <h3 style="color:var(--green)">Valor</h3>
+        <p class="pv-def">Lo que el otro recibe.</p>
+        <ul>
+          <li>Es el cambio real en la vida del cliente</li>
+          <li>No lo que le diste — lo que <em>logró</em> con eso</li>
+          <li>La gente paga más cuando percibe valor más alto</li>
+          <li>Es la base correcta para fijar el precio</li>
+        </ul>
+      </div>
+    </div>
+    <div class="pv-footer">
+      Un tutor no vende horas — vende que el alumno pase el examen. Eso cambia completamente cuánto puede cobrar.
+    </div>
+  </div>
+</section>
+
+<!-- ═══ 06 ACTIVIDAD 1 ══════════════════════════════ -->
+<section class="slide s-activity" id="s6">
+  <div class="act-head">
+    <h2>Actividad 1</h2>
+    <span class="badge">4 minutos · en parejas</span>
+  </div>
+  <div class="act-body">
+    <div class="act-q">
+      <div class="act-q-letter">A</div>
+      <div class="act-q-body">
+        <h4>¿En qué actividad pierden la noción del tiempo?</h4>
+        <p>No lo que "deberían" hacer — lo que hacen cuando nadie les pide nada.</p>
+      </div>
+    </div>
+    <div class="act-q">
+      <div class="act-q-letter">B</div>
+      <div class="act-q-body">
+        <h4>¿Qué problema resuelve esa habilidad para una persona concreta?</h4>
+        <p>Piensen en alguien real. No en "la gente en general".</p>
+      </div>
+    </div>
+    <div class="act-q">
+      <div class="act-q-letter">C</div>
+      <div class="act-q-body">
+        <h4>¿Cuánto pagaría esa persona por ese resultado?</h4>
+        <p>No por su tiempo. Por lo que logra gracias a ellos.</p>
+      </div>
+    </div>
+  </div>
+  <div class="act-footer">
+    Donde A, B y C se cruzan → el embrión de un negocio real.
+  </div>
+</section>
+
+<!-- ═══ 07 MODELOS DE NEGOCIO ═══════════════════════ -->
+<section class="slide" id="s7">
+  <div class="pad" style="display:flex;flex-direction:column;height:100%">
+    <div class="slide-head">
+      <div class="eyebrow">Estructura</div>
+      <h2>Tres maneras de cobrar por lo que sabes hacer</h2>
+      <p class="deck-sub">Cualquiera puede empezar con el primero esta semana.</p>
+    </div>
+    <div class="cards-3" style="flex:1">
+      <div class="card">
+        <span class="c-tag" style="background:#FEF3D5;color:#854F0B">Modelo 01</span>
+        <h3>Servicio directo</h3>
+        <p>Das el servicio tú mismo, de forma personalizada. Cobras por sesión, por proyecto o por mes.</p>
+        <p class="c-pros">✓ &nbsp;Empiezas rápido. Sin inversión. Control total.</p>
+        <p class="c-cons">✕ &nbsp;Tu tiempo es el límite. No escala solo.</p>
+        <p class="c-ej">Tutoría, fotografía, entrenamiento, diseño de logos, edición de video</p>
+      </div>
+      <div class="card">
+        <span class="c-tag" style="background:#EAF3DE;color:#3B6D11">Modelo 02</span>
+        <h3>Producto digital</h3>
+        <p>Creas algo una vez — video, PDF, guía, preset — y lo vendes muchas veces sin hacer más trabajo.</p>
+        <p class="c-pros">✓ &nbsp;Escala sin ti. Puede generar ingresos mientras duermes.</p>
+        <p class="c-cons">✕ &nbsp;Requiere construirlo bien desde el inicio.</p>
+        <p class="c-ej">Ebook, rutina en PDF, preset fotográfico, plantilla, guía de estudio</p>
+      </div>
+      <div class="card">
+        <span class="c-tag" style="background:#E6F1FB;color:#185FA5">Modelo 03</span>
+        <h3>Contenido + comunidad</h3>
+        <p>Construyes audiencia en redes compartiendo lo que sabes. El dinero llega por colaboraciones o ventas.</p>
+        <p class="c-pros">✓ &nbsp;Construye reputación. Crece orgánicamente.</p>
+        <p class="c-cons">✕ &nbsp;Tarda en monetizar. Exige consistencia real.</p>
+        <p class="c-ej">Canal de YouTube, TikTok educativo, newsletter, podcast, Instagram</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ 08 ERROR — COBRAR BARATO ════════════════════ -->
+<section class="slide" id="s8">
+  <div class="two-col" style="height:100%">
+    <div class="col-block dark">
+      <h2 style="font-size:clamp(22px,4vw,52px);color:#F7F4EE">El error más común al empezar.</h2>
+      <p style="font-size:clamp(26px,3.5vw,42px);font-family:'Fraunces',serif;font-weight:700;
+        color:var(--gold-light);margin-top:16px;line-height:1.2">
+        Cobrar muy barato por miedo.
+      </p>
+      <p style="margin-top:20px;font-size:12.5px;color:rgba(247,244,238,.5);line-height:1.7">
+        Y ese miedo le cuesta más dinero a la gente que cualquier otro error de negocios.
+      </p>
+    </div>
+    <div class="col-block" style="background:var(--paper);padding:6%">
+      <div class="steps" style="flex:1">
+        <div class="step">
+          <div class="step-num" style="font-size:13px;color:var(--ink-3);font-family:'DM Sans',sans-serif;font-weight:500;padding:0 12px;text-align:center;line-height:1.3">Por qué<br>pasa</div>
+          <div class="step-body">
+            <p>Creen que si cobran caro nadie les va a comprar. O que "todavía no merecen" cobrar bien.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num" style="font-size:13px;color:var(--ink-3);font-family:'DM Sans',sans-serif;font-weight:500;padding:0 12px;text-align:center;line-height:1.3">Qué<br>pasa</div>
+          <div class="step-body">
+            <p>Clientes que no valoran el trabajo, agotamiento, resentimiento. El negocio se vuelve insoportable.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num" style="font-size:13px;color:var(--green);font-family:'DM Sans',sans-serif;font-weight:500;padding:0 12px;text-align:center;line-height:1.3">La<br>solución</div>
+          <div class="step-body">
+            <p>El precio no lo pones según tu inseguridad. Lo pones según el <strong>valor que generas</strong> para el cliente.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ 09 PRIMEROS CLIENTES ════════════════════════ -->
+<section class="slide" id="s9">
+  <div class="pad" style="display:flex;flex-direction:column;height:100%">
+    <div class="slide-head">
+      <div class="eyebrow">Proceso</div>
+      <h2>Cómo consigues tus primeros clientes</h2>
+      <p class="deck-sub">Sin dinero, sin experiencia, sin seguidores. Paso a paso.</p>
+    </div>
+    <div class="steps" style="flex:1">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <h4>Empieza con tu círculo — familia, amigos, compañeros</h4>
+          <p>Ya confían en ti. Ofrece algo a precio bajo o gratis para tener casos reales. Experiencia primero.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <h4>Documenta los resultados</h4>
+          <p>Captura de pantalla de un mensaje de agradecimiento. Un número concreto de mejora. Una foto de antes y después. Eso es prueba social.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <h4>Pide referidos explícitamente</h4>
+          <p>"Si conoces a alguien que necesite esto, aquí estoy." Un cliente satisfecho es el mejor vendedor que puedes tener.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-body">
+          <h4>Sube el precio con cada nuevo cliente</h4>
+          <p>Cada nuevo cliente puede pagar un poco más que el anterior. No subas por ego — súbelo cuando tengas más demanda que capacidad.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ 10 ACTIVIDAD 2 ═══════════════════════════════ -->
+<section class="slide s-activity" id="s10">
+  <div class="act-head">
+    <h2>Actividad 2</h2>
+    <span class="badge">6 minutos · individual</span>
+  </div>
+  <div class="act-body">
+    <p style="color:rgba(247,244,238,.6);font-size:13px;margin-bottom:4px">
+      Construye tu primera oferta. Una sola. Concreta. Real.
+    </p>
+    <div class="act-q">
+      <div class="act-q-letter" style="font-size:13px;font-family:'DM Sans',sans-serif;font-weight:500;writing-mode:vertical-lr;transform:rotate(180deg);letter-spacing:.08em">Ofrezco…</div>
+      <div class="act-q-body">
+        <h4>Descripción clara de lo que haces. Una línea.</h4>
+        <p>Sé específico. No "soy creativo" — "edito videos cortos para negocios locales".</p>
+      </div>
+    </div>
+    <div class="act-q">
+      <div class="act-q-letter" style="font-size:13px;font-family:'DM Sans',sans-serif;font-weight:500;writing-mode:vertical-lr;transform:rotate(180deg);letter-spacing:.08em">Para…</div>
+      <div class="act-q-body">
+        <h4>¿A quién va dirigido? Sé específico.</h4>
+        <p>"Alumnos de prepa que quieren…" / "Negocios locales que necesitan…" — una persona concreta.</p>
+      </div>
+    </div>
+    <div class="act-q">
+      <div class="act-q-letter" style="font-size:13px;font-family:'DM Sans',sans-serif;font-weight:500;writing-mode:vertical-lr;transform:rotate(180deg);letter-spacing:.08em">Resultado</div>
+      <div class="act-q-body">
+        <h4>¿Qué logra el cliente? No lo que tú haces — lo que él obtiene.</h4>
+        <p>El resultado es lo que justifica el precio.</p>
+      </div>
+    </div>
+    <div class="act-q">
+      <div class="act-q-letter" style="font-size:13px;font-family:'DM Sans',sans-serif;font-weight:500;writing-mode:vertical-lr;transform:rotate(180deg);letter-spacing:.08em">Precio</div>
+      <div class="act-q-body">
+        <h4>Un número. Aunque sea aproximado. Ponlo.</h4>
+        <p>No "depende". Un precio concreto. Lo puedes ajustar después.</p>
+      </div>
+    </div>
+  </div>
+  <div class="act-footer">
+    Tres personas presentan su oferta al grupo al terminar.
+  </div>
+</section>
+
+<!-- ═══ 11 LOS 4 ERRORES ═════════════════════════════ -->
+<section class="slide" id="s11">
+  <div class="pad" style="display:flex;flex-direction:column;height:100%">
+    <div class="slide-head">
+      <div class="eyebrow">Errores comunes</div>
+      <h2>Cuatro cosas que matan negocios jóvenes</h2>
+    </div>
+    <div class="err-list" style="flex:1">
+      <div class="err-item">
+        <div class="err-num" style="background:#FEE9E8;color:#A32D2D;font-size:22px;font-family:'Fraunces',serif;font-weight:900">1</div>
+        <div class="err-title"><h4>Querer empezar con todo perfecto — logo, nombre, web — antes de tener un cliente</h4></div>
+        <div class="err-fix"><p>Empieza feo. Mejora con retroalimentación real, no con suposiciones.</p></div>
+      </div>
+      <div class="err-item">
+        <div class="err-num" style="background:#FAEEDA;color:#633806;font-size:22px;font-family:'Fraunces',serif;font-weight:900">2</div>
+        <div class="err-title"><h4>Ofrecer todo para todos: "hago fotos, logos, webs, redes, videos…"</h4></div>
+        <div class="err-fix"><p>Nadie sabe para qué llamarte. Una cosa, un tipo de cliente. Después amplías.</p></div>
+      </div>
+      <div class="err-item">
+        <div class="err-num" style="background:#E6F1FB;color:#0C447C;font-size:22px;font-family:'Fraunces',serif;font-weight:900">3</div>
+        <div class="err-title"><h4>No cobrar por miedo al "no" — o no subir el precio aunque haya demanda</h4></div>
+        <div class="err-fix"><p>El "no" no te mata. El precio bajo crónico, sí. El precio correcto atrae al cliente correcto.</p></div>
+      </div>
+      <div class="err-item">
+        <div class="err-num" style="background:#EAF3DE;color:#27500A;font-size:22px;font-family:'Fraunces',serif;font-weight:900">4</div>
+        <div class="err-title"><h4>Dejar de buscar nuevos clientes cuando ya tienes clientes</h4></div>
+        <div class="err-fix"><p>El peor momento para parar de vender es cuando todo va bien. Siempre hay que tener el siguiente en fila.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ 12 SITUACIONES — elegancia aplicada ══════════ -->
+<section class="slide" id="s12">
+  <div class="pad" style="display:flex;flex-direction:column;height:100%">
+    <div class="slide-head">
+      <div class="eyebrow">Toma de decisiones</div>
+      <h2>Cómo actuar cuando las cosas se complican</h2>
+      <p class="deck-sub">Piénsalo antes de leer la columna derecha.</p>
+    </div>
+    <div class="row-head">
+      <span>Situación</span>
+      <span>Sin criterio</span>
+      <span>Con criterio</span>
+    </div>
+    <div class="row-list" style="flex:1">
+      <div class="row-item">
+        <div class="col-q">Tu competidor hace lo mismo que tú y cobra menos</div>
+        <div class="col-bad">Lo atacas en redes, dices que copia, bajas tu precio por miedo</div>
+        <div class="col-good">Lo estudias, mejoras tu propuesta y explicas por qué vales más</div>
+      </div>
+      <div class="row-item">
+        <div class="col-q">Cometes un error grave frente a un cliente</div>
+        <div class="col-bad">Niegas, justificas o desapareces del chat</div>
+        <div class="col-good">Lo reconoces, ofreces solución concreta y cumples lo que prometes</div>
+      </div>
+      <div class="row-item">
+        <div class="col-q">Alguien te ofrece la mitad de lo que cobras</div>
+        <div class="col-bad">Aceptas por inseguridad o explotas por orgullo</div>
+        <div class="col-good">Explicas tu valor con calma y declines sin drama</div>
+      </div>
+      <div class="row-item">
+        <div class="col-q">Publicas algo en redes y alguien te critica en público</div>
+        <div class="col-bad">Borras el comentario o respondes agresivo</div>
+        <div class="col-good">Respondes con calma, agradeces si tiene sentido, sigues adelante</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ 13 LO QUE SE LLEVAN ══════════════════════════ -->
+<section class="slide" id="s13">
+  <div class="pad" style="display:flex;flex-direction:column;height:100%">
+    <div class="slide-head">
+      <div class="eyebrow">Cierre</div>
+      <h2>Lo que se llevan hoy</h2>
+    </div>
+    <div class="takeaway-grid" style="flex:1">
+      <div class="tcard">
+        <div class="t-num">1</div>
+        <div>
+          <h4>La fórmula</h4>
+          <p>Habilidad + Valor + Mercado = Negocio sostenible. Analicen todo lo que hagan con esa lente.</p>
+        </div>
+      </div>
+      <div class="tcard">
+        <div class="t-num">2</div>
+        <div>
+          <h4>Su primera oferta escrita</h4>
+          <p>Ya la tienen. Solo falta mandarla a alguien que la necesite. Eso es todo lo que separa el ejercicio del negocio real.</p>
+        </div>
+      </div>
+      <div class="tcard">
+        <div class="t-num">3</div>
+        <div>
+          <h4>Precio ≠ Valor</h4>
+          <p>No cobren según el tiempo invertido. Cobren según el resultado que genera para el cliente.</p>
+        </div>
+      </div>
+      <div class="tcard">
+        <div class="t-num">4</div>
+        <div>
+          <h4>El primer paso concreto</h4>
+          <p>Un cliente. Esta semana. Gratis si es necesario. Para tener el caso real que justifica el siguiente precio.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ 14 CIERRE ════════════════════════════════════ -->
+<section class="slide s-close" id="s14">
+  <div class="close-center">
+    <h2>¿Preguntas?</h2>
+    <p class="handle">@gabufitness</p>
+    <p>Si les genera alguna duda después de hoy, manden un mensaje. Sin problema.</p>
+  </div>
+  <div class="close-links">
+    <div class="close-link">
+      <div class="cl-label">Instagram</div>
+      <div class="cl-val">@gabufitness</div>
+    </div>
+    <div class="close-link">
+      <div class="cl-label">Web</div>
+      <div class="cl-val">gabufitness.com</div>
+    </div>
+    <div class="close-link">
+      <div class="cl-label">Programas</div>
+      <div class="cl-val">Cut Control · BUILD · BASE 360</div>
+    </div>
+  </div>
+</section>
+
+</div><!-- /deck -->
+
+<nav id="nav">
+  <button onclick="go(-1)" aria-label="Anterior">←</button>
+  <span id="counter">1 / 14</span>
+  <button onclick="go(1)" aria-label="Siguiente">→</button>
+</nav>
+
+<script>
+const slides=document.querySelectorAll('.slide');
+const total=slides.length;
+let cur=0;
+function go(dir){
+  slides[cur].classList.remove('active');
+  slides[cur].classList.add('out');
+  const prev=cur;
+  cur=Math.max(0,Math.min(total-1,cur+dir));
+  if(cur!==prev){
+    setTimeout(()=>slides[prev].classList.remove('out'),460);
+    slides[cur].classList.add('active');
+  } else {
+    slides[prev].classList.remove('out');
+    slides[prev].classList.add('active');
+  }
+  document.getElementById('counter').textContent=(cur+1)+' / '+total;
+  document.getElementById('progress').style.width=((cur+1)/total*100)+'%';
+}
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowRight'||e.key==='ArrowDown'||e.key===' ')go(1);
+  if(e.key==='ArrowLeft'||e.key==='ArrowUp')go(-1);
+});
+document.getElementById('progress').style.width=(1/total*100)+'%';
+</script>
+</body>
+</html>
